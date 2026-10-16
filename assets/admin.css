@@ -1,0 +1,13 @@
+.meil-mailer-wrap .form-table th {
+	width: 220px;
+}
+
+.meil-mailer-links {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.meil-mailer-audiences {
+	max-width: 760px;
+}
