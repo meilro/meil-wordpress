@@ -43,7 +43,7 @@ This plugin does not talk to any third party; it only calls the meil.ro API.
    several sites. "Transactional only" is enough for `wp_mail()` delivery; forms and the preferences
    page need "Full access".
 4. In WordPress, open **meil.ro** in the admin menu and enter the API key.
-5. Set a default from address on a domain the key covers, for example `wordpress@yourdomain.ro`.
+5. Set a default from address on a domain the key covers, for example `wordpress@example.com`.
 6. Send a test email from the bottom of the same screen.
 7. Build a form under **meil.ro > Forms** and paste its shortcode into a page.
 
@@ -62,7 +62,7 @@ Yes: uncheck "Send WordPress mail through meil" on the meil.ro screen.
 = Which domains does a key cover? =
 
 A meil.ro key works with all your domains unless you limit it to one when you create it. Limited to
-`yourdomain.ro`, it also covers `news.yourdomain.ro`; limited to `news.yourdomain.ro`, only that
+`example.com`, it also covers `news.example.com`; limited to `news.example.com`, only that
 subdomain. If your meil.ro account sends for more than one site, limit this site's key to its domain:
 the forms and the preferences page then offer only this site's audiences. Mail from an address the
 key does not cover is refused by meil.ro, and the error shows up wherever WordPress reports a failed
@@ -71,11 +71,11 @@ email.
 = Can newsletters come from a subdomain, apart from the site's own mail? =
 
 Yes, and it is a good idea: it keeps the reputation of your newsletters apart from your password
-resets and order emails. Verify `news.yourdomain.ro` in meil.ro and put your newsletter audiences on
-it. The site's mail keeps going from the default from address (`wordpress@yourdomain.ro`), while
-confirmation emails and campaigns for those audiences go from `news.yourdomain.ro`. One key for
-`yourdomain.ro` covers both. If the site should never send from the main domain, use a key for
-`news.yourdomain.ro` and a default from address on it.
+resets and order emails. Verify `news.example.com` in meil.ro and put your newsletter audiences on
+it. The site's mail keeps going from the default from address (`wordpress@example.com`), while
+confirmation emails and campaigns for those audiences go from `news.example.com`. One key for
+`example.com` covers both. If the site should never send from the main domain, use a key for
+`news.example.com` and a default from address on it.
 
 = Should visitors confirm by email? =
 
