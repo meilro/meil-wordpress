@@ -1,0 +1,578 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the meil.ro – Email & Newsletter package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: meil.ro – Email & Newsletter 1.1.0\n"
+"Report-Msgid-Bugs-To: https://github.com/meilro/meil-wordpress/issues\n"
+"POT-Creation-Date: 2026-10-22 09:00+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: meil.php:232 includes/class-meil-mailer-admin.php:58
+#: includes/class-meil-mailer-admin.php:59
+msgid "Settings"
+msgstr ""
+
+#: includes/class-meil-client.php:39
+msgid "meil is not configured: add the API key under meil.ro > Settings."
+msgstr ""
+
+#. translators: %d: HTTP status code
+#: includes/class-meil-client.php:82
+#, php-format
+msgid "meil API returned HTTP %d."
+msgstr ""
+
+#: includes/class-meil-forms.php:86 includes/class-meil-forms.php:95
+msgid "Forms"
+msgstr ""
+
+#: includes/class-meil-forms.php:87
+msgid "Form"
+msgstr ""
+
+#: includes/class-meil-forms.php:88 includes/class-meil-forms.php:89
+msgid "Add form"
+msgstr ""
+
+#: includes/class-meil-forms.php:90
+msgid "Edit form"
+msgstr ""
+
+#: includes/class-meil-forms.php:91
+msgid "New form"
+msgstr ""
+
+#: includes/class-meil-forms.php:92
+msgid "Search forms"
+msgstr ""
+
+#: includes/class-meil-forms.php:93
+msgid "No forms yet."
+msgstr ""
+
+#: includes/class-meil-forms.php:94
+msgid "No forms in the trash."
+msgstr ""
+
+#: includes/class-meil-forms.php:126
+msgid "Form settings"
+msgstr ""
+
+#: includes/class-meil-forms.php:127 includes/class-meil-forms.php:546
+msgid "Shortcode"
+msgstr ""
+
+#: includes/class-meil-forms.php:132
+msgid "Save the form to get its shortcode."
+msgstr ""
+
+#: includes/class-meil-forms.php:135
+msgid "Paste it into any page, post or widget area:"
+msgstr ""
+
+#: includes/class-meil-forms.php:158 includes/class-meil-forms.php:547
+#: includes/class-meil-mailer-admin.php:336
+msgid "Audiences"
+msgstr ""
+
+#: includes/class-meil-forms.php:160
+msgid "Add an API key under meil.ro > Settings first."
+msgstr ""
+
+#: includes/class-meil-forms.php:166
+msgid ""
+"Forms need a \"Full access\" API key. Change it under meil.ro > Settings."
+msgstr ""
+
+#. translators: %s: error message from the meil API
+#: includes/class-meil-forms.php:168
+#, php-format
+msgid "Could not reach meil: %s"
+msgstr ""
+
+#. translators: %s: sending domain
+#: includes/class-meil-forms.php:177
+#, php-format
+msgid "There are no audiences on %s yet."
+msgstr ""
+
+#: includes/class-meil-forms.php:181
+msgid "Create one in meil.ro"
+msgstr ""
+
+#: includes/class-meil-forms.php:184
+msgid ""
+"Tick the audiences this form offers and write the label visitors see for "
+"each. With more than one, visitors choose with checkboxes; with one, the "
+"form only asks for the email address."
+msgstr ""
+
+#: includes/class-meil-forms.php:200
+msgid "private"
+msgstr ""
+
+#: includes/class-meil-forms.php:204
+msgid "Label on the form"
+msgstr ""
+
+#: includes/class-meil-forms.php:208
+msgid "Ticked at first"
+msgstr ""
+
+#: includes/class-meil-forms.php:218
+msgid "Checkboxes"
+msgstr ""
+
+#: includes/class-meil-forms.php:219
+msgid ""
+"For your terms, your privacy policy, or anything visitors agree to. Use the "
+"link button to point to your pages. Checkboxes start unticked, and each "
+"answer is saved on the contact, with the text the visitor saw."
+msgstr ""
+
+#: includes/class-meil-forms.php:227
+msgid "No checkboxes yet."
+msgstr ""
+
+#: includes/class-meil-forms.php:244
+msgid "Add checkbox"
+msgstr ""
+
+#: includes/class-meil-forms.php:250
+msgid "Signing up"
+msgstr ""
+
+#: includes/class-meil-forms.php:253
+msgid "Fields"
+msgstr ""
+
+#: includes/class-meil-forms.php:255
+msgid "Also ask for a first name"
+msgstr ""
+
+#: includes/class-meil-forms.php:259
+msgid "Confirmation"
+msgstr ""
+
+#: includes/class-meil-forms.php:261
+msgid ""
+"Ask visitors to confirm by email before they are subscribed (recommended)"
+msgstr ""
+
+#: includes/class-meil-forms.php:262
+msgid ""
+"They get one email and are subscribed only after pressing its button, which "
+"keeps typos and bots off your list and records when and from where they "
+"confirmed."
+msgstr ""
+
+#: includes/class-meil-forms.php:266
+msgid "Page they land on after confirming"
+msgstr ""
+
+#: includes/class-meil-forms.php:274
+msgid "meil.ro's own confirmation page"
+msgstr ""
+
+#: includes/class-meil-forms.php:285
+msgid "Texts"
+msgstr ""
+
+#: includes/class-meil-forms.php:286
+msgid ""
+"Leave a field empty to use the default, which follows the site language."
+msgstr ""
+
+#: includes/class-meil-forms.php:290
+msgid "Button"
+msgstr ""
+
+#: includes/class-meil-forms.php:291
+msgid "Email field placeholder"
+msgstr ""
+
+#: includes/class-meil-forms.php:292
+msgid "Message after subscribing"
+msgstr ""
+
+#: includes/class-meil-forms.php:293
+msgid "Message while waiting for the confirmation"
+msgstr ""
+
+#: includes/class-meil-forms.php:312
+msgid "Subscribe"
+msgstr ""
+
+#: includes/class-meil-forms.php:314
+msgid "you@example.com"
+msgstr ""
+
+#: includes/class-meil-forms.php:316
+msgid "Thank you, you are subscribed."
+msgstr ""
+
+#: includes/class-meil-forms.php:318
+msgid ""
+"Almost done: check your inbox and press the button in our email to confirm."
+msgstr ""
+
+#: includes/class-meil-forms.php:379
+msgid "Checkbox"
+msgstr ""
+
+#: includes/class-meil-forms.php:382
+msgid "Remove"
+msgstr ""
+
+#: includes/class-meil-forms.php:385
+msgid "Checkbox text"
+msgstr ""
+
+#: includes/class-meil-forms.php:390
+msgid "Required"
+msgstr ""
+
+#: includes/class-meil-forms.php:393
+msgid "Saved on the contact as"
+msgstr ""
+
+#: includes/class-meil-forms.php:563
+msgid "None yet"
+msgstr ""
+
+#: includes/class-meil-forms.php:569
+msgid "Form saved."
+msgstr ""
+
+#: includes/class-meil-forms.php:601 includes/class-meil-forms.php:797
+#: templates/form.php:50
+msgid "Sorry, we could not sign you up right now. Please try again later."
+msgstr ""
+
+#: includes/class-meil-forms.php:624
+msgid "meil_form: no saved form with this id."
+msgstr ""
+
+#: includes/class-meil-forms.php:627
+msgid ""
+"meil_form: this form has no audiences yet. Pick them under meil.ro > Forms."
+msgstr ""
+
+#: includes/class-meil-forms.php:743 includes/class-meil-mailer-admin.php:436
+msgid "Enter a valid email address."
+msgstr ""
+
+#: includes/class-meil-forms.php:746
+msgid "Choose at least one list."
+msgstr ""
+
+#: includes/class-meil-forms.php:750
+msgid "Tick the required box to continue."
+msgstr ""
+
+#: includes/class-meil-forms.php:754
+msgid ""
+"Too many tries from your connection. Please wait a few minutes and try again."
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:46
+#: includes/class-meil-mailer-admin.php:47
+#: includes/class-meil-mailer-admin.php:287
+msgid "meil.ro"
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:79
+msgid "Connection"
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:81
+msgid ""
+"Enter an API key created under API Keys in meil.ro for this site's domain. A "
+"\"Transactional only\" key is enough for WordPress mail; forms and the "
+"preferences page need \"Full access\"."
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:87
+msgid "API key"
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:88
+msgid "Default from address"
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:89
+msgid "Default from name"
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:90
+msgid "Send WordPress mail through meil"
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:91
+msgid "Form styles"
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:92
+msgid "Deleted users"
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:173
+msgid "This API key is not valid. Copy it again from API Keys in meil.ro."
+msgstr ""
+
+#. translators: %s: error message from the meil API
+#: includes/class-meil-mailer-admin.php:175
+#, php-format
+msgid "Could not check the API key with meil.ro: %s"
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:211
+msgid "Full access"
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:212
+msgid "Emails and broadcasts"
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:213
+msgid "Transactional only"
+msgstr ""
+
+#. translators: 1: the API key's domain, 2: its permission, e.g. "Full access"
+#: includes/class-meil-mailer-admin.php:237
+#, php-format
+msgid "Works with %1$s, %2$s."
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:251
+msgid "Must be on a domain verified in meil.ro under Domains."
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:265
+msgid ""
+"Replace wp_mail() delivery with the meil API (recommended). Leave unchecked "
+"to use meil for forms only."
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:266
+msgid ""
+"Load the plugin's styles for forms and the preferences page. Turn off to "
+"style them entirely from your theme."
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:267
+msgid ""
+"When a WordPress user is deleted, delete their meil.ro contact too, with its "
+"data."
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:296
+msgid "Save Settings"
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:302
+msgid "Send a test email"
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:304
+msgid ""
+"Add an API key and turn on \"Send WordPress mail through meil\" to send a "
+"test."
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:306
+msgid ""
+"Sends through wp_mail(), the same way your site sends password resets and "
+"order emails."
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:312
+msgid "Send to"
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:319
+msgid "Send Test Email"
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:334
+msgid "Sent emails"
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:335
+msgid "Broadcasts"
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:337
+msgid "Templates"
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:338
+msgid "Domains"
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:339
+msgid "API keys"
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:360
+msgid "Subscription forms"
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:362
+msgid "Forms and the preferences page need a \"Full access\" API key."
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:364
+msgid ""
+"Build forms with the audiences, labels and confirmation you want, then place "
+"each one with its shortcode."
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:365
+msgid "Manage forms"
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:367
+msgid "Email preferences"
+msgstr ""
+
+#. translators: 1: the shortcode, 2: the API key's domain
+#: includes/class-meil-mailer-admin.php:372
+#, php-format
+msgid ""
+"Put %1$s on an account page: logged-in users see the public audiences of "
+"%2$s and choose which ones they get. Visitors who are not logged in see a "
+"message instead."
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:383
+msgid "You do not have permission to do this."
+msgstr ""
+
+#. translators: %s: site name
+#: includes/class-meil-mailer-admin.php:405
+#, php-format
+msgid "Test email from %s"
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:408
+msgid ""
+"This is a test email sent by the meil.ro plugin. If you received this, "
+"WordPress mail is going through meil."
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:415
+msgid "wp_mail() returned false."
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php:434
+msgid "Test email sent."
+msgstr ""
+
+#. translators: %s: error message from the meil API
+#: includes/class-meil-mailer-admin.php:442
+#, php-format
+msgid "Test email failed: %s"
+msgstr ""
+
+#: includes/class-meil-mailer.php:48
+msgid "meil: no recipient address."
+msgstr ""
+
+#: includes/class-meil-preferences.php:63
+msgid "Your choices are saved."
+msgstr ""
+
+#: includes/class-meil-preferences.php:65
+msgid ""
+"Some lists could not be turned on for this address, because earlier emails "
+"to it were not delivered or were marked as spam. Contact us if this is a "
+"mistake."
+msgstr ""
+
+#: includes/class-meil-preferences.php:67 templates/preferences.php:44
+msgid "Your email preferences are available once you are logged in."
+msgstr ""
+
+#: includes/class-meil-preferences.php:69 templates/preferences.php:57
+msgid ""
+"Sorry, your choices could not be saved right now. Please try again later."
+msgstr ""
+
+#: includes/class-meil-preferences.php:307
+msgid ""
+"Your email preferences cannot be shown right now. Please try again later."
+msgstr ""
+
+#: templates/form.php:55
+msgid "Choose what you want to receive"
+msgstr ""
+
+#: templates/form.php:68
+msgid "First name"
+msgstr ""
+
+#: templates/form.php:74
+msgid "Email address"
+msgstr ""
+
+#: templates/preferences.php:45
+msgid "Log in"
+msgstr ""
+
+#: templates/preferences.php:53
+msgid "There are no lists to choose from yet."
+msgstr ""
+
+#. translators: %s: the user's email address
+#: templates/preferences.php:66
+#, php-format
+msgid "Emails we send to %s"
+msgstr ""
+
+#: templates/preferences.php:81
+msgid ""
+"Waiting for you to confirm from the email we sent. Saving with this ticked "
+"subscribes you now."
+msgstr ""
+
+#: templates/preferences.php:89
+msgid "Save"
+msgstr ""
+
+#. translators: %s: the API key's permission, e.g. "Full access"
+#: includes/class-meil-mailer-admin.php
+#, php-format
+msgid "Works with all your domains, %s."
+msgstr ""
+
+#. translators: %s: the shortcode
+#: includes/class-meil-mailer-admin.php
+#, php-format
+msgid ""
+"Put %s on an account page: logged-in users see the public audiences of all "
+"your domains and choose which ones they get. Visitors who are not logged in "
+"see a message instead."
+msgstr ""
+
+#: includes/class-meil-forms.php
+msgid "There are no audiences yet."
+msgstr ""
+
+#: includes/class-meil-forms.php
+msgid "Also ask for a last name"
+msgstr ""
+
+#: templates/form.php
+msgid "Last name"
+msgstr ""

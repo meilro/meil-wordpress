@@ -1,0 +1,248 @@
+/*
+ * meil.ro forms: [meil_form] and [meil_preferences].
+ *
+ * Deliberately plain, so it sits in any theme. To restyle, override the
+ * variables below in your theme, or turn this file off under
+ * meil.ro > Settings and write your own against the same classes.
+ *
+ * The real checkbox stays in the page (keyboard and screen readers use it) but
+ * is hidden visually; .meil-form__checkbox / .meil-prefs__checkbox is the box
+ * people see. Style its ticked look with
+ *   .meil-form__checkbox-input:checked + .meil-form__checkbox
+ * which follows every click, unlike the --checked class set when the page loads.
+ */
+
+.meil-form,
+.meil-prefs {
+	--meil-gap: 0.75em;
+	--meil-accent: currentColor;
+	--meil-border: rgba(0, 0, 0, 0.35);
+	--meil-radius: 4px;
+	--meil-box-size: 1.15em;
+	--meil-success: #1a7f37;
+	--meil-error: #d63638;
+	--meil-muted: rgba(0, 0, 0, 0.6);
+}
+
+.meil-form__form,
+.meil-prefs__form {
+	display: flex;
+	flex-direction: column;
+	gap: var(--meil-gap);
+	align-items: flex-start;
+}
+
+.meil-form__field,
+.meil-form__actions,
+.meil-prefs__actions,
+.meil-form__message,
+.meil-prefs__message,
+.meil-prefs__notice {
+	margin: 0;
+}
+
+.meil-form__field {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25em;
+	width: 100%;
+	max-width: 28em;
+}
+
+/* Light defaults only: a theme that styles its own inputs and buttons wins,
+   since its element selectors are more specific than these single classes. */
+.meil-form__input {
+	width: 100%;
+	box-sizing: border-box;
+	padding: 0.55em 0.7em;
+	font: inherit;
+	border: 1px solid var(--meil-border);
+	border-radius: var(--meil-radius);
+}
+
+.meil-form__button,
+.meil-prefs__button {
+	padding: 0.55em 1.2em;
+	font: inherit;
+	cursor: pointer;
+}
+
+/* While a form is being sent: the button waits, with a small spinner after its text. */
+.meil-form__button:disabled,
+.meil-prefs__button:disabled {
+	cursor: progress;
+	opacity: 0.75;
+}
+
+.meil-form__button--loading::after,
+.meil-prefs__button--loading::after {
+	content: "";
+	display: inline-block;
+	width: 0.85em;
+	height: 0.85em;
+	margin-left: 0.5em;
+	vertical-align: -0.1em;
+	border: 2px solid currentColor;
+	border-right-color: transparent;
+	border-radius: 50%;
+	animation: meil-spin 0.6s linear infinite;
+}
+
+@keyframes meil-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.meil-form__button--loading::after,
+	.meil-prefs__button--loading::after {
+		animation: none;
+		border-right-color: currentColor;
+		opacity: 0.5;
+	}
+}
+
+/* Lists to choose from. */
+.meil-form__choices,
+.meil-prefs__choices {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5em;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	min-width: 0;
+}
+
+.meil-form__legend,
+.meil-prefs__legend {
+	padding: 0;
+	margin-bottom: 0.5em;
+}
+
+.meil-form__choice,
+.meil-prefs__choice {
+	position: relative;
+	display: flex;
+	align-items: flex-start;
+	gap: 0.6em;
+	cursor: pointer;
+}
+
+/* The real checkbox: hidden from sight, still focusable and clickable. */
+.meil-form__checkbox-input,
+.meil-prefs__checkbox-input {
+	position: absolute;
+	opacity: 0;
+	width: var(--meil-box-size);
+	height: var(--meil-box-size);
+	margin: 0;
+	cursor: pointer;
+}
+
+/* The box people see. */
+.meil-form__checkbox,
+.meil-prefs__checkbox {
+	flex: none;
+	position: relative;
+	width: var(--meil-box-size);
+	height: var(--meil-box-size);
+	margin-top: 0.15em;
+	border: 1.5px solid var(--meil-border);
+	border-radius: var(--meil-radius);
+	box-sizing: border-box;
+	transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.meil-form__checkbox::after,
+.meil-prefs__checkbox::after {
+	content: "";
+	position: absolute;
+	left: 50%;
+	top: 45%;
+	width: 0.3em;
+	height: 0.55em;
+	border: solid #fff;
+	border-width: 0 2px 2px 0;
+	transform: translate(-50%, -50%) rotate(45deg);
+	opacity: 0;
+	transition: opacity 0.15s ease;
+}
+
+.meil-form__checkbox-input:checked + .meil-form__checkbox,
+.meil-prefs__checkbox-input:checked + .meil-prefs__checkbox {
+	background-color: var(--meil-accent);
+	border-color: var(--meil-accent);
+}
+
+.meil-form__checkbox-input:checked + .meil-form__checkbox::after,
+.meil-prefs__checkbox-input:checked + .meil-prefs__checkbox::after {
+	opacity: 1;
+}
+
+.meil-form__checkbox-input:focus-visible + .meil-form__checkbox,
+.meil-prefs__checkbox-input:focus-visible + .meil-prefs__checkbox {
+	outline: 2px solid var(--meil-accent);
+	outline-offset: 2px;
+}
+
+.meil-prefs__choice-text {
+	display: flex;
+	flex-direction: column;
+	gap: 0.15em;
+}
+
+.meil-prefs__choice-description,
+.meil-prefs__choice-status {
+	font-size: 0.875em;
+	color: var(--meil-muted);
+}
+
+/* Messages. */
+.meil-form__message--success,
+.meil-form__message--pending,
+.meil-prefs__message--success {
+	color: var(--meil-success);
+}
+
+.meil-form__message--error,
+.meil-prefs__message--error {
+	color: var(--meil-error);
+}
+
+.meil-form__message:not([hidden]) + .meil-form__form,
+.meil-prefs__message:not([hidden]) + .meil-prefs__form {
+	margin-top: var(--meil-gap);
+}
+
+/* Honeypot: hidden from people, filled in by bots. */
+.meil-form__hp {
+	position: absolute;
+	left: -9999px;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}
+
+/* Hidden means hidden: an empty message line, or the form after a signup,
+   whatever display the rules above or the theme give them. */
+.meil-form [hidden],
+.meil-prefs [hidden] {
+	display: none !important;
+}
+
+/* The form's own checkboxes: their text may hold links. */
+.meil-form__consents {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5em;
+}
+
+.meil-form__choice--consent .meil-form__choice-label {
+	font-size: 0.925em;
+}
+
+.meil-form__choice--consent a {
+	text-decoration: underline;
+}

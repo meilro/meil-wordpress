@@ -1,3 +1,4 @@
+/* meil.ro > Settings. */
 .meil-mailer-wrap .form-table th {
 	width: 220px;
 }
@@ -8,6 +9,232 @@
 	gap: 6px;
 }
 
-.meil-mailer-audiences {
-	max-width: 760px;
+/* ------------------------------------------------------------------------
+ * meil.ro > Forms: the form editor.
+ * --------------------------------------------------------------------- */
+
+.meil-fa {
+	max-width: 880px;
+	margin: 0 -2px;
+}
+
+.meil-fa-section {
+	padding: 20px 2px 24px;
+	border-top: 1px solid #f0f0f1;
+}
+
+.meil-fa-section:first-child {
+	padding-top: 8px;
+	border-top: 0;
+}
+
+.meil-fa-section__title {
+	margin: 0 0 4px;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.meil-fa-section__lead {
+	margin: 0 0 14px;
+	color: #646970;
+}
+
+.meil-fa-tag {
+	padding: 1px 7px;
+	border-radius: 9px;
+	background: #f0f0f1;
+	color: #50575e;
+	font-size: 11px;
+	font-weight: 400;
+	line-height: 18px;
+}
+
+.meil-fa-inline {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	white-space: nowrap;
+}
+
+.meil-fa-inline input[type="checkbox"] {
+	margin: 0;
+}
+
+/* Audiences: one line each. The label field shows once the audience is offered. */
+.meil-fa-audiences {
+	margin: 0;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	background: #fff;
+}
+
+.meil-fa-audience {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px 16px;
+	min-height: 40px;
+	margin: 0;
+	padding: 8px 14px;
+	border-top: 1px solid #f0f0f1;
+}
+
+.meil-fa-audience:first-child {
+	border-top: 0;
+}
+
+.meil-fa-audience__offer {
+	display: flex;
+	flex: 1 1 260px;
+	align-items: center;
+	gap: 10px;
+	min-width: 0;
+	cursor: pointer;
+}
+
+.meil-fa-audience__offer input[type="checkbox"] {
+	margin: 0;
+}
+
+.meil-fa-audience__name {
+	font-weight: 600;
+	overflow-wrap: anywhere;
+}
+
+.meil-fa-audience__details {
+	display: flex;
+	flex: 1 1 360px;
+	align-items: center;
+	gap: 16px;
+}
+
+.meil-fa-audience__label {
+	flex: 1;
+	min-width: 0;
+}
+
+.meil-fa-audience:not(:has(.meil-fa-audience__toggle:checked)) .meil-fa-audience__details {
+	display: none;
+}
+
+.meil-fa-audience:has(.meil-fa-audience__toggle:checked) {
+	background: #f6f7f7;
+}
+
+/* Checkboxes: a numbered card each. */
+.meil-fa-cards {
+	counter-reset: meil-checkbox;
+}
+
+.meil-fa-card {
+	counter-increment: meil-checkbox;
+	margin-bottom: 12px;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	background: #fff;
+}
+
+.meil-fa-card__head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 8px 12px;
+	border-bottom: 1px solid #f0f0f1;
+}
+
+.meil-fa-card__title {
+	font-weight: 600;
+}
+
+.meil-fa-card__title::before {
+	content: attr(data-label) " " counter(meil-checkbox);
+}
+
+.meil-fa .meil-fa-card__remove {
+	display: inline-flex;
+	align-items: center;
+	gap: 2px;
+	color: #b32d2e;
+	text-decoration: none;
+}
+
+.meil-fa .meil-fa-card__remove:hover,
+.meil-fa .meil-fa-card__remove:focus {
+	color: #8a2424;
+}
+
+/* WordPress draws dashicons at 20px whatever the box says: size the glyph too. */
+.meil-fa-card__remove .dashicons,
+.meil-fa-card__remove .dashicons::before,
+.wp-core-ui .meil-fa-add .button .dashicons,
+.meil-fa-add .dashicons::before {
+	width: 16px;
+	height: 16px;
+	font-size: 16px;
+	line-height: 1;
+}
+
+.meil-fa-card .wp-editor-wrap {
+	padding: 10px 12px 0;
+}
+
+.meil-fa-card > textarea {
+	display: block;
+	width: calc(100% - 24px);
+	margin: 10px 12px 0;
+}
+
+.meil-fa-card__foot {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 10px 24px;
+	padding: 10px 12px 12px;
+}
+
+.meil-fa-property {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.meil-fa-property input {
+	width: 200px;
+}
+
+.meil-fa-empty {
+	margin: 0 0 12px;
+	color: #646970;
+	font-style: italic;
+}
+
+.meil-fa-section:has(.meil-fa-card) .meil-fa-empty {
+	display: none;
+}
+
+.meil-fa-add {
+	margin: 0;
+}
+
+.meil-fa-add .button {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+}
+
+
+
+/* Settings rows, as on WordPress's own settings screens. */
+.meil-fa-table {
+	margin-top: 0;
+}
+
+.meil-fa-table th {
+	width: 220px;
+	padding-left: 0;
+}
+
+/* The thank-you page only matters when visitors confirm. */
+.meil-fa-table:not(:has(#meil-confirm:checked)) .meil-fa-thanks {
+	display: none;
 }

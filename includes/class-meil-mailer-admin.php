@@ -1,10 +1,17 @@
 <?php
 /**
- * Settings screen: Meil.
+ * Settings screen: meil.ro.
  *
- * Standard Settings API (options.php) for the connection fields, a
- * separate admin-post.php handler for the "send a test email" tool, links
- * into the meil.ro dashboard, and the audiences ready for [meil_signup].
+ * Standard Settings API (options.php) for the connection fields, a separate
+ * admin-post.php handler for the "send a test email" tool, links into the
+ * meil.ro dashboard, and pointers to the forms and the preferences page.
+ *
+ * Saving a key asks meil.ro which domain it belongs to (GET /key). A key for
+ * another site, or a default from address off the key's domain, is refused
+ * with an error and the old settings stay, so nothing breaks later in front
+ * of visitors.
+ *
+ * @package Meil_Mailer
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -44,6 +51,16 @@ class Meil_Mailer_Admin {
 			'dashicons-email-alt',
 			80
 		);
+		// The settings come first under the menu, so the menu link opens them.
+		// Without this item WordPress lists only Forms, and the link goes there.
+		add_submenu_page(
+			self::PAGE,
+			__( 'Settings', 'meil' ),
+			__( 'Settings', 'meil' ),
+			'manage_options',
+			self::PAGE,
+			array( $this, 'render_settings_page' )
+		);
 	}
 
 	public function register_settings(): void {
@@ -61,7 +78,7 @@ class Meil_Mailer_Admin {
 			self::SECTION,
 			__( 'Connection', 'meil' ),
 			static function (): void {
-				echo '<p>' . esc_html__( 'Enter an API key created under API Keys in meil.ro. An "Email sending" key is enough for WordPress mail; the signup form needs a "Full access" key.', 'meil' ) . '</p>';
+				echo '<p>' . esc_html__( "Enter an API key created under API Keys in meil.ro for this site's domain. A \"Transactional only\" key is enough for WordPress mail; forms and the preferences page need \"Full access\".", 'meil' ) . '</p>';
 			},
 			self::PAGE
 		);
@@ -71,6 +88,8 @@ class Meil_Mailer_Admin {
 			'from_email'       => __( 'Default from address', 'meil' ),
 			'from_name'        => __( 'Default from name', 'meil' ),
 			'override_wp_mail' => __( 'Send WordPress mail through meil', 'meil' ),
+			'load_css'         => __( 'Form styles', 'meil' ),
+			'delete_with_user' => __( 'Deleted users', 'meil' ),
 		);
 		foreach ( $fields as $field => $label ) {
 			add_settings_field(
@@ -84,16 +103,88 @@ class Meil_Mailer_Admin {
 		}
 	}
 
-	/** @param array<string,mixed> $input */
+	/**
+	 * Checks a new set of settings with meil.ro before they are stored. On a
+	 * problem it adds an error for the screen and returns the old settings.
+	 *
+	 * @param array<string,mixed> $input
+	 */
 	public function sanitize_settings( $input ): array {
-		$input = is_array( $input ) ? $input : array();
+		$input    = is_array( $input ) ? $input : array();
+		$previous = get_option( $this->option_name, array() );
+		$previous = is_array( $previous ) ? $previous : array();
 
-		return array(
+		$out = array(
 			'api_key'          => sanitize_text_field( (string) ( $input['api_key'] ?? '' ) ),
 			'from_email'       => sanitize_email( (string) ( $input['from_email'] ?? '' ) ),
 			'from_name'        => sanitize_text_field( (string) ( $input['from_name'] ?? '' ) ),
 			'override_wp_mail' => ! empty( $input['override_wp_mail'] ),
+			'load_css'         => ! empty( $input['load_css'] ),
+			'delete_with_user' => ! empty( $input['delete_with_user'] ),
+			'key_domain'       => '',
+			'key_permission'   => '',
 		);
+		if ( '' === $out['api_key'] ) {
+			return $out;
+		}
+
+		$key = $this->check_key( $out['api_key'] );
+		if ( is_string( $key ) ) {
+			$this->refuse( $key );
+			return $previous;
+		}
+		$out['key_domain']     = $key['domain'];
+		$out['key_permission'] = $key['permission'];
+		return $out;
+	}
+
+	/**
+	 * What meil.ro says about a key: its domain and permission, or why it
+	 * cannot be used. Asked once per request: WordPress may run the sanitize
+	 * callback twice on the first save.
+	 *
+	 * @return array{domain:string,permission:string}|string
+	 */
+	private function check_key( string $api_key ) {
+		static $seen = array();
+		if ( isset( $seen[ $api_key ] ) ) {
+			return $seen[ $api_key ];
+		}
+
+		$result = ( new Meil_Client( $api_key ) )->get_key();
+		if ( is_wp_error( $result ) ) {
+			$status             = Meil_Client::status( $result );
+			$seen[ $api_key ] = 401 === $status
+				? __( 'This API key is not valid. Copy it again from API Keys in meil.ro.', 'meil' )
+				/* translators: %s: error message from the meil API */
+				: sprintf( __( 'Could not check the API key with meil.ro: %s', 'meil' ), $result->get_error_message() );
+			return $seen[ $api_key ];
+		}
+
+		$seen[ $api_key ] = array(
+			'domain'     => strtolower( (string) ( $result['domain'] ?? '' ) ),
+			'permission' => (string) ( $result['permission'] ?? '' ),
+		);
+		return $seen[ $api_key ];
+	}
+
+	/** Shows an error on the settings screen, once. */
+	private function refuse( string $message ): void {
+		static $shown = array();
+		if ( ! isset( $shown[ $message ] ) ) {
+			$shown[ $message ] = true;
+			add_settings_error( $this->option_name, 'meil_settings', $message );
+		}
+	}
+
+	/** The permission names as the meil.ro dashboard shows them. */
+	private static function permission_label( string $permission ): string {
+		$labels = array(
+			'full_access'      => __( 'Full access', 'meil' ),
+			'broadcast_access' => __( 'Emails and broadcasts', 'meil' ),
+			'email_access'     => __( 'Transactional only', 'meil' ),
+		);
+		return $labels[ $permission ] ?? $permission;
 	}
 
 	public function render_field( array $args ): void {
@@ -111,6 +202,22 @@ class Meil_Mailer_Admin {
 					esc_attr( $name ),
 					esc_attr( $value )
 				);
+				if ( '' !== $settings['key_permission'] ) {
+					echo '<p class="description">' . esc_html(
+						'' !== $settings['key_domain']
+							? sprintf(
+								/* translators: 1: the API key's domain, 2: its permission, e.g. "Full access" */
+								__( 'Works with %1$s, %2$s.', 'meil' ),
+								$settings['key_domain'],
+								self::permission_label( $settings['key_permission'] )
+							)
+							: sprintf(
+								/* translators: %s: the API key's permission, e.g. "Full access" */
+								__( 'Works with all your domains, %s.', 'meil' ),
+								self::permission_label( $settings['key_permission'] )
+							)
+					) . '</p>';
+				}
 				break;
 			case 'from_email':
 				printf(
@@ -130,12 +237,19 @@ class Meil_Mailer_Admin {
 				);
 				break;
 			case 'override_wp_mail':
+			case 'load_css':
+			case 'delete_with_user':
+				$texts = array(
+					'override_wp_mail' => __( 'Replace wp_mail() delivery with the meil API (recommended). Leave unchecked to use meil for forms only.', 'meil' ),
+					'load_css'         => __( "Load the plugin's styles for forms and the preferences page. Turn off to style them entirely from your theme.", 'meil' ),
+					'delete_with_user' => __( 'When a WordPress user is deleted, delete their meil.ro contact too, with its data.', 'meil' ),
+				);
 				printf(
 					'<label><input type="checkbox" id="%1$s" name="%2$s" value="1" %3$s /> %4$s</label>',
 					esc_attr( $id ),
 					esc_attr( $name ),
 					checked( ! empty( $value ), true, false ),
-					esc_html__( 'Replace wp_mail() delivery with the meil API (recommended). Leave unchecked to use meil for the signup form only.', 'meil' )
+					esc_html( $texts[ $field ] )
 				);
 				break;
 		}
@@ -150,6 +264,7 @@ class Meil_Mailer_Admin {
 		<div class="wrap meil-mailer-wrap">
 			<h1><?php esc_html_e( 'meil.ro', 'meil' ); ?></h1>
 
+			<?php settings_errors( $this->option_name ); ?>
 			<?php $this->render_dashboard_links(); ?>
 
 			<form action="options.php" method="post">
@@ -185,8 +300,7 @@ class Meil_Mailer_Admin {
 
 			<?php if ( $this->client->is_configured() ) : ?>
 				<hr />
-				<h2><?php esc_html_e( 'Signup form', 'meil' ); ?></h2>
-				<?php $this->render_audiences(); ?>
+				<?php $this->render_forms_help( $settings ); ?>
 			<?php endif; ?>
 		</div>
 		<?php
@@ -214,50 +328,40 @@ class Meil_Mailer_Admin {
 		echo '</p>';
 	}
 
-	/** Lists the account's audiences with the shortcode for each one. */
-	private function render_audiences(): void {
-		$result = $this->client->list_audiences();
+	/**
+	 * Where the forms are built, and how to place the preferences page.
+	 *
+	 * @param array<string,mixed> $settings
+	 */
+	private function render_forms_help( array $settings ): void {
+		?>
+		<h2><?php esc_html_e( 'Subscription forms', 'meil' ); ?></h2>
+		<?php if ( 'full_access' !== $settings['key_permission'] ) : ?>
+			<div class="notice notice-warning inline"><p><?php esc_html_e( 'Forms and the preferences page need a "Full access" API key.', 'meil' ); ?></p></div>
+		<?php endif; ?>
+		<p><?php esc_html_e( 'Build forms with the audiences, labels and confirmation you want, then place each one with its shortcode.', 'meil' ); ?></p>
+		<p><a class="button" href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . Meil_Forms::POST_TYPE ) ); ?>"><?php esc_html_e( 'Manage forms', 'meil' ); ?></a></p>
 
-		if ( is_wp_error( $result ) ) {
-			$status = (int) ( $result->get_error_data()['status'] ?? 0 );
-			if ( 403 === $status ) {
-				echo '<p>' . esc_html__( 'This API key can only send email. To add a signup form to your site, use a "Full access" key.', 'meil' ) . '</p>';
-				return;
+		<h2><?php esc_html_e( 'Email preferences', 'meil' ); ?></h2>
+		<p>
+			<?php
+			if ( '' !== $settings['key_domain'] ) {
+				printf(
+					/* translators: 1: the shortcode, 2: the API key's domain */
+					esc_html__( 'Put %1$s on an account page: logged-in users see the public audiences of %2$s and choose which ones they get. Visitors who are not logged in see a message instead.', 'meil' ),
+					'<code>[meil_preferences]</code>',
+					esc_html( $settings['key_domain'] )
+				);
+			} else {
+				printf(
+					/* translators: %s: the shortcode */
+					esc_html__( 'Put %s on an account page: logged-in users see the public audiences of all your domains and choose which ones they get. Visitors who are not logged in see a message instead.', 'meil' ),
+					'<code>[meil_preferences]</code>'
+				);
 			}
-			echo '<div class="notice notice-error inline"><p>' . esc_html(
-				sprintf(
-					/* translators: %s: error message from the meil API */
-					__( 'Could not reach meil: %s', 'meil' ),
-					$result->get_error_message()
-				)
-			) . '</p></div>';
-			return;
-		}
-
-		$audiences = $result['data'] ?? array();
-		if ( array() === $audiences ) {
-			printf(
-				'<p>%1$s <a href="%2$s" target="_blank" rel="noopener">%3$s</a></p>',
-				esc_html__( 'You have no audiences yet.', 'meil' ),
-				esc_url( MEIL_MAILER_APP_URL . '/audiences' ),
-				esc_html__( 'Create one in meil.ro', 'meil' )
-			);
-			return;
-		}
-
-		echo '<p>' . esc_html__( 'Paste a shortcode into any page, post or widget area to add a signup form for that audience. Add show_name_fields="true" to also ask for a first name.', 'meil' ) . '</p>';
-		echo '<table class="widefat striped meil-mailer-audiences"><thead><tr>';
-		echo '<th>' . esc_html__( 'Audience', 'meil' ) . '</th>';
-		echo '<th>' . esc_html__( 'Shortcode', 'meil' ) . '</th>';
-		echo '</tr></thead><tbody>';
-		foreach ( $audiences as $audience ) {
-			printf(
-				'<tr><td>%1$s</td><td><code>[meil_signup audience="%2$s"]</code></td></tr>',
-				esc_html( (string) ( $audience['name'] ?? '' ) ),
-				esc_html( (string) ( $audience['id'] ?? '' ) )
-			);
-		}
-		echo '</tbody></table>';
+			?>
+		</p>
+		<?php
 	}
 
 	public function handle_test_email(): void {
