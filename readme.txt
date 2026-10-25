@@ -4,7 +4,7 @@ Tags: email, smtp, transactional email, newsletter, subscription form
 Requires at least: 5.9
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,7 +20,7 @@ email and newsletters.
   local mail, with attachments, Cc/Bcc, Reply-To and custom headers carried across.
 * **Subscription forms.** Build forms under **meil.ro > Forms**: pick the audiences each form offers,
   give each one your own label, ask for a first and last name or not, and choose whether visitors
-  confirm by email first. Place a form anywhere with its shortcode, `[meil_form id="123"]`. Forms
+  confirm by email first, on meil.ro or on a page of your own site. Place a form anywhere with its shortcode, `[meil_form id="123"]`. Forms
   are sent in the background, with the answer shown in place; without JavaScript they still work.
 * **Email preferences for logged-in users.** Put `[meil_preferences]` on an account page: users see
   the public audiences of your domain and tick the ones they want.
@@ -62,8 +62,8 @@ Yes: uncheck "Send WordPress mail through meil" on the meil.ro screen.
 = Which domains does a key cover? =
 
 A meil.ro key works with all your domains unless you limit it to one when you create it. Limited to
-`example.com`, it also covers `news.example.com`; limited to `news.example.com`, only that
-subdomain. If your meil.ro account sends for more than one site, limit this site's key to its domain:
+`example.com`, it also covers its subdomains, like `news.example.com`. If your meil.ro account sends
+for more than one site, limit this site's key to its domain:
 the forms and the preferences page then offer only this site's audiences. Mail from an address the
 key does not cover is refused by meil.ro, and the error shows up wherever WordPress reports a failed
 email.
@@ -74,8 +74,7 @@ Yes, and it is a good idea: it keeps the reputation of your newsletters apart fr
 resets and order emails. Verify `news.example.com` in meil.ro and put your newsletter audiences on
 it. The site's mail keeps going from the default from address (`wordpress@example.com`), while
 confirmation emails and campaigns for those audiences go from `news.example.com`. One key for
-`example.com` covers both. If the site should never send from the main domain, use a key for
-`news.example.com` and a default from address on it.
+`example.com` covers both.
 
 = Should visitors confirm by email? =
 
@@ -83,7 +82,21 @@ We recommend it, and new forms have it on. The visitor gets one email, in your s
 is subscribed only after pressing its button. Until then they get nothing, and a signup nobody
 confirms is deleted after 7 days. This keeps typos and bots off your list and records when and from
 where each person confirmed. Pick a page of your site for them to land on afterwards, or leave
-meil.ro's own confirmation page.
+the thank-you on the confirmation page.
+
+= Can visitors confirm on my own site instead of on meil.ro? =
+
+Yes. In the form editor, under "Where visitors confirm", pick a page of your site. The button in the
+confirmation email then opens that page, which shows the visitor's address and the lists they are
+confirming, with a button. Pressing it subscribes them, records when and from where, and takes them
+to your thank-you page if the form has one. The confirmation appears at the top of the page; put
+`[meil_confirm]` in the page to place it yourself.
+
+Opening the page never subscribes anyone on its own, only pressing its button does: Outlook and
+company mail filters open every link in an email to check it. The page must be published, without a
+password, and on the domain your lists send from (or a subdomain of it). If meil.ro refuses it,
+visitors are still signed up and confirm on meil.ro's page, and you see a warning in the admin until
+you save the form again.
 
 = What does the preferences page show? =
 
@@ -98,8 +111,9 @@ email. Visitors who are not logged in see a short message. The page is never cac
 * Or turn off "Form styles" on the meil.ro screen and style the classes yourself. Each checkbox has
   a real input, hidden visually, followed by `.meil-form__checkbox` / `.meil-prefs__checkbox` to
   draw your own box; style the ticked state with `input:checked + .meil-form__checkbox`.
-* Or copy `templates/form.php` or `templates/preferences.php` into your theme as `meil/form.php` or
-  `meil/preferences.php` and change the markup.
+* Or copy `templates/form.php`, `templates/preferences.php` or `templates/confirm.php` into your
+  theme as `meil/form.php`, `meil/preferences.php` or `meil/confirm.php` and change the markup.
+* The `meil_confirm_text` filter changes any text of the confirmation box.
 * The `meil_preferences_choices` filter renames, reorders or hides lists on the preferences page.
 * The form's own checkboxes (terms and the like) have `.meil-form__choice--consent`, and
   `--required` when they must be ticked.
@@ -127,6 +141,10 @@ keep only bold, italic and web, email or phone links: anything else, scripts inc
 when the form is saved and again when it is shown.
 
 == Changelog ==
+
+= 1.2.0 =
+* Visitors can confirm their subscription on a page of your site instead of on meil.ro: pick it under "Where visitors confirm" in the form editor. The page shows who is confirming which lists, with a button, and only the button subscribes. Place it with [meil_confirm], or it shows at the top of the page.
+* If meil.ro refuses a form's confirmation page or thank-you page (a site on another domain, say), visitors are still signed up and confirm on meil.ro's page, and the admin is told why. Before, the signup failed.
 
 = 1.1.0 =
 * Forms and the preferences page are sent in the background (admin-ajax.php), with a loading state on the button and the answer shown in place.

@@ -5,7 +5,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: meil.ro – Email & Newsletter 1.1.0\n"
+"Project-Id-Version: meil.ro – Email & Newsletter 1.2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/meilro/meil-wordpress/issues\n"
 "POT-Creation-Date: 2026-10-22 09:00+0300\n"
 "PO-Revision-Date: 2026-10-22 12:00+0300\n"
@@ -178,10 +178,6 @@ msgstr "Primesc un e-mail și sunt abonați doar după ce apasă pe butonul din 
 #: includes/class-meil-forms.php:266
 msgid "Page they land on after confirming"
 msgstr "Pagina la care ajung după confirmare"
-
-#: includes/class-meil-forms.php:274
-msgid "meil.ro's own confirmation page"
-msgstr "Pagina de confirmare de la meil.ro"
 
 #: includes/class-meil-forms.php:285
 msgid "Texts"
@@ -575,3 +571,73 @@ msgstr "Cere și numele de familie"
 #: templates/form.php
 msgid "Last name"
 msgstr "Nume"
+
+#: includes/class-meil-confirm.php
+msgid "Thank you, your subscription is confirmed."
+msgstr "Mulțumim, abonarea ta este confirmată."
+
+#: includes/class-meil-confirm.php
+msgid "Your subscription was already confirmed. Thank you!"
+msgstr "Abonarea ta era deja confirmată. Mulțumim!"
+
+#: includes/class-meil-confirm.php
+msgid "This confirmation link has expired. Please sign up again to get a new one."
+msgstr "Linkul de confirmare a expirat. Abonează-te din nou ca să primești unul nou."
+
+#: includes/class-meil-confirm.php
+msgid "This confirmation link is not valid. Please use the button in the email we sent you, or sign up again."
+msgstr "Linkul de confirmare nu este valid. Folosește butonul din e-mailul primit de la noi sau abonează-te din nou."
+
+#: includes/class-meil-confirm.php
+msgid "Sorry, we could not confirm your subscription right now. Please try again in a few minutes."
+msgstr "Ne pare rău, nu am putut confirma abonarea acum. Încearcă din nou în câteva minute."
+
+#. translators: %s: the visitor's email address
+#: includes/class-meil-confirm.php
+#, php-format
+msgid "Press the button to confirm that you want to receive our emails at %s."
+msgstr "Apasă butonul ca să confirmi că vrei să primești e-mailurile noastre la %s."
+
+#: includes/class-meil-confirm.php
+msgid "Press the button to confirm your subscription."
+msgstr "Apasă butonul ca să confirmi abonarea."
+
+#: includes/class-meil-confirm.php
+msgid "You are subscribing to:"
+msgstr "Te abonezi la:"
+
+#: includes/class-meil-confirm.php
+msgid "Confirm my subscription"
+msgstr "Confirm abonarea"
+
+#: includes/class-meil-confirm.php
+msgid "This is where visitors confirm their subscription: they arrive here from the button in the confirmation email. Only you see this note."
+msgstr "Aici își confirmă vizitatorii abonarea: ajung pe această pagină din butonul din e-mailul de confirmare. Doar tu vezi această notă."
+
+#: includes/class-meil-forms.php
+msgid "Where visitors confirm"
+msgstr "Unde confirmă vizitatorii"
+
+#: includes/class-meil-forms.php
+msgid "On meil.ro's confirmation page, in your branding"
+msgstr "Pe pagina de confirmare meil.ro, cu brandingul tău"
+
+#: includes/class-meil-forms.php
+msgid "Or pick a page of this site: the button in the email opens it, and visitors confirm there. It must be on the domain you send from, or a subdomain of it. The confirmation shows at the top of the page; put [meil_confirm] in the page to place it yourself."
+msgstr "Sau alege o pagină de pe acest site: butonul din e-mail o deschide, iar vizitatorii confirmă acolo. Pagina trebuie să fie pe domeniul de pe care trimiți sau pe un subdomeniu al lui. Confirmarea apare în partea de sus a paginii; pune [meil_confirm] în pagină ca s-o așezi tu unde vrei."
+
+#: includes/class-meil-forms.php
+msgid "This page is not published, or has a password, so visitors could not open it: until that changes, they confirm on meil.ro."
+msgstr "Pagina nu este publicată sau are parolă, așa că vizitatorii nu o pot deschide: până se schimbă asta, confirmă pe meil.ro."
+
+#: includes/class-meil-forms.php
+msgid "None: the confirmation page says thank you"
+msgstr "Niciuna: pagina de confirmare le mulțumește"
+
+#: includes/class-meil-forms.php
+msgid "A meil.ro form could not use its own confirmation page or its \"after confirming\" page, so its visitors confirm on meil.ro's page for now. Sign-ups still work. meil.ro said:"
+msgstr "Un formular meil.ro nu și-a putut folosi propria pagină de confirmare sau pagina de după confirmare, așa că vizitatorii lui confirmă deocamdată pe pagina meil.ro. Abonările merg în continuare. meil.ro a răspuns:"
+
+#: includes/class-meil-forms.php
+msgid "Open the form"
+msgstr "Deschide formularul"

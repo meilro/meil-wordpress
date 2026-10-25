@@ -125,6 +125,28 @@ class Meil_Client {
 		return $this->request( 'POST', '/contacts', $payload, self::PAGE_TIMEOUT );
 	}
 
+	/**
+	 * Where a sign-up waiting for confirmation stands (GET /contacts/confirm/{token}):
+	 * status pending, confirmed or expired, the address and the audiences by
+	 * name. Changes nothing. A WP_Error with status 404 for a token that is not valid.
+	 */
+	public function get_confirmation( string $token ) {
+		return $this->request( 'GET', '/contacts/confirm/' . self::segment( $token ), null, self::PAGE_TIMEOUT );
+	}
+
+	/**
+	 * Confirms a sign-up (POST /contacts/confirm), with the visitor's IP as
+	 * proof. Only ever on the visitor's button press: mail filters open every
+	 * link in an email. An expired link is not an error: status is expired.
+	 */
+	public function confirm_contact( string $token, string $ip ) {
+		$payload = array( 'token' => $token );
+		if ( '' !== $ip ) {
+			$payload['ip'] = $ip;
+		}
+		return $this->request( 'POST', '/contacts/confirm', $payload, self::PAGE_TIMEOUT );
+	}
+
 	/** A contact with its audiences, or a WP_Error with status 404 when it does not exist. */
 	public function get_contact( string $email ) {
 		return $this->request( 'GET', '/contacts/' . self::segment( $email ), null, self::PAGE_TIMEOUT );

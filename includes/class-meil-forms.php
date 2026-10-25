@@ -5,7 +5,8 @@
  * Each form is a post of a private type (meil_form) whose settings live in one
  * meta field: the audiences it offers, each with its own label and whether it
  * starts ticked, whether to ask for a first name, whether to ask for a
- * confirmation by email, the page to land on after confirming, and its texts.
+ * confirmation by email, where visitors confirm (meil.ro's page or one of this
+ * site, see Meil_Confirm), the page to land on after confirming, and its texts.
  *
  * The form is sent in the background (admin-ajax.php, see assets/forms.js) and
  * the answer replaces it in place; without JavaScript it posts to the page.
@@ -39,6 +40,9 @@ class Meil_Forms {
 	private const NONCE    = 'meil_form_save';
 	private const HONEYPOT = 'meil_form_website';
 
+	/** Why a form's own confirmation page was refused, shown to the admins until the form is saved again. */
+	public const PAGE_PROBLEM = 'meil_confirm_page_problem';
+
 	/** @var Meil_Client */
 	private $client;
 
@@ -56,6 +60,7 @@ class Meil_Forms {
 			add_filter( 'manage_' . self::POST_TYPE . '_posts_columns', array( $this, 'columns' ) );
 			add_action( 'manage_' . self::POST_TYPE . '_posts_custom_column', array( $this, 'column' ), 10, 2 );
 			add_filter( 'post_updated_messages', array( $this, 'updated_messages' ) );
+			add_action( 'admin_notices', array( $this, 'page_problem_notice' ) );
 		}
 	}
 
@@ -69,6 +74,7 @@ class Meil_Forms {
 				'ask_name'      => false,
 				'ask_last_name' => false,
 				'confirm'       => true,
+				'confirm_page'  => 0,
 				'thanks_page'   => 0,
 				'checkboxes'    => array(),
 				'button'        => '',
@@ -271,6 +277,29 @@ class Meil_Forms {
 						</td>
 					</tr>
 					<tr class="meil-fa-thanks">
+						<th scope="row"><label for="meil-confirm-page"><?php esc_html_e( 'Where visitors confirm', 'meil' ); ?></label></th>
+						<td>
+							<?php
+							wp_dropdown_pages(
+								array(
+									'name'              => 'meil_confirm_page',
+									'id'                => 'meil-confirm-page',
+									'selected'          => (int) $form['confirm_page'],
+									'show_option_none'  => esc_html__( "On meil.ro's confirmation page, in your branding", 'meil' ),
+									'option_none_value' => '0',
+								)
+							);
+							?>
+							<p class="description"><?php esc_html_e( 'Or pick a page of this site: the button in the email opens it, and visitors confirm there. It must be on the domain you send from, or a subdomain of it. The confirmation shows at the top of the page; put [meil_confirm] in the page to place it yourself.', 'meil' ); ?></p>
+							<?php
+							$confirm_post = (int) $form['confirm_page'] > 0 ? get_post( (int) $form['confirm_page'] ) : null;
+							if ( $confirm_post && ( 'publish' !== $confirm_post->post_status || '' !== $confirm_post->post_password ) ) :
+								?>
+								<p class="description meil-fa-warning"><?php esc_html_e( 'This page is not published, or has a password, so visitors could not open it: until that changes, they confirm on meil.ro.', 'meil' ); ?></p>
+							<?php endif; ?>
+						</td>
+					</tr>
+					<tr class="meil-fa-thanks">
 						<th scope="row"><label for="meil-thanks-page"><?php esc_html_e( 'Page they land on after confirming', 'meil' ); ?></label></th>
 						<td>
 							<?php
@@ -279,7 +308,7 @@ class Meil_Forms {
 									'name'              => 'meil_thanks_page',
 									'id'                => 'meil-thanks-page',
 									'selected'          => (int) $form['thanks_page'],
-									'show_option_none'  => esc_html__( "meil.ro's own confirmation page", 'meil' ),
+									'show_option_none'  => esc_html__( 'None: the confirmation page says thank you', 'meil' ),
 									'option_none_value' => '0',
 								)
 							);
@@ -367,10 +396,17 @@ class Meil_Forms {
 				'ask_name'      => ! empty( $_POST['meil_ask_name'] ),
 				'ask_last_name' => ! empty( $_POST['meil_ask_last_name'] ),
 				'confirm'       => ! empty( $_POST['meil_confirm'] ),
+				'confirm_page'  => isset( $_POST['meil_confirm_page'] ) ? absint( $_POST['meil_confirm_page'] ) : 0,
 				'thanks_page'   => isset( $_POST['meil_thanks_page'] ) ? absint( $_POST['meil_thanks_page'] ) : 0,
 				'checkboxes'    => $checkboxes,
 			) + $texts
 		);
+
+		// Saved again: the admin has seen the warning about its confirmation page.
+		$problem = get_option( self::PAGE_PROBLEM );
+		if ( is_array( $problem ) && (int) ( $problem['form'] ?? 0 ) === $post_id ) {
+			delete_option( self::PAGE_PROBLEM );
+		}
 	}
 
 	/**
@@ -507,7 +543,7 @@ class Meil_Forms {
 	 *
 	 * @param array<string,mixed> $row
 	 */
-	private static function label( array $row ): string {
+	public static function label( array $row ): string {
 		foreach ( array( 'label', 'name', 'id' ) as $key ) {
 			if ( '' !== (string) ( $row[ $key ] ?? '' ) ) {
 				return (string) $row[ $key ];
@@ -602,7 +638,8 @@ class Meil_Forms {
 	/** The form sent in the background: answers with the message, and whether the form is done. */
 	public function handle_ajax(): void {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- public form, see the class comment.
-		$form = self::published( isset( $_POST['meil_form_id'] ) ? absint( $_POST['meil_form_id'] ) : 0 );
+		$form_id = isset( $_POST['meil_form_id'] ) ? absint( $_POST['meil_form_id'] ) : 0;
+		$form    = self::published( $form_id );
 		if ( null === $form || array() === $form['audiences'] ) {
 			wp_send_json(
 				array(
@@ -612,7 +649,7 @@ class Meil_Forms {
 				)
 			);
 		}
-		list( $message, $done ) = $this->handle_submission( $form, self::texts( $form ) );
+		list( $message, $done ) = $this->handle_submission( $form_id, $form, self::texts( $form ) );
 		wp_send_json(
 			array(
 				'type'    => $message['type'],
@@ -652,7 +689,7 @@ class Meil_Forms {
 			'checkboxes' => array(),
 		);
 		if ( $submitted ) {
-			list( $message, $done, $values ) = $this->handle_submission( $form, $text );
+			list( $message, $done, $values ) = $this->handle_submission( $form_id, $form, $text );
 		}
 		// phpcs:enable WordPress.Security.NonceVerification.Missing
 
@@ -701,10 +738,11 @@ class Meil_Forms {
 	 * Signs the visitor up. Only audiences the form offers are ever sent, whatever
 	 * the posted values say.
 	 *
+	 * @param int                 $form_id
 	 * @param array<string,mixed> $form
 	 * @return array{0: array{type:string,text:string}|null, 1: bool, 2: array<string,mixed>}
 	 */
-	private function handle_submission( array $form, callable $text ): array {
+	private function handle_submission( int $form_id, array $form, callable $text ): array {
 		// phpcs:disable WordPress.Security.NonceVerification.Missing -- public form, see the class comment.
 		$email      = isset( $_POST['meil_email'] ) ? sanitize_email( wp_unslash( (string) $_POST['meil_email'] ) ) : '';
 		$first_name = isset( $_POST['meil_first_name'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['meil_first_name'] ) ) : '';
@@ -798,13 +836,35 @@ class Meil_Forms {
 		if ( ! empty( $form['confirm'] ) ) {
 			$payload['confirm']  = true;
 			$payload['language'] = 0 === strpos( determine_locale(), 'ro' ) ? 'ro' : 'en';
-			$thanks              = (int) $form['thanks_page'] > 0 ? get_permalink( (int) $form['thanks_page'] ) : false;
-			if ( is_string( $thanks ) && '' !== $thanks ) {
+			// On a page of this site (Meil_Confirm sends them on to the thanks
+			// page after the press), or on meil.ro's, which does it itself.
+			$page   = self::confirm_page_url( $form, $form_id );
+			$thanks = (int) $form['thanks_page'] > 0 ? get_permalink( (int) $form['thanks_page'] ) : false;
+			if ( '' !== $page ) {
+				$payload['confirm_page'] = $page;
+			} elseif ( is_string( $thanks ) && '' !== $thanks ) {
 				$payload['confirmed_url'] = $thanks;
 			}
 		}
 
 		$result = $this->client->create_contact( $payload );
+		// meil.ro refused this site's page (the site is not on the domain the
+		// lists send from, say): the visitor is still signed up, confirming on
+		// meil.ro's own page instead, and the admins are told why.
+		if ( is_wp_error( $result ) && 'validation_error' === $result->get_error_code()
+			&& ( isset( $payload['confirm_page'] ) || isset( $payload['confirmed_url'] ) )
+			&& preg_match( '/confirm_page|confirmed_url/', $result->get_error_message() ) ) {
+			update_option(
+				self::PAGE_PROBLEM,
+				array(
+					'form'    => $form_id,
+					'message' => $result->get_error_message(),
+				),
+				false
+			);
+			unset( $payload['confirm_page'], $payload['confirmed_url'] );
+			$result = $this->client->create_contact( $payload );
+		}
 		if ( is_wp_error( $result ) ) {
 			// The API's message is for the site owner (it can mention API keys), not visitors.
 			return $error(
@@ -828,5 +888,42 @@ class Meil_Forms {
 			true,
 			$values,
 		);
+	}
+	/**
+	 * The address of the form's own confirmation page, as meil.ro needs it:
+	 * with the form's id, to which meil.ro adds the token (&token=...). '' for
+	 * meil.ro's page: when none is picked, or the page cannot be opened by
+	 * visitors (not published, or behind a password).
+	 *
+	 * @param array<string,mixed> $form
+	 */
+	private static function confirm_page_url( array $form, int $form_id ): string {
+		$page_id = (int) ( $form['confirm_page'] ?? 0 );
+		$post    = $page_id > 0 ? get_post( $page_id ) : null;
+		if ( ! $post || 'publish' !== $post->post_status || '' !== $post->post_password ) {
+			return '';
+		}
+		$url = get_permalink( $post );
+		if ( ! is_string( $url ) || '' === $url ) {
+			return '';
+		}
+		return add_query_arg( 'meil_form', $form_id, $url );
+	}
+
+	/** Tells the admins when a form's confirmation page was refused, until they save that form again. */
+	public function page_problem_notice(): void {
+		$problem = get_option( self::PAGE_PROBLEM );
+		if ( ! is_array( $problem ) || ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+		$form_id = (int) ( $problem['form'] ?? 0 );
+		$edit    = $form_id > 0 ? get_edit_post_link( $form_id ) : '';
+		echo '<div class="notice notice-warning"><p>';
+		echo esc_html__( 'A meil.ro form could not use its own confirmation page or its "after confirming" page, so its visitors confirm on meil.ro\'s page for now. Sign-ups still work. meil.ro said:', 'meil' );
+		echo '</p><p><em>' . esc_html( (string) ( $problem['message'] ?? '' ) ) . '</em></p>';
+		if ( is_string( $edit ) && '' !== $edit ) {
+			echo '<p><a href="' . esc_url( $edit ) . '">' . esc_html__( 'Open the form', 'meil' ) . '</a></p>';
+		}
+		echo '</div>';
 	}
 }

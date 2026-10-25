@@ -234,7 +234,12 @@
 	padding-left: 0;
 }
 
-/* The thank-you page only matters when visitors confirm. */
+/* Where they confirm, and the thank-you page, only matter when visitors confirm. */
 .meil-fa-table:not(:has(#meil-confirm:checked)) .meil-fa-thanks {
 	display: none;
+}
+
+/* A setting that will not work as it is (an unpublished confirmation page). */
+.meil-fa-warning {
+	color: #b32d2e;
 }

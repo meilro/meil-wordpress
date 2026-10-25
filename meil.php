@@ -3,7 +3,7 @@
  * Plugin Name:       meil.ro – Email & Newsletter
  * Plugin URI:        https://github.com/meilro/meil-wordpress
  * Description:       Sends WordPress mail through meil.ro, with subscription forms and a preferences page for logged-in users.
- * Version:           1.1.0
+ * Version:           1.2.0
  * Requires at least: 5.9
  * Requires PHP:      7.4
  * Author:            meil.ro
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'MEIL_MAILER_VERSION', '1.1.0' );
+define( 'MEIL_MAILER_VERSION', '1.2.0' );
 define( 'MEIL_MAILER_FILE', __FILE__ );
 define( 'MEIL_MAILER_DIR', plugin_dir_path( __FILE__ ) );
 define( 'MEIL_MAILER_URL', plugin_dir_url( __FILE__ ) );
@@ -36,6 +36,7 @@ require_once MEIL_MAILER_DIR . 'includes/class-meil-mailer.php';
 require_once MEIL_MAILER_DIR . 'includes/class-meil-mailer-admin.php';
 require_once MEIL_MAILER_DIR . 'includes/class-meil-forms.php';
 require_once MEIL_MAILER_DIR . 'includes/class-meil-preferences.php';
+require_once MEIL_MAILER_DIR . 'includes/class-meil-confirm.php';
 require_once MEIL_MAILER_DIR . 'includes/class-meil-users.php';
 
 /**
@@ -193,6 +194,7 @@ function meil_mailer_bootstrap(): void {
 
 	new Meil_Forms( $client );
 	new Meil_Preferences( $client );
+	new Meil_Confirm( $client );
 	new Meil_Users( $client, $settings );
 }
 add_action( 'plugins_loaded', 'meil_mailer_bootstrap' );

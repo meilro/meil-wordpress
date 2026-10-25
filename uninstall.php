@@ -11,6 +11,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 }
 
 delete_option( 'meil_mailer_settings' );
+delete_option( 'meil_confirm_page_problem' );
 
 $meil_forms = get_posts(
 	array(

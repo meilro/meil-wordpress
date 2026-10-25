@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: meil.ro – Email & Newsletter 1.1.0\n"
+"Project-Id-Version: meil.ro – Email & Newsletter 1.2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/meilro/meil-wordpress/issues\n"
 "POT-Creation-Date: 2026-10-22 09:00+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -178,10 +178,6 @@ msgstr ""
 
 #: includes/class-meil-forms.php:266
 msgid "Page they land on after confirming"
-msgstr ""
-
-#: includes/class-meil-forms.php:274
-msgid "meil.ro's own confirmation page"
 msgstr ""
 
 #: includes/class-meil-forms.php:285
@@ -575,4 +571,74 @@ msgstr ""
 
 #: templates/form.php
 msgid "Last name"
+msgstr ""
+
+#: includes/class-meil-confirm.php
+msgid "Thank you, your subscription is confirmed."
+msgstr ""
+
+#: includes/class-meil-confirm.php
+msgid "Your subscription was already confirmed. Thank you!"
+msgstr ""
+
+#: includes/class-meil-confirm.php
+msgid "This confirmation link has expired. Please sign up again to get a new one."
+msgstr ""
+
+#: includes/class-meil-confirm.php
+msgid "This confirmation link is not valid. Please use the button in the email we sent you, or sign up again."
+msgstr ""
+
+#: includes/class-meil-confirm.php
+msgid "Sorry, we could not confirm your subscription right now. Please try again in a few minutes."
+msgstr ""
+
+#. translators: %s: the visitor's email address
+#: includes/class-meil-confirm.php
+#, php-format
+msgid "Press the button to confirm that you want to receive our emails at %s."
+msgstr ""
+
+#: includes/class-meil-confirm.php
+msgid "Press the button to confirm your subscription."
+msgstr ""
+
+#: includes/class-meil-confirm.php
+msgid "You are subscribing to:"
+msgstr ""
+
+#: includes/class-meil-confirm.php
+msgid "Confirm my subscription"
+msgstr ""
+
+#: includes/class-meil-confirm.php
+msgid "This is where visitors confirm their subscription: they arrive here from the button in the confirmation email. Only you see this note."
+msgstr ""
+
+#: includes/class-meil-forms.php
+msgid "Where visitors confirm"
+msgstr ""
+
+#: includes/class-meil-forms.php
+msgid "On meil.ro's confirmation page, in your branding"
+msgstr ""
+
+#: includes/class-meil-forms.php
+msgid "Or pick a page of this site: the button in the email opens it, and visitors confirm there. It must be on the domain you send from, or a subdomain of it. The confirmation shows at the top of the page; put [meil_confirm] in the page to place it yourself."
+msgstr ""
+
+#: includes/class-meil-forms.php
+msgid "This page is not published, or has a password, so visitors could not open it: until that changes, they confirm on meil.ro."
+msgstr ""
+
+#: includes/class-meil-forms.php
+msgid "None: the confirmation page says thank you"
+msgstr ""
+
+#: includes/class-meil-forms.php
+msgid "A meil.ro form could not use its own confirmation page or its \"after confirming\" page, so its visitors confirm on meil.ro's page for now. Sign-ups still work. meil.ro said:"
+msgstr ""
+
+#: includes/class-meil-forms.php
+msgid "Open the form"
 msgstr ""

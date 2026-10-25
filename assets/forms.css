@@ -1,5 +1,5 @@
 /*
- * meil.ro forms: [meil_form] and [meil_preferences].
+ * meil.ro forms: [meil_form], [meil_preferences] and [meil_confirm].
  *
  * Deliberately plain, so it sits in any theme. To restyle, override the
  * variables below in your theme, or turn this file off under
@@ -13,7 +13,8 @@
  */
 
 .meil-form,
-.meil-prefs {
+.meil-prefs,
+.meil-confirm {
 	--meil-gap: 0.75em;
 	--meil-accent: currentColor;
 	--meil-border: rgba(0, 0, 0, 0.35);
@@ -25,7 +26,8 @@
 }
 
 .meil-form__form,
-.meil-prefs__form {
+.meil-prefs__form,
+.meil-confirm__form {
 	display: flex;
 	flex-direction: column;
 	gap: var(--meil-gap);
@@ -37,7 +39,12 @@
 .meil-prefs__actions,
 .meil-form__message,
 .meil-prefs__message,
-.meil-prefs__notice {
+.meil-prefs__notice,
+.meil-confirm__message,
+.meil-confirm__intro,
+.meil-confirm__lists-label,
+.meil-confirm__actions,
+.meil-confirm__note {
 	margin: 0;
 }
 
@@ -61,7 +68,8 @@
 }
 
 .meil-form__button,
-.meil-prefs__button {
+.meil-prefs__button,
+.meil-confirm__button {
 	padding: 0.55em 1.2em;
 	font: inherit;
 	cursor: pointer;
@@ -202,12 +210,14 @@
 /* Messages. */
 .meil-form__message--success,
 .meil-form__message--pending,
-.meil-prefs__message--success {
+.meil-prefs__message--success,
+.meil-confirm__message--success {
 	color: var(--meil-success);
 }
 
 .meil-form__message--error,
-.meil-prefs__message--error {
+.meil-prefs__message--error,
+.meil-confirm__message--error {
 	color: var(--meil-error);
 }
 
@@ -245,4 +255,23 @@
 
 .meil-form__choice--consent a {
 	text-decoration: underline;
+}
+
+/* Confirming a sign-up on this site: the lists, and the admins' note. */
+.meil-confirm__message + .meil-confirm__form {
+	margin-top: var(--meil-gap);
+}
+
+.meil-confirm__lists {
+	margin: 0;
+	padding-left: 1.25em;
+}
+
+.meil-confirm__note {
+	margin-bottom: var(--meil-gap);
+	padding: 0.6em 0.8em;
+	font-size: 0.875em;
+	color: var(--meil-muted);
+	border: 1px dashed var(--meil-border);
+	border-radius: var(--meil-radius);
 }
