@@ -83,8 +83,8 @@ class Meil_Mailer_Admin {
 
 	public function register_menu(): void {
 		add_menu_page(
-			__( 'meil.ro', 'meil' ),
-			__( 'meil.ro', 'meil' ),
+			__( 'meil.ro', 'meilro' ),
+			__( 'meil.ro', 'meilro' ),
 			'manage_options',
 			self::PAGE,
 			array( $this, 'render_settings_page' ),
@@ -95,8 +95,8 @@ class Meil_Mailer_Admin {
 		// Without this item WordPress lists only Forms, and the link goes there.
 		add_submenu_page(
 			self::PAGE,
-			__( 'Settings', 'meil' ),
-			__( 'Settings', 'meil' ),
+			__( 'Settings', 'meilro' ),
+			__( 'Settings', 'meilro' ),
 			'manage_options',
 			self::PAGE,
 			array( $this, 'render_settings_page' )
@@ -116,19 +116,19 @@ class Meil_Mailer_Admin {
 
 		add_settings_section(
 			self::SECTION,
-			__( 'Connection', 'meil' ),
+			__( 'Connection', 'meilro' ),
 			static function (): void {
-				echo '<p>' . esc_html__( "Enter an API key created under API Keys in meil.ro for this site's domain. A \"Transactional only\" key is enough for WordPress mail. Forms and the preferences page need \"Full access\".", 'meil' ) . '</p>';
+				echo '<p>' . esc_html__( "Enter an API key created under API Keys in meil.ro for this site's domain. A \"Transactional only\" key is enough for WordPress mail. Forms and the preferences page need \"Full access\".", 'meilro' ) . '</p>';
 			},
 			self::PAGE
 		);
 
 		$fields = array(
-			'api_key'          => __( 'API key', 'meil' ),
-			'from_email'       => __( 'Default from address', 'meil' ),
-			'from_name'        => __( 'Default from name', 'meil' ),
-			'override_wp_mail' => __( 'Send WordPress mail through meil', 'meil' ),
-			'delete_with_user' => __( 'Deleted users', 'meil' ),
+			'api_key'          => __( 'API key', 'meilro' ),
+			'from_email'       => __( 'Default from address', 'meilro' ),
+			'from_name'        => __( 'Default from name', 'meilro' ),
+			'override_wp_mail' => __( 'Send WordPress mail through meil', 'meilro' ),
+			'delete_with_user' => __( 'Deleted users', 'meilro' ),
 		);
 		foreach ( $fields as $field => $label ) {
 			add_settings_field(
@@ -146,16 +146,16 @@ class Meil_Mailer_Admin {
 			self::LOOK,
 			'',
 			static function (): void {
-				echo '<p>' . esc_html__( 'Your own CSS classes are added after the plugin\'s own, on the buttons, fields and checkboxes of its forms and popups, the preferences page, the confirmation page and the sign-up checkbox, so they take your theme\'s look. Separate several with spaces.', 'meil' ) . '</p>';
+				echo '<p>' . esc_html__( 'Your own CSS classes are added after the plugin\'s own, on the buttons, fields and checkboxes of its forms and popups, the preferences page, the confirmation page and the sign-up checkbox, so they take your theme\'s look. Separate several with spaces.', 'meilro' ) . '</p>';
 			},
 			self::LOOK_TAB
 		);
 		$look = array(
-			'load_css'       => __( 'Form styles', 'meil' ),
-			'class_button'   => __( 'Button classes', 'meil' ),
-			'class_input'    => __( 'Field classes', 'meil' ),
-			'class_checkbox' => __( 'Checkbox classes', 'meil' ),
-			'test_mode'      => __( 'Test mode', 'meil' ),
+			'load_css'       => __( 'Form styles', 'meilro' ),
+			'class_button'   => __( 'Button classes', 'meilro' ),
+			'class_input'    => __( 'Field classes', 'meilro' ),
+			'class_checkbox' => __( 'Checkbox classes', 'meilro' ),
+			'test_mode'      => __( 'Test mode', 'meilro' ),
 		);
 		foreach ( $look as $field => $label ) {
 			add_settings_field(
@@ -173,15 +173,15 @@ class Meil_Mailer_Admin {
 			self::SIGNUP,
 			'',
 			static function (): void {
-				echo '<p>' . esc_html__( 'Adds a "send me news by email" checkbox at checkout and on the registration forms. It starts unticked, and whoever ticks it is added to the audiences below.', 'meil' ) . '</p>';
+				echo '<p>' . esc_html__( 'Adds a "send me news by email" checkbox at checkout and on the registration forms. It starts unticked, and whoever ticks it is added to the audiences below.', 'meilro' ) . '</p>';
 			},
 			self::SIGNUP_TAB
 		);
 		$signup = array(
-			'signup_places'    => __( 'Show it', 'meil' ),
-			'signup_audiences' => __( 'Add to', 'meil' ),
-			'signup_label'     => __( 'Text', 'meil' ),
-			'signup_confirm'   => __( 'Confirmation', 'meil' ),
+			'signup_places'    => __( 'Show it', 'meilro' ),
+			'signup_audiences' => __( 'Add to', 'meilro' ),
+			'signup_label'     => __( 'Text', 'meilro' ),
+			'signup_confirm'   => __( 'Confirmation', 'meilro' ),
 		);
 		foreach ( $signup as $field => $label ) {
 			add_settings_field(
@@ -198,19 +198,19 @@ class Meil_Mailer_Admin {
 			self::POPUP,
 			'',
 			static function (): void {
-				echo '<p>' . esc_html__( 'Shows one of your forms on top of your pages, when the visitor has had time to read. It is not shown again to someone who closed it, for the days you choose, nor to someone who already signed up. On phones a popup in the middle shows at the bottom instead, so it never covers the page.', 'meil' ) . '</p>';
+				echo '<p>' . esc_html__( 'Shows one of your forms on top of your pages, when the visitor has had time to read. It is not shown again to someone who closed it, for the days you choose, nor to someone who already signed up. On phones a popup in the middle shows at the bottom instead, so it never covers the page.', 'meilro' ) . '</p>';
 			},
 			self::POPUP_TAB
 		);
 		$popup = array(
-			'popup_form'    => __( 'Form', 'meil' ),
-			'popup_kind'    => __( 'Show it as', 'meil' ),
-			'popup_trigger' => __( 'When', 'meil' ),
-			'popup_where'   => __( 'On', 'meil' ),
-			'popup_days'    => __( 'Once closed', 'meil' ),
-			'popup_title'   => __( 'Title', 'meil' ),
-			'popup_text'    => __( 'Text under the title', 'meil' ),
-			'popup_preview' => __( 'Preview', 'meil' ),
+			'popup_form'    => __( 'Form', 'meilro' ),
+			'popup_kind'    => __( 'Show it as', 'meilro' ),
+			'popup_trigger' => __( 'When', 'meilro' ),
+			'popup_where'   => __( 'On', 'meilro' ),
+			'popup_days'    => __( 'Once closed', 'meilro' ),
+			'popup_title'   => __( 'Title', 'meilro' ),
+			'popup_text'    => __( 'Text under the title', 'meilro' ),
+			'popup_preview' => __( 'Preview', 'meilro' ),
 		);
 		foreach ( $popup as $field => $label ) {
 			add_settings_field(
@@ -322,9 +322,9 @@ class Meil_Mailer_Admin {
 		if ( is_wp_error( $result ) ) {
 			$status             = Meil_Client::status( $result );
 			$seen[ $api_key ] = 401 === $status
-				? __( 'This API key is not valid. Copy it again from API Keys in meil.ro.', 'meil' )
+				? __( 'This API key is not valid. Copy it again from API Keys in meil.ro.', 'meilro' )
 				/* translators: %s: error message from the meil API */
-				: sprintf( __( 'Could not check the API key with meil.ro: %s', 'meil' ), $result->get_error_message() );
+				: sprintf( __( 'Could not check the API key with meil.ro: %s', 'meilro' ), $result->get_error_message() );
 			return $seen[ $api_key ];
 		}
 
@@ -347,9 +347,9 @@ class Meil_Mailer_Admin {
 	/** The permission names as the meil.ro dashboard shows them. */
 	private static function permission_label( string $permission ): string {
 		$labels = array(
-			'full_access'      => __( 'Full access', 'meil' ),
-			'broadcast_access' => __( 'Emails and broadcasts', 'meil' ),
-			'email_access'     => __( 'Transactional only', 'meil' ),
+			'full_access'      => __( 'Full access', 'meilro' ),
+			'broadcast_access' => __( 'Emails and broadcasts', 'meilro' ),
+			'email_access'     => __( 'Transactional only', 'meilro' ),
 		);
 		return $labels[ $permission ] ?? $permission;
 	}
@@ -374,13 +374,13 @@ class Meil_Mailer_Admin {
 						'' !== $settings['key_domain']
 							? sprintf(
 								/* translators: 1: the API key's domain, 2: its permission, e.g. "Full access" */
-								__( 'Works with %1$s, %2$s.', 'meil' ),
+								__( 'Works with %1$s, %2$s.', 'meilro' ),
 								$settings['key_domain'],
 								self::permission_label( $settings['key_permission'] )
 							)
 							: sprintf(
 								/* translators: %s: the API key's permission, e.g. "Full access" */
-								__( 'Works with all your domains, %s.', 'meil' ),
+								__( 'Works with all your domains, %s.', 'meilro' ),
 								self::permission_label( $settings['key_permission'] )
 							)
 					) . '</p>';
@@ -393,7 +393,7 @@ class Meil_Mailer_Admin {
 					esc_attr( $name ),
 					esc_attr( $value )
 				);
-				echo '<p class="description">' . esc_html__( 'Must be on a domain verified in meil.ro under Domains.', 'meil' ) . '</p>';
+				echo '<p class="description">' . esc_html__( 'Must be on a domain verified in meil.ro under Domains.', 'meilro' ) . '</p>';
 				break;
 			case 'from_name':
 				printf(
@@ -406,9 +406,9 @@ class Meil_Mailer_Admin {
 			case 'signup_places':
 				$places = array(
 					'checkout' => class_exists( 'WooCommerce' )
-						? __( 'At WooCommerce checkout', 'meil' )
-						: __( 'At WooCommerce checkout (WooCommerce is not active)', 'meil' ),
-					'register' => __( 'On the registration forms (WordPress and WooCommerce My Account)', 'meil' ),
+						? __( 'At WooCommerce checkout', 'meilro' )
+						: __( 'At WooCommerce checkout (WooCommerce is not active)', 'meilro' ),
+					'register' => __( 'On the registration forms (WordPress and WooCommerce My Account)', 'meilro' ),
 				);
 				echo '<ul class="meil-signup-list">';
 				foreach ( $places as $place => $text ) {
@@ -433,7 +433,7 @@ class Meil_Mailer_Admin {
 					esc_attr( (string) $value ),
 					esc_attr( Meil_Signup::default_label() )
 				);
-				echo '<p class="description">' . esc_html__( 'Leave it empty to use the default, which follows the site language. The exact text is saved with each contact.', 'meil' ) . '</p>';
+				echo '<p class="description">' . esc_html__( 'Leave it empty to use the default, which follows the site language. The exact text is saved with each contact.', 'meilro' ) . '</p>';
 				break;
 			case 'class_button':
 			case 'class_input':
@@ -449,10 +449,10 @@ class Meil_Mailer_Admin {
 					esc_attr( $name ),
 					esc_attr( (string) $value ),
 					/* translators: %s: example CSS classes */
-					esc_attr( sprintf( __( 'For example %s', 'meil' ), $examples[ $field ] ) )
+					esc_attr( sprintf( __( 'For example %s', 'meilro' ), $examples[ $field ] ) )
 				);
 				if ( 'class_checkbox' === $field ) {
-					echo '<p class="description">' . esc_html__( 'With the form styles on, the box people see on the plugin\'s forms is drawn by the plugin. Turn them off to let your theme style the real checkbox.', 'meil' ) . '</p>';
+					echo '<p class="description">' . esc_html__( 'With the form styles on, the box people see on the plugin\'s forms is drawn by the plugin. Turn them off to let your theme style the real checkbox.', 'meilro' ) . '</p>';
 				}
 				break;
 			case 'popup_form':
@@ -462,14 +462,14 @@ class Meil_Mailer_Admin {
 			case 'popup_where':
 				$options = 'popup_kind' === $field
 					? array(
-						'modal' => __( 'A popup in the middle of the screen', 'meil' ),
-						'slide' => __( 'A slide-in, in the bottom corner', 'meil' ),
-						'bar'   => __( 'A bar at the bottom of the screen', 'meil' ),
+						'modal' => __( 'A popup in the middle of the screen', 'meilro' ),
+						'slide' => __( 'A slide-in, in the bottom corner', 'meilro' ),
+						'bar'   => __( 'A bar at the bottom of the screen', 'meilro' ),
 					)
 					: array(
-						'all'   => __( 'Every page', 'meil' ),
-						'posts' => __( 'Blog posts only', 'meil' ),
-						'pages' => __( 'Pages only', 'meil' ),
+						'all'   => __( 'Every page', 'meilro' ),
+						'posts' => __( 'Blog posts only', 'meilro' ),
+						'pages' => __( 'Pages only', 'meilro' ),
 					);
 				printf( '<select id="%1$s" name="%2$s">', esc_attr( $id ), esc_attr( $name ) );
 				foreach ( $options as $option => $text ) {
@@ -477,14 +477,14 @@ class Meil_Mailer_Admin {
 				}
 				echo '</select>';
 				if ( 'popup_where' === $field ) {
-					echo '<p class="description">' . esc_html__( 'Never on the cart, the checkout, the account pages, or a page that already shows this form.', 'meil' ) . '</p>';
+					echo '<p class="description">' . esc_html__( 'Never on the cart, the checkout, the account pages, or a page that already shows this form.', 'meilro' ) . '</p>';
 				}
 				break;
 			case 'popup_trigger':
 				$triggers = array(
-					'delay'  => __( 'After this many seconds on the page', 'meil' ),
-					'scroll' => __( 'After scrolling this much of the page, in percent', 'meil' ),
-					'exit'   => __( 'When the visitor is about to leave (on phones: after scrolling half the page)', 'meil' ),
+					'delay'  => __( 'After this many seconds on the page', 'meilro' ),
+					'scroll' => __( 'After scrolling this much of the page, in percent', 'meilro' ),
+					'exit'   => __( 'When the visitor is about to leave (on phones: after scrolling half the page)', 'meilro' ),
 				);
 				echo '<fieldset class="meil-choices">';
 				foreach ( $triggers as $option => $text ) {
@@ -499,7 +499,7 @@ class Meil_Mailer_Admin {
 				echo '</fieldset>';
 				printf(
 					'<label class="meil-inline-label">%1$s <input type="number" min="0" max="600" class="small-text" name="%2$s" value="%3$s" /></label>',
-					esc_html__( 'Seconds or percent:', 'meil' ),
+					esc_html__( 'Seconds or percent:', 'meilro' ),
 					esc_attr( $this->option_name . '[popup_value]' ),
 					esc_attr( (string) (int) $settings['popup_value'] )
 				);
@@ -507,11 +507,11 @@ class Meil_Mailer_Admin {
 			case 'popup_days':
 				printf(
 					'<label class="meil-inline-label">%1$s <input type="number" id="%2$s" min="1" max="365" class="small-text" name="%3$s" value="%4$s" /> %5$s</label>',
-					esc_html__( 'Show it again after', 'meil' ),
+					esc_html__( 'Show it again after', 'meilro' ),
 					esc_attr( $id ),
 					esc_attr( $name ),
 					esc_attr( (string) (int) $value ),
-					esc_html__( 'days', 'meil' )
+					esc_html__( 'days', 'meilro' )
 				);
 				break;
 			case 'popup_title':
@@ -521,7 +521,7 @@ class Meil_Mailer_Admin {
 					esc_attr( $id ),
 					esc_attr( $name ),
 					esc_attr( (string) $value ),
-					esc_attr( 'popup_title' === $field ? Meil_Forms::default_text( 'popup_title' ) : __( 'Optional, for example what you send and how often', 'meil' ) )
+					esc_attr( 'popup_title' === $field ? Meil_Forms::default_text( 'popup_title' ) : __( 'Optional, for example what you send and how often', 'meilro' ) )
 				);
 				break;
 			case 'popup_preview':
@@ -533,11 +533,11 @@ class Meil_Mailer_Admin {
 			case 'signup_confirm':
 			case 'test_mode':
 				$texts = array(
-					'override_wp_mail' => __( 'Replace wp_mail() delivery with the meil API (recommended). Leave unchecked to use meil for forms only.', 'meil' ),
-					'load_css'         => __( "Load the plugin's styles for forms and the preferences page. Turn off to style them entirely from your theme.", 'meil' ),
-					'delete_with_user' => __( 'When a WordPress user is deleted, delete their meil.ro contact too, with its data.', 'meil' ),
-					'signup_confirm'   => __( 'Ask them to confirm by email before they are subscribed (recommended)', 'meil' ),
-					'test_mode'        => __( 'Administrators see the popup on every page right away, even after closing it or signing up, and the confirmation page shows examples of what visitors see there. This lets you design both with your theme. Visitors see the site as usual.', 'meil' ),
+					'override_wp_mail' => __( 'Replace wp_mail() delivery with the meil API (recommended). Leave unchecked to use meil for forms only.', 'meilro' ),
+					'load_css'         => __( "Load the plugin's styles for forms and the preferences page. Turn off to style them entirely from your theme.", 'meilro' ),
+					'delete_with_user' => __( 'When a WordPress user is deleted, delete their meil.ro contact too, with its data.', 'meilro' ),
+					'signup_confirm'   => __( 'Ask them to confirm by email before they are subscribed (recommended)', 'meilro' ),
+					'test_mode'        => __( 'Administrators see the popup on every page right away, even after closing it or signing up, and the confirmation page shows examples of what visitors see there. This lets you design both with your theme. Visitors see the site as usual.', 'meilro' ),
 				);
 				printf(
 					'<label><input type="checkbox" id="%1$s" name="%2$s" value="1" %3$s /> %4$s</label>',
@@ -559,16 +559,16 @@ class Meil_Mailer_Admin {
 	 */
 	private function render_signup_audiences( string $name, array $chosen, array $settings ): void {
 		if ( ! $this->client->is_configured() ) {
-			echo '<p class="description">' . esc_html__( 'Save an API key first.', 'meil' ) . '</p>';
+			echo '<p class="description">' . esc_html__( 'Save an API key first.', 'meilro' ) . '</p>';
 			return;
 		}
 		$audiences = $this->client->list_audiences();
 		if ( is_wp_error( $audiences ) ) {
 			echo '<p class="description">' . esc_html(
 				403 === Meil_Client::status( $audiences )
-					? __( 'The sign-up checkbox needs a "Full access" API key.', 'meil' )
+					? __( 'The sign-up checkbox needs a "Full access" API key.', 'meilro' )
 					/* translators: %s: error message from the meil API */
-					: sprintf( __( 'Could not reach meil: %s', 'meil' ), $audiences->get_error_message() )
+					: sprintf( __( 'Could not reach meil: %s', 'meilro' ), $audiences->get_error_message() )
 			) . '</p>';
 			// Keep what was chosen, so saving now does not empty it.
 			foreach ( $chosen as $id ) {
@@ -578,7 +578,7 @@ class Meil_Mailer_Admin {
 		}
 		$list = array_values( array_filter( (array) ( $audiences['data'] ?? array() ), 'is_array' ) );
 		if ( array() === $list ) {
-			echo '<p class="description">' . esc_html__( 'There are no audiences yet.', 'meil' ) . ' <a href="' . esc_url( MEIL_MAILER_APP_URL . '/audiences' ) . '" target="_blank" rel="noopener">' . esc_html__( 'Create one in meil.ro', 'meil' ) . '</a></p>';
+			echo '<p class="description">' . esc_html__( 'There are no audiences yet.', 'meilro' ) . ' <a href="' . esc_url( MEIL_MAILER_APP_URL . '/audiences' ) . '" target="_blank" rel="noopener">' . esc_html__( 'Create one in meil.ro', 'meilro' ) . '</a></p>';
 			return;
 		}
 		echo '<ul class="meil-signup-list">';
@@ -600,7 +600,7 @@ class Meil_Mailer_Admin {
 		$out = array();
 		foreach ( get_posts( array( 'post_type' => Meil_Forms::POST_TYPE, 'post_status' => 'publish', 'posts_per_page' => 50, 'orderby' => 'title', 'order' => 'ASC' ) ) as $post ) {
 			/* translators: %d: form id */
-			$out[ (int) $post->ID ] = '' !== $post->post_title ? $post->post_title : sprintf( __( 'Form %d', 'meil' ), $post->ID );
+			$out[ (int) $post->ID ] = '' !== $post->post_title ? $post->post_title : sprintf( __( 'Form %d', 'meilro' ), $post->ID );
 		}
 		return $out;
 	}
@@ -608,12 +608,12 @@ class Meil_Mailer_Admin {
 	private function render_popup_form_field( string $id, string $name, int $value ): void {
 		$forms = self::form_choices();
 		if ( array() === $forms ) {
-			echo '<p class="description">' . esc_html__( 'There are no forms yet. Build one under meil.ro > Forms, then pick it here.', 'meil' ) . '</p>';
+			echo '<p class="description">' . esc_html__( 'There are no forms yet. Build one under meil.ro > Forms, then pick it here.', 'meilro' ) . '</p>';
 			printf( '<input type="hidden" name="%s" value="0" />', esc_attr( $name ) );
 			return;
 		}
 		printf( '<select id="%1$s" name="%2$s">', esc_attr( $id ), esc_attr( $name ) );
-		printf( '<option value="0" %1$s>%2$s</option>', selected( $value, 0, false ), esc_html__( 'No popup', 'meil' ) );
+		printf( '<option value="0" %1$s>%2$s</option>', selected( $value, 0, false ), esc_html__( 'No popup', 'meilro' ) );
 		foreach ( $forms as $form_id => $title ) {
 			printf( '<option value="%1$d" %2$s>%3$s</option>', (int) $form_id, selected( $value, $form_id, false ), esc_html( $title ) );
 		}
@@ -634,7 +634,7 @@ class Meil_Mailer_Admin {
 			$html = $this->forms->render_shortcode( array( 'id' => $form_id ) );
 			$forms[ $form_id ] = false !== strpos( $html, 'meil-form__form' )
 				? $html
-				: '<p>' . esc_html__( 'This form cannot be shown yet: pick its audiences under meil.ro > Forms.', 'meil' ) . '</p>';
+				: '<p>' . esc_html__( 'This form cannot be shown yet: pick its audiences under meil.ro > Forms.', 'meilro' ) . '</p>';
 		}
 		// render_shortcode() asks for the front-end files; this page does not need them.
 		wp_dequeue_script( 'meil-forms' );
@@ -649,22 +649,22 @@ class Meil_Mailer_Admin {
 					'formsCss'     => ! empty( $settings['load_css'] ) ? MEIL_MAILER_URL . 'assets/forms.css?ver=' . meil_asset_version( 'assets/forms.css' ) : '',
 					'popupCss'     => MEIL_MAILER_URL . 'assets/popup.css?ver=' . meil_asset_version( 'assets/popup.css' ),
 					'defaultTitle' => Meil_Forms::default_text( 'popup_title' ),
-					'noForm'       => __( 'Pick a form above to see the popup.', 'meil' ),
+					'noForm'       => __( 'Pick a form above to see the popup.', 'meilro' ),
 				)
 			) . ';',
 			'before'
 		);
 		?>
 		<div class="meil-popup-preview">
-			<div class="meil-tabs meil-tabs--small" role="group" aria-label="<?php esc_attr_e( 'Preview', 'meil' ); ?>">
-				<button type="button" class="meil-tab meil-tab--active" data-meil-preview-width="desktop" aria-pressed="true"><?php esc_html_e( 'Computer', 'meil' ); ?></button>
-				<button type="button" class="meil-tab" data-meil-preview-width="phone" aria-pressed="false"><?php esc_html_e( 'Phone', 'meil' ); ?></button>
+			<div class="meil-tabs meil-tabs--small" role="group" aria-label="<?php esc_attr_e( 'Preview', 'meilro' ); ?>">
+				<button type="button" class="meil-tab meil-tab--active" data-meil-preview-width="desktop" aria-pressed="true"><?php esc_html_e( 'Computer', 'meilro' ); ?></button>
+				<button type="button" class="meil-tab" data-meil-preview-width="phone" aria-pressed="false"><?php esc_html_e( 'Phone', 'meilro' ); ?></button>
 			</div>
 			<div class="meil-popup-preview__stage">
-				<iframe class="meil-popup-preview__frame" title="<?php esc_attr_e( 'Popup preview', 'meil' ); ?>" data-meil-popup-preview></iframe>
+				<iframe class="meil-popup-preview__frame" title="<?php esc_attr_e( 'Popup preview', 'meilro' ); ?>" data-meil-popup-preview></iframe>
 			</div>
 		</div>
-		<p class="description"><?php esc_html_e( 'As it opens on your site, where it also takes your theme\'s look. The form cannot be sent from here.', 'meil' ); ?></p>
+		<p class="description"><?php esc_html_e( 'As it opens on your site, where it also takes your theme\'s look. The form cannot be sent from here.', 'meilro' ); ?></p>
 		<?php
 	}
 
@@ -674,10 +674,10 @@ class Meil_Mailer_Admin {
 		}
 		$settings = meil_mailer_settings();
 		$tabs     = array(
-			'general' => __( 'General', 'meil' ),
-			'signup'  => __( 'Sign-up checkbox', 'meil' ),
-			'popup'   => __( 'Popup', 'meil' ),
-			'look'    => __( 'Forms look', 'meil' ),
+			'general' => __( 'General', 'meilro' ),
+			'signup'  => __( 'Sign-up checkbox', 'meilro' ),
+			'popup'   => __( 'Popup', 'meilro' ),
+			'look'    => __( 'Forms look', 'meilro' ),
 		);
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- only picks which tab to show.
 		$tab  = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( (string) $_GET['tab'] ) ) : 'general';
@@ -690,10 +690,10 @@ class Meil_Mailer_Admin {
 		);
 		?>
 		<div class="wrap meil-app">
-			<?php meil_admin_head( __( 'Settings', 'meil' ), __( 'How this site connects to meil.ro, and how its forms look.', 'meil' ) ); ?>
+			<?php meil_admin_head( __( 'Settings', 'meilro' ), __( 'How this site connects to meil.ro, and how its forms look.', 'meilro' ) ); ?>
 			<?php settings_errors( $this->option_name ); ?>
 
-			<nav class="meil-tabs" aria-label="<?php esc_attr_e( 'Settings', 'meil' ); ?>">
+			<nav class="meil-tabs" aria-label="<?php esc_attr_e( 'Settings', 'meilro' ); ?>">
 				<?php foreach ( $tabs as $key => $label ) : ?>
 					<a href="<?php echo esc_url( add_query_arg( array( 'page' => self::PAGE, 'tab' => 'general' === $key ? false : $key ), admin_url( 'admin.php' ) ) ); ?>"
 						class="meil-tab<?php echo $tab === $key ? ' meil-tab--active' : ''; ?>"<?php echo $tab === $key ? ' aria-current="page"' : ''; ?>><?php echo esc_html( $label ); ?></a>
@@ -706,7 +706,7 @@ class Meil_Mailer_Admin {
 				printf( '<input type="hidden" name="%s[_tab]" value="%s" />', esc_attr( $this->option_name ), esc_attr( $tab ) );
 				self::render_panels( $page[ $tab ] );
 				?>
-				<p class="meil-actions"><button type="submit" class="button button-primary"><?php esc_html_e( 'Save Settings', 'meil' ); ?></button></p>
+				<p class="meil-actions"><button type="submit" class="button button-primary"><?php esc_html_e( 'Save Settings', 'meilro' ); ?></button></p>
 			</form>
 			<?php
 			if ( 'general' !== $tab ) {
@@ -716,20 +716,20 @@ class Meil_Mailer_Admin {
 			?>
 
 			<div class="meil-panel">
-				<div class="meil-panel__head"><h2 class="meil-panel__title"><?php esc_html_e( 'Send a test email', 'meil' ); ?></h2></div>
+				<div class="meil-panel__head"><h2 class="meil-panel__title"><?php esc_html_e( 'Send a test email', 'meilro' ); ?></h2></div>
 				<div class="meil-panel__body">
 					<?php if ( empty( $settings['override_wp_mail'] ) || ! $this->client->is_configured() ) : ?>
-						<p class="meil-panel__lead"><?php esc_html_e( 'Add an API key and turn on "Send WordPress mail through meil" to send a test.', 'meil' ); ?></p>
+						<p class="meil-panel__lead"><?php esc_html_e( 'Add an API key and turn on "Send WordPress mail through meil" to send a test.', 'meilro' ); ?></p>
 					<?php else : ?>
-						<p class="meil-panel__lead"><?php esc_html_e( 'Sends through wp_mail(), the same way your site sends password resets and order emails.', 'meil' ); ?></p>
+						<p class="meil-panel__lead"><?php esc_html_e( 'Sends through wp_mail(), the same way your site sends password resets and order emails.', 'meilro' ); ?></p>
 						<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post" class="meil-inline-form">
 							<input type="hidden" name="action" value="meil_mailer_send_test" />
 							<?php wp_nonce_field( self::TEST_NONCE ); ?>
 							<div class="meil-field meil-field--grow">
-								<label class="meil-field__label" for="meil-mailer-test-to"><?php esc_html_e( 'Send to', 'meil' ); ?></label>
+								<label class="meil-field__label" for="meil-mailer-test-to"><?php esc_html_e( 'Send to', 'meilro' ); ?></label>
 								<input type="email" id="meil-mailer-test-to" name="test_to" value="<?php echo esc_attr( wp_get_current_user()->user_email ); ?>" required />
 							</div>
-							<button type="submit" class="button"><?php esc_html_e( 'Send Test Email', 'meil' ); ?></button>
+							<button type="submit" class="button"><?php esc_html_e( 'Send Test Email', 'meilro' ); ?></button>
 						</form>
 					<?php endif; ?>
 				</div>
@@ -787,24 +787,24 @@ class Meil_Mailer_Admin {
 	private function render_preferences_help( array $settings ): void {
 		?>
 		<div class="meil-panel">
-			<div class="meil-panel__head"><h2 class="meil-panel__title"><?php esc_html_e( 'Email preferences', 'meil' ); ?></h2></div>
+			<div class="meil-panel__head"><h2 class="meil-panel__title"><?php esc_html_e( 'Email preferences', 'meilro' ); ?></h2></div>
 			<div class="meil-panel__body">
 				<?php if ( ! meil_key_can( 'manage' ) ) : ?>
-					<div class="notice notice-warning inline"><p><?php esc_html_e( 'The preferences page needs a "Full access" API key.', 'meil' ); ?></p></div>
+					<div class="notice notice-warning inline"><p><?php esc_html_e( 'The preferences page needs a "Full access" API key.', 'meilro' ); ?></p></div>
 				<?php endif; ?>
 				<p class="meil-panel__lead">
 					<?php
 					if ( '' !== $settings['key_domain'] ) {
 						printf(
 							/* translators: 1: the shortcode, 2: the API key's domain */
-							esc_html__( 'Put the "meil.ro email preferences" block or %1$s on an account page: logged-in users see the public audiences of %2$s and choose which ones they get. Visitors who are not logged in see a message instead.', 'meil' ),
+							esc_html__( 'Put the "meil.ro email preferences" block or %1$s on an account page: logged-in users see the public audiences of %2$s and choose which ones they get. Visitors who are not logged in see a message instead.', 'meilro' ),
 							'<code>[meil_preferences]</code>',
 							esc_html( $settings['key_domain'] )
 						);
 					} else {
 						printf(
 							/* translators: %s: the shortcode */
-							esc_html__( 'Put the "meil.ro email preferences" block or %s on an account page: logged-in users see the public audiences of all your domains and choose which ones they get. Visitors who are not logged in see a message instead.', 'meil' ),
+							esc_html__( 'Put the "meil.ro email preferences" block or %s on an account page: logged-in users see the public audiences of all your domains and choose which ones they get. Visitors who are not logged in see a message instead.', 'meilro' ),
 							'<code>[meil_preferences]</code>'
 						);
 					}
@@ -817,7 +817,7 @@ class Meil_Mailer_Admin {
 
 	public function handle_test_email(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to do this.', 'meil' ) );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'meilro' ) );
 		}
 		check_admin_referer( self::TEST_NONCE );
 
@@ -844,10 +844,10 @@ class Meil_Mailer_Admin {
 			$to,
 			sprintf(
 				/* translators: %s: site name */
-				__( 'Test email from %s', 'meil' ),
+				__( 'Test email from %s', 'meilro' ),
 				get_bloginfo( 'name' )
 			),
-			__( 'This is a test email sent by the meil.ro plugin. If you received this, WordPress mail is going through meil.', 'meil' )
+			__( 'This is a test email sent by the meil.ro plugin. If you received this, WordPress mail is going through meil.', 'meilro' )
 		);
 		remove_action( 'wp_mail_failed', $capture );
 		remove_action( 'meil_queued', $wait );
@@ -855,7 +855,7 @@ class Meil_Mailer_Admin {
 		if ( $sent ) {
 			wp_safe_redirect( add_query_arg( 'meil_test', $queued ? 'queued' : 'sent', $redirect ) );
 		} else {
-			$message = $error instanceof WP_Error ? $error->get_error_message() : __( 'wp_mail() returned false.', 'meil' );
+			$message = $error instanceof WP_Error ? $error->get_error_message() : __( 'wp_mail() returned false.', 'meilro' );
 			wp_safe_redirect( add_query_arg( 'meil_test_error', rawurlencode( $message ), $redirect ) );
 		}
 		exit;
@@ -874,17 +874,17 @@ class Meil_Mailer_Admin {
 
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended
 		if ( isset( $_GET['meil_test'] ) && 'sent' === $_GET['meil_test'] ) {
-			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Test email sent.', 'meil' ) . '</p></div>';
+			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Test email sent.', 'meilro' ) . '</p></div>';
 		} elseif ( isset( $_GET['meil_test'] ) && 'queued' === $_GET['meil_test'] ) {
-			echo '<div class="notice notice-warning is-dismissible"><p>' . esc_html__( 'meil.ro could not be reached, so the test email is waiting under meil.ro > Unsent and will be tried again on its own.', 'meil' ) . '</p></div>';
+			echo '<div class="notice notice-warning is-dismissible"><p>' . esc_html__( 'meil.ro could not be reached, so the test email is waiting under meil.ro > Unsent and will be tried again on its own.', 'meilro' ) . '</p></div>';
 		} elseif ( isset( $_GET['meil_test'] ) && 'invalid_address' === $_GET['meil_test'] ) {
-			echo '<div class="notice notice-error is-dismissible"><p>' . esc_html__( 'Enter a valid email address.', 'meil' ) . '</p></div>';
+			echo '<div class="notice notice-error is-dismissible"><p>' . esc_html__( 'Enter a valid email address.', 'meilro' ) . '</p></div>';
 		} elseif ( isset( $_GET['meil_test_error'] ) ) {
 			$message = sanitize_text_field( wp_unslash( (string) $_GET['meil_test_error'] ) );
 			echo '<div class="notice notice-error is-dismissible"><p>' . esc_html(
 				sprintf(
 					/* translators: %s: error message from the meil API */
-					__( 'Test email failed: %s', 'meil' ),
+					__( 'Test email failed: %s', 'meilro' ),
 					$message
 				)
 			) . '</p></div>';

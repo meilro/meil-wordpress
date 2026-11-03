@@ -37,7 +37,7 @@ class Meil_Client {
 	 */
 	private function request( string $method, string $path, ?array $body = null, int $timeout = 20, array $headers = array() ) {
 		if ( ! $this->is_configured() ) {
-			return new WP_Error( 'meil_not_configured', __( 'meil is not configured: add the API key under meil.ro > Settings.', 'meil' ) );
+			return new WP_Error( 'meil_not_configured', __( 'meil is not configured: add the API key under meil.ro > Settings.', 'meilro' ) );
 		}
 
 		$args = array(
@@ -80,7 +80,7 @@ class Meil_Client {
 			if ( '' === $message ) {
 				$message = sprintf(
 					/* translators: %d: HTTP status code */
-					__( 'meil API returned HTTP %d.', 'meil' ),
+					__( 'meil API returned HTTP %d.', 'meilro' ),
 					$code
 				);
 			}

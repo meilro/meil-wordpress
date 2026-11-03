@@ -75,7 +75,7 @@ class Meil_Signup {
 	}
 
 	public static function default_label(): string {
-		return __( 'Send me news and offers by email', 'meil' );
+		return __( 'Send me news and offers by email', 'meilro' );
 	}
 
 	/* ------------------------------------------------------------- checkout */

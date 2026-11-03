@@ -38,9 +38,9 @@ class Meil_Integration_WPForms extends Meil_Integration {
 				$type  = (string) ( $field['type'] ?? '' );
 				if ( 'name' === $type && 'simple' !== ( $field['format'] ?? 'first-last' ) ) {
 					/* translators: %s: the field's label */
-					$fields[] = array( 'id' => $id . '.first', 'label' => sprintf( __( '%s (first name)', 'meil' ), $label ), 'type' => 'text' );
+					$fields[] = array( 'id' => $id . '.first', 'label' => sprintf( __( '%s (first name)', 'meilro' ), $label ), 'type' => 'text' );
 					/* translators: %s: the field's label */
-					$fields[] = array( 'id' => $id . '.last', 'label' => sprintf( __( '%s (last name)', 'meil' ), $label ), 'type' => 'text' );
+					$fields[] = array( 'id' => $id . '.last', 'label' => sprintf( __( '%s (last name)', 'meilro' ), $label ), 'type' => 'text' );
 					continue;
 				}
 				$fields[] = array(

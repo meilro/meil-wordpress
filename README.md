@@ -13,7 +13,7 @@ The official WordPress plugin for [meil.ro](https://meil.ro), a Romanian service
 - The **meil.ro email preferences** block or `[meil_preferences]` for account pages: logged-in users choose which lists they get.
 - Moves a user's lists when they change their email, and can delete the contact when the user is deleted.
 - Restyle with CSS variables, your own CSS, or template overrides in your theme (`yourtheme/meil/form.php`, `preferences.php`, `confirm.php`).
-- English and Romanian, translatable with the usual WordPress tools (`languages/meil.pot`).
+- English and Romanian, translatable with the usual WordPress tools (`languages/meilro.pot`).
 
 Requires WordPress 5.9+ and PHP 7.4+.
 

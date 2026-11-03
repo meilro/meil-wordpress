@@ -62,7 +62,7 @@ class Meil_Mailer {
 
 		$to_field = $this->addr_field( $to );
 		if ( '' === $to_field ) {
-			return $this->fail( $atts, __( 'meil: no recipient address.', 'meil' ) );
+			return $this->fail( $atts, __( 'meil: no recipient address.', 'meilro' ) );
 		}
 
 		// The same filters core wp_mail() applies, so plugins that switch to

@@ -36,9 +36,9 @@ class Meil_Integration_Gravity extends Meil_Integration {
 				$label = '' !== (string) ( $field->label ?? '' ) ? (string) $field->label : $id;
 				if ( 'name' === $type ) {
 					/* translators: %s: the field's label */
-					$fields[] = array( 'id' => $id . '.3', 'label' => sprintf( __( '%s (first name)', 'meil' ), $label ), 'type' => 'text' );
+					$fields[] = array( 'id' => $id . '.3', 'label' => sprintf( __( '%s (first name)', 'meilro' ), $label ), 'type' => 'text' );
 					/* translators: %s: the field's label */
-					$fields[] = array( 'id' => $id . '.6', 'label' => sprintf( __( '%s (last name)', 'meil' ), $label ), 'type' => 'text' );
+					$fields[] = array( 'id' => $id . '.6', 'label' => sprintf( __( '%s (last name)', 'meilro' ), $label ), 'type' => 'text' );
 					continue;
 				}
 				$fields[] = array(

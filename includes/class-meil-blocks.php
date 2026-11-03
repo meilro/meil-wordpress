@@ -93,7 +93,7 @@ class Meil_Blocks {
 					return array(
 						'id'    => $post->ID,
 						/* translators: %d: form id */
-						'title' => '' !== $post->post_title ? $post->post_title : sprintf( __( 'Form %d', 'meil' ), $post->ID ),
+						'title' => '' !== $post->post_title ? $post->post_title : sprintf( __( 'Form %d', 'meilro' ), $post->ID ),
 					);
 				},
 				$forms
@@ -102,19 +102,19 @@ class Meil_Blocks {
 			'newUrl'    => admin_url( 'post-new.php?post_type=' . Meil_Forms::POST_TYPE ),
 			'manageUrl' => admin_url( 'edit.php?post_type=' . Meil_Forms::POST_TYPE ),
 			'strings'   => array(
-				'formTitle'        => __( 'meil.ro form', 'meil' ),
-				'formDescription'  => __( 'A subscription form built under meil.ro > Forms.', 'meil' ),
-				'prefsTitle'       => __( 'meil.ro email preferences', 'meil' ),
-				'prefsDescription' => __( 'Logged-in users choose which of your lists they get.', 'meil' ),
-				'prefsPreview'     => __( 'Email preferences: on the page, logged-in users see your public lists here and tick the ones they want. Visitors who are not logged in see a short message.', 'meil' ),
-				'form'             => __( 'Form', 'meil' ),
-				'choose'           => __( 'Choose a form', 'meil' ),
-				'pick'             => __( 'Choose which form to show.', 'meil' ),
-				'noForms'          => __( 'There are no forms yet. Build one under meil.ro > Forms, then pick it here.', 'meil' ),
-				'noFormsEditor'    => __( 'There are no forms yet. An administrator can build one under meil.ro > Forms.', 'meil' ),
-				'create'           => __( 'Build a form', 'meil' ),
-				'manage'           => __( 'Manage forms', 'meil' ),
-				'keywords'         => array( __( 'newsletter', 'meil' ), __( 'subscribe', 'meil' ), 'email' ),
+				'formTitle'        => __( 'meil.ro form', 'meilro' ),
+				'formDescription'  => __( 'A subscription form built under meil.ro > Forms.', 'meilro' ),
+				'prefsTitle'       => __( 'meil.ro email preferences', 'meilro' ),
+				'prefsDescription' => __( 'Logged-in users choose which of your lists they get.', 'meilro' ),
+				'prefsPreview'     => __( 'Email preferences: on the page, logged-in users see your public lists here and tick the ones they want. Visitors who are not logged in see a short message.', 'meilro' ),
+				'form'             => __( 'Form', 'meilro' ),
+				'choose'           => __( 'Choose a form', 'meilro' ),
+				'pick'             => __( 'Choose which form to show.', 'meilro' ),
+				'noForms'          => __( 'There are no forms yet. Build one under meil.ro > Forms, then pick it here.', 'meilro' ),
+				'noFormsEditor'    => __( 'There are no forms yet. An administrator can build one under meil.ro > Forms.', 'meilro' ),
+				'create'           => __( 'Build a form', 'meilro' ),
+				'manage'           => __( 'Manage forms', 'meilro' ),
+				'keywords'         => array( __( 'newsletter', 'meilro' ), __( 'subscribe', 'meilro' ), 'email' ),
 			),
 		);
 		wp_add_inline_script( 'meil-blocks', 'window.meilBlocks = ' . wp_json_encode( $data ) . ';', 'before' );

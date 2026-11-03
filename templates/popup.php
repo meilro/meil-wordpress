@@ -38,7 +38,7 @@ $meil_title_id = 'meil-popup-' . $form_id . '-title';
 		<div class="meil-popup__backdrop" data-meil-popup-close></div>
 	<?php endif; ?>
 	<div class="meil-popup__box" role="dialog" aria-labelledby="<?php echo esc_attr( $meil_title_id ); ?>"<?php echo 'modal' === $kind ? ' aria-modal="true"' : ''; ?>>
-		<button type="button" class="meil-popup__close" data-meil-popup-close aria-label="<?php esc_attr_e( 'Close', 'meil' ); ?>"><span aria-hidden="true">&times;</span></button>
+		<button type="button" class="meil-popup__close" data-meil-popup-close aria-label="<?php esc_attr_e( 'Close', 'meilro' ); ?>"><span aria-hidden="true">&times;</span></button>
 		<p class="meil-popup__title" id="<?php echo esc_attr( $meil_title_id ); ?>"><?php echo esc_html( $title ); ?></p>
 		<?php if ( '' !== $text ) : ?>
 			<p class="meil-popup__text"><?php echo esc_html( $text ); ?></p>

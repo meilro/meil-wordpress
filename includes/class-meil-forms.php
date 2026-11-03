@@ -97,16 +97,16 @@ class Meil_Forms {
 			self::POST_TYPE,
 			array(
 				'labels'          => array(
-					'name'               => __( 'Forms', 'meil' ),
-					'singular_name'      => __( 'Form', 'meil' ),
-					'add_new'            => __( 'Add form', 'meil' ),
-					'add_new_item'       => __( 'Add form', 'meil' ),
-					'edit_item'          => __( 'Edit form', 'meil' ),
-					'new_item'           => __( 'New form', 'meil' ),
-					'search_items'       => __( 'Search forms', 'meil' ),
-					'not_found'          => __( 'No forms yet.', 'meil' ),
-					'not_found_in_trash' => __( 'No forms in the trash.', 'meil' ),
-					'all_items'          => __( 'Forms', 'meil' ),
+					'name'               => __( 'Forms', 'meilro' ),
+					'singular_name'      => __( 'Form', 'meilro' ),
+					'add_new'            => __( 'Add form', 'meilro' ),
+					'add_new_item'       => __( 'Add form', 'meilro' ),
+					'edit_item'          => __( 'Edit form', 'meilro' ),
+					'new_item'           => __( 'New form', 'meilro' ),
+					'search_items'       => __( 'Search forms', 'meilro' ),
+					'not_found'          => __( 'No forms yet.', 'meilro' ),
+					'not_found_in_trash' => __( 'No forms in the trash.', 'meilro' ),
+					'all_items'          => __( 'Forms', 'meilro' ),
 				),
 				'public'          => false,
 				'show_ui'         => true,
@@ -137,16 +137,16 @@ class Meil_Forms {
 		wp_enqueue_editor();
 		wp_enqueue_script( 'meil-admin-forms', MEIL_MAILER_URL . 'assets/admin-forms.js', array(), meil_asset_version( 'assets/admin-forms.js' ), true );
 
-		add_meta_box( 'meil-form-settings', __( 'Form settings', 'meil' ), array( $this, 'render_settings_box' ), self::POST_TYPE, 'normal', 'high' );
-		add_meta_box( 'meil-form-shortcode', __( 'Shortcode', 'meil' ), array( $this, 'render_shortcode_box' ), self::POST_TYPE, 'side', 'high' );
+		add_meta_box( 'meil-form-settings', __( 'Form settings', 'meilro' ), array( $this, 'render_settings_box' ), self::POST_TYPE, 'normal', 'high' );
+		add_meta_box( 'meil-form-shortcode', __( 'Shortcode', 'meilro' ), array( $this, 'render_shortcode_box' ), self::POST_TYPE, 'side', 'high' );
 	}
 
 	public function render_shortcode_box( WP_Post $post ): void {
 		if ( 'auto-draft' === $post->post_status ) {
-			echo '<p>' . esc_html__( 'Save the form to get its shortcode.', 'meil' ) . '</p>';
+			echo '<p>' . esc_html__( 'Save the form to get its shortcode.', 'meilro' ) . '</p>';
 			return;
 		}
-		echo '<p>' . esc_html__( 'Paste it into any page, post or widget area:', 'meil' ) . '</p>';
+		echo '<p>' . esc_html__( 'Paste it into any page, post or widget area:', 'meilro' ) . '</p>';
 		printf( '<p><input type="text" class="widefat code" readonly value="%s" onfocus="this.select()" /></p>', esc_attr( self::shortcode( $post->ID ) ) );
 	}
 
@@ -169,17 +169,17 @@ class Meil_Forms {
 		<div class="meil-fa">
 
 			<section class="meil-fa-section">
-				<h3 class="meil-fa-section__title"><?php esc_html_e( 'Audiences', 'meil' ); ?></h3>
+				<h3 class="meil-fa-section__title"><?php esc_html_e( 'Audiences', 'meilro' ); ?></h3>
 				<?php if ( null === $audiences ) : ?>
-					<p><?php esc_html_e( 'Add an API key under meil.ro > Settings first.', 'meil' ); ?></p>
+					<p><?php esc_html_e( 'Add an API key under meil.ro > Settings first.', 'meilro' ); ?></p>
 				<?php elseif ( is_wp_error( $audiences ) ) : ?>
 					<div class="notice notice-error inline"><p>
 						<?php
 						echo esc_html(
 							403 === Meil_Client::status( $audiences )
-								? __( 'Forms need a "Full access" API key. Change it under meil.ro > Settings.', 'meil' )
+								? __( 'Forms need a "Full access" API key. Change it under meil.ro > Settings.', 'meilro' )
 								/* translators: %s: error message from the meil API */
-								: sprintf( __( 'Could not reach meil: %s', 'meil' ), $audiences->get_error_message() )
+								: sprintf( __( 'Could not reach meil: %s', 'meilro' ), $audiences->get_error_message() )
 						);
 						?>
 					</p></div>
@@ -189,17 +189,17 @@ class Meil_Forms {
 						if ( '' !== $plugin['key_domain'] ) {
 							printf(
 								/* translators: %s: sending domain */
-								esc_html__( 'There are no audiences on %s yet.', 'meil' ),
+								esc_html__( 'There are no audiences on %s yet.', 'meilro' ),
 								esc_html( $plugin['key_domain'] )
 							);
 						} else {
-							esc_html_e( 'There are no audiences yet.', 'meil' );
+							esc_html_e( 'There are no audiences yet.', 'meilro' );
 						}
 						?>
-						<a href="<?php echo esc_url( MEIL_MAILER_APP_URL . '/audiences' ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Create one in meil.ro', 'meil' ); ?></a>
+						<a href="<?php echo esc_url( MEIL_MAILER_APP_URL . '/audiences' ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Create one in meil.ro', 'meilro' ); ?></a>
 					</p>
 				<?php else : ?>
-					<p class="meil-fa-section__lead"><?php esc_html_e( 'Tick the audiences this form offers and write the label visitors see for each. With one, the form only asks for the email address. With more than one, choose below whether visitors pick from them or join all of them.', 'meil' ); ?></p>
+					<p class="meil-fa-section__lead"><?php esc_html_e( 'Tick the audiences this form offers and write the label visitors see for each. With one, the form only asks for the email address. With more than one, choose below whether visitors pick from them or join all of them.', 'meilro' ); ?></p>
 					<input type="hidden" name="meil_audiences_shown" value="1" />
 					<ul class="meil-fa-audiences">
 						<?php
@@ -216,32 +216,32 @@ class Meil_Forms {
 									<input type="checkbox" class="meil-fa-audience__toggle" name="<?php echo esc_attr( $field . '[on]' ); ?>" value="1" <?php checked( null !== $row ); ?> />
 									<span class="meil-fa-audience__name"><?php echo esc_html( $name ); ?></span>
 									<?php if ( 'private' === ( $audience['visibility'] ?? '' ) ) : ?>
-										<span class="meil-fa-tag"><?php esc_html_e( 'private', 'meil' ); ?></span>
+										<span class="meil-fa-tag"><?php esc_html_e( 'private', 'meilro' ); ?></span>
 									<?php endif; ?>
 								</label>
 								<span class="meil-fa-audience__details">
-									<label class="screen-reader-text" for="<?php echo esc_attr( $slug ); ?>"><?php esc_html_e( 'Label on the form', 'meil' ); ?></label>
+									<label class="screen-reader-text" for="<?php echo esc_attr( $slug ); ?>"><?php esc_html_e( 'Label on the form', 'meilro' ); ?></label>
 									<input type="text" id="<?php echo esc_attr( $slug ); ?>" class="meil-fa-audience__label" name="<?php echo esc_attr( $field . '[label]' ); ?>" value="<?php echo esc_attr( null !== $row ? $row['label'] : '' ); ?>" placeholder="<?php echo esc_attr( $name ); ?>" />
 									<label class="meil-fa-inline meil-fa-audience__ticked">
 										<input type="checkbox" name="<?php echo esc_attr( $field . '[checked]' ); ?>" value="1" <?php checked( null !== $row && ! empty( $row['checked'] ) ); ?> />
-										<?php esc_html_e( 'Ticked at first', 'meil' ); ?>
+										<?php esc_html_e( 'Ticked at first', 'meilro' ); ?>
 									</label>
 								</span>
 							</li>
 						<?php endforeach; ?>
 					</ul>
 					<fieldset class="meil-fa-lists">
-						<legend class="meil-fa-lists__title"><?php esc_html_e( 'With more than one audience', 'meil' ); ?></legend>
-						<label class="meil-fa-inline"><input type="radio" name="meil_lists" value="choose" <?php checked( empty( $form['all_lists'] ) ); ?> /> <?php esc_html_e( 'Visitors choose, with checkboxes', 'meil' ); ?></label>
-						<label class="meil-fa-inline"><input type="radio" id="meil-lists-all" name="meil_lists" value="all" <?php checked( ! empty( $form['all_lists'] ) ); ?> /> <?php esc_html_e( 'They join all of them, without checkboxes', 'meil' ); ?></label>
-						<p class="description"><?php esc_html_e( 'Use the second one when the form says clearly what they will receive, for example "Get our news and offers by email".', 'meil' ); ?></p>
+						<legend class="meil-fa-lists__title"><?php esc_html_e( 'With more than one audience', 'meilro' ); ?></legend>
+						<label class="meil-fa-inline"><input type="radio" name="meil_lists" value="choose" <?php checked( empty( $form['all_lists'] ) ); ?> /> <?php esc_html_e( 'Visitors choose, with checkboxes', 'meilro' ); ?></label>
+						<label class="meil-fa-inline"><input type="radio" id="meil-lists-all" name="meil_lists" value="all" <?php checked( ! empty( $form['all_lists'] ) ); ?> /> <?php esc_html_e( 'They join all of them, without checkboxes', 'meilro' ); ?></label>
+						<p class="description"><?php esc_html_e( 'Use the second one when the form says clearly what they will receive, for example "Get our news and offers by email".', 'meilro' ); ?></p>
 					</fieldset>
 				<?php endif; ?>
 			</section>
 
 			<section class="meil-fa-section">
-				<h3 class="meil-fa-section__title"><?php esc_html_e( 'Checkboxes', 'meil' ); ?></h3>
-				<p class="meil-fa-section__lead"><?php esc_html_e( 'For your terms, your privacy policy, or anything visitors agree to. Use the link button to point to your pages. Checkboxes start unticked, and each answer is saved on the contact, with the text the visitor saw.', 'meil' ); ?></p>
+				<h3 class="meil-fa-section__title"><?php esc_html_e( 'Checkboxes', 'meilro' ); ?></h3>
+				<p class="meil-fa-section__lead"><?php esc_html_e( 'For your terms, your privacy policy, or anything visitors agree to. Use the link button to point to your pages. Checkboxes start unticked, and each answer is saved on the contact, with the text the visitor saw.', 'meilro' ); ?></p>
 				<div class="meil-fa-cards" data-meil-checkboxes data-next="<?php echo esc_attr( (string) count( $form['checkboxes'] ) ); ?>" data-max="<?php echo esc_attr( (string) self::MAX_CHECKBOXES ); ?>">
 					<?php
 					foreach ( array_values( $form['checkboxes'] ) as $i => $checkbox ) {
@@ -249,7 +249,7 @@ class Meil_Forms {
 					}
 					?>
 				</div>
-				<p class="meil-fa-empty"><?php esc_html_e( 'No checkboxes yet.', 'meil' ); ?></p>
+				<p class="meil-fa-empty"><?php esc_html_e( 'No checkboxes yet.', 'meilro' ); ?></p>
 				<template data-meil-checkbox-template>
 					<?php
 					self::render_checkbox_row(
@@ -266,32 +266,32 @@ class Meil_Forms {
 				<p class="meil-fa-add">
 					<button type="button" class="button" data-meil-add>
 						<span class="dashicons dashicons-plus-alt2" aria-hidden="true"></span>
-						<?php esc_html_e( 'Add checkbox', 'meil' ); ?>
+						<?php esc_html_e( 'Add checkbox', 'meilro' ); ?>
 					</button>
 				</p>
 			</section>
 
 			<section class="meil-fa-section">
-				<h3 class="meil-fa-section__title"><?php esc_html_e( 'Signing up', 'meil' ); ?></h3>
+				<h3 class="meil-fa-section__title"><?php esc_html_e( 'Signing up', 'meilro' ); ?></h3>
 				<table class="form-table meil-fa-table" role="presentation">
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Fields', 'meil' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Fields', 'meilro' ); ?></th>
 						<td>
 							<fieldset>
-								<label><input type="checkbox" name="meil_ask_name" value="1" <?php checked( $form['ask_name'] ); ?> /> <?php esc_html_e( 'Also ask for a first name', 'meil' ); ?></label><br />
-								<label><input type="checkbox" name="meil_ask_last_name" value="1" <?php checked( $form['ask_last_name'] ); ?> /> <?php esc_html_e( 'Also ask for a last name', 'meil' ); ?></label>
+								<label><input type="checkbox" name="meil_ask_name" value="1" <?php checked( $form['ask_name'] ); ?> /> <?php esc_html_e( 'Also ask for a first name', 'meilro' ); ?></label><br />
+								<label><input type="checkbox" name="meil_ask_last_name" value="1" <?php checked( $form['ask_last_name'] ); ?> /> <?php esc_html_e( 'Also ask for a last name', 'meilro' ); ?></label>
 							</fieldset>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Confirmation', 'meil' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Confirmation', 'meilro' ); ?></th>
 						<td>
-							<label><input type="checkbox" id="meil-confirm" name="meil_confirm" value="1" <?php checked( $form['confirm'] ); ?> /> <?php esc_html_e( 'Ask visitors to confirm by email before they are subscribed (recommended)', 'meil' ); ?></label>
-							<p class="description"><?php esc_html_e( 'They get one email and are subscribed only after pressing its button, which keeps typos and bots off your list and records when and from where they confirmed.', 'meil' ); ?></p>
+							<label><input type="checkbox" id="meil-confirm" name="meil_confirm" value="1" <?php checked( $form['confirm'] ); ?> /> <?php esc_html_e( 'Ask visitors to confirm by email before they are subscribed (recommended)', 'meilro' ); ?></label>
+							<p class="description"><?php esc_html_e( 'They get one email and are subscribed only after pressing its button, which keeps typos and bots off your list and records when and from where they confirmed.', 'meilro' ); ?></p>
 						</td>
 					</tr>
 					<tr class="meil-fa-thanks">
-						<th scope="row"><label for="meil-confirm-page"><?php esc_html_e( 'Where visitors confirm', 'meil' ); ?></label></th>
+						<th scope="row"><label for="meil-confirm-page"><?php esc_html_e( 'Where visitors confirm', 'meilro' ); ?></label></th>
 						<td>
 							<?php
 							wp_dropdown_pages(
@@ -299,22 +299,22 @@ class Meil_Forms {
 									'name'              => 'meil_confirm_page',
 									'id'                => 'meil-confirm-page',
 									'selected'          => (int) $form['confirm_page'],
-									'show_option_none'  => esc_html__( "On meil.ro's confirmation page, in your branding", 'meil' ),
+									'show_option_none'  => esc_html__( "On meil.ro's confirmation page, in your branding", 'meilro' ),
 									'option_none_value' => '0',
 								)
 							);
 							?>
-							<p class="description"><?php esc_html_e( 'Or pick a page of your site. The button in the email opens it, and above its content visitors see their address, the lists they chose and a button to confirm. To show this somewhere else on the page, put [meil_confirm] there. The page must be on the domain you send from, or a subdomain of it.', 'meil' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Or pick a page of your site. The button in the email opens it, and above its content visitors see their address, the lists they chose and a button to confirm. To show this somewhere else on the page, put [meil_confirm] there. The page must be on the domain you send from, or a subdomain of it.', 'meilro' ); ?></p>
 							<?php
 							$confirm_post = (int) $form['confirm_page'] > 0 ? get_post( (int) $form['confirm_page'] ) : null;
 							if ( $confirm_post && ( 'publish' !== $confirm_post->post_status || '' !== $confirm_post->post_password ) ) :
 								?>
-								<p class="description meil-fa-warning"><?php esc_html_e( 'This page is not published, or has a password, so visitors could not open it: until that changes, they confirm on meil.ro.', 'meil' ); ?></p>
+								<p class="description meil-fa-warning"><?php esc_html_e( 'This page is not published, or has a password, so visitors could not open it: until that changes, they confirm on meil.ro.', 'meilro' ); ?></p>
 							<?php endif; ?>
 						</td>
 					</tr>
 					<tr class="meil-fa-thanks">
-						<th scope="row"><label for="meil-thanks-page"><?php esc_html_e( 'Page they land on after confirming', 'meil' ); ?></label></th>
+						<th scope="row"><label for="meil-thanks-page"><?php esc_html_e( 'Page they land on after confirming', 'meilro' ); ?></label></th>
 						<td>
 							<?php
 							wp_dropdown_pages(
@@ -322,7 +322,7 @@ class Meil_Forms {
 									'name'              => 'meil_thanks_page',
 									'id'                => 'meil-thanks-page',
 									'selected'          => (int) $form['thanks_page'],
-									'show_option_none'  => esc_html__( 'None: the confirmation page says thank you', 'meil' ),
+									'show_option_none'  => esc_html__( 'None: the confirmation page says thank you', 'meilro' ),
 									'option_none_value' => '0',
 								)
 							);
@@ -333,18 +333,18 @@ class Meil_Forms {
 			</section>
 
 			<section class="meil-fa-section">
-				<h3 class="meil-fa-section__title"><?php esc_html_e( 'Texts', 'meil' ); ?></h3>
-				<p class="meil-fa-section__lead"><?php esc_html_e( 'Leave a field empty to use the default, which follows the site language.', 'meil' ); ?></p>
+				<h3 class="meil-fa-section__title"><?php esc_html_e( 'Texts', 'meilro' ); ?></h3>
+				<p class="meil-fa-section__lead"><?php esc_html_e( 'Leave a field empty to use the default, which follows the site language.', 'meilro' ); ?></p>
 				<?php if ( defined( 'ICL_SITEPRESS_VERSION' ) || defined( 'POLYLANG_VERSION' ) ) : ?>
-					<p class="meil-fa-section__lead"><?php esc_html_e( 'With WPML or Polylang, the texts you fill in here, the list labels and the checkbox texts are translated with the site\'s other texts, in the "meil.ro forms" group, once the form is saved.', 'meil' ); ?></p>
+					<p class="meil-fa-section__lead"><?php esc_html_e( 'With WPML or Polylang, the texts you fill in here, the list labels and the checkbox texts are translated with the site\'s other texts, in the "meil.ro forms" group, once the form is saved.', 'meilro' ); ?></p>
 				<?php endif; ?>
 				<table class="form-table meil-fa-table" role="presentation">
 					<?php
 					$texts = array(
-						'button'      => array( __( 'Button', 'meil' ), self::default_text( 'button' ) ),
-						'placeholder' => array( __( 'Email field placeholder', 'meil' ), self::default_text( 'placeholder' ) ),
-						'success'     => array( __( 'Message after subscribing', 'meil' ), self::default_text( 'success' ) ),
-						'pending'     => array( __( 'Message while waiting for the confirmation', 'meil' ), self::default_text( 'pending' ) ),
+						'button'      => array( __( 'Button', 'meilro' ), self::default_text( 'button' ) ),
+						'placeholder' => array( __( 'Email field placeholder', 'meilro' ), self::default_text( 'placeholder' ) ),
+						'success'     => array( __( 'Message after subscribing', 'meilro' ), self::default_text( 'success' ) ),
+						'pending'     => array( __( 'Message while waiting for the confirmation', 'meilro' ), self::default_text( 'pending' ) ),
 					);
 					foreach ( $texts as $key => list( $label, $default ) ) :
 						?>
@@ -363,15 +363,15 @@ class Meil_Forms {
 	public static function default_text( string $key ): string {
 		switch ( $key ) {
 			case 'button':
-				return __( 'Subscribe', 'meil' );
+				return __( 'Subscribe', 'meilro' );
 			case 'placeholder':
-				return __( 'you@example.com', 'meil' );
+				return __( 'you@example.com', 'meilro' );
 			case 'success':
-				return __( 'Thank you, you are subscribed.', 'meil' );
+				return __( 'Thank you, you are subscribed.', 'meilro' );
 			case 'pending':
-				return __( 'Almost done: check your inbox and press the button in our email to confirm.', 'meil' );
+				return __( 'Almost done: check your inbox and press the button in our email to confirm.', 'meilro' );
 			case 'popup_title':
-				return __( 'Get our news by email', 'meil' );
+				return __( 'Get our news by email', 'meilro' );
 		}
 		return '';
 	}
@@ -447,21 +447,21 @@ class Meil_Forms {
 		?>
 		<div class="meil-fa-card" data-meil-checkbox>
 			<div class="meil-fa-card__head">
-				<span class="meil-fa-card__title" data-label="<?php esc_attr_e( 'Checkbox', 'meil' ); ?>"></span>
+				<span class="meil-fa-card__title" data-label="<?php esc_attr_e( 'Checkbox', 'meilro' ); ?>"></span>
 				<button type="button" class="button-link meil-fa-card__remove" data-meil-remove>
 					<span class="dashicons dashicons-trash" aria-hidden="true"></span>
-					<?php esc_html_e( 'Remove', 'meil' ); ?>
+					<?php esc_html_e( 'Remove', 'meilro' ); ?>
 				</button>
 			</div>
-			<label class="screen-reader-text" for="meil-checkbox-text-<?php echo esc_attr( $key ); ?>"><?php esc_html_e( 'Checkbox text', 'meil' ); ?></label>
+			<label class="screen-reader-text" for="meil-checkbox-text-<?php echo esc_attr( $key ); ?>"><?php esc_html_e( 'Checkbox text', 'meilro' ); ?></label>
 			<textarea id="meil-checkbox-text-<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $name . '[text]' ); ?>" rows="3" class="widefat" data-meil-editor><?php echo esc_textarea( (string) $checkbox['text'] ); ?></textarea>
 			<div class="meil-fa-card__foot">
 				<label class="meil-fa-inline">
 					<input type="checkbox" name="<?php echo esc_attr( $name . '[required]' ); ?>" value="1" <?php checked( ! empty( $checkbox['required'] ) ); ?> />
-					<?php esc_html_e( 'Required', 'meil' ); ?>
+					<?php esc_html_e( 'Required', 'meilro' ); ?>
 				</label>
 				<label class="meil-fa-property">
-					<span><?php esc_html_e( 'Saved on the contact as', 'meil' ); ?></span>
+					<span><?php esc_html_e( 'Saved on the contact as', 'meilro' ); ?></span>
 					<input type="text" class="code" name="<?php echo esc_attr( $name . '[property]' ); ?>" value="<?php echo esc_attr( (string) $checkbox['property'] ); ?>" placeholder="<?php echo esc_attr( $placeholder ); ?>" maxlength="58" />
 				</label>
 			</div>
@@ -616,8 +616,8 @@ class Meil_Forms {
 		foreach ( $columns as $key => $label ) {
 			$out[ $key ] = $label;
 			if ( 'title' === $key ) {
-				$out['meil_shortcode'] = __( 'Shortcode', 'meil' );
-				$out['meil_audiences'] = __( 'Audiences', 'meil' );
+				$out['meil_shortcode'] = __( 'Shortcode', 'meilro' );
+				$out['meil_audiences'] = __( 'Audiences', 'meilro' );
 			}
 		}
 		return $out;
@@ -633,7 +633,7 @@ class Meil_Forms {
 				},
 				$this->with_names( self::settings( $post_id )['audiences'] )
 			);
-			echo esc_html( array() !== $labels ? implode( ', ', $labels ) : __( 'None yet', 'meil' ) );
+			echo esc_html( array() !== $labels ? implode( ', ', $labels ) : __( 'None yet', 'meilro' ) );
 		}
 	}
 
@@ -663,7 +663,7 @@ class Meil_Forms {
 
 	/** "Form saved." instead of WordPress's "Post published. View post", which leads nowhere. */
 	public function updated_messages( array $messages ): array {
-		$saved                        = __( 'Form saved.', 'meil' );
+		$saved                        = __( 'Form saved.', 'meilro' );
 		$messages[ self::POST_TYPE ] = array_fill( 0, 11, $saved );
 		$messages[ self::POST_TYPE ][0] = '';
 		return $messages;
@@ -802,7 +802,7 @@ class Meil_Forms {
 			wp_send_json(
 				array(
 					'type'    => 'error',
-					'message' => __( 'Sorry, we could not sign you up right now. Please try again later.', 'meil' ),
+					'message' => __( 'Sorry, we could not sign you up right now. Please try again later.', 'meilro' ),
 					'done'    => false,
 				)
 			);
@@ -825,14 +825,14 @@ class Meil_Forms {
 		$admin   = current_user_can( 'manage_options' );
 
 		if ( null === $form ) {
-			return $admin ? '<p>' . esc_html__( 'meil_form: no saved form with this id.', 'meil' ) . '</p>' : '';
+			return $admin ? '<p>' . esc_html__( 'meil_form: no saved form with this id.', 'meilro' ) . '</p>' : '';
 		}
 		// A form that cannot sign anyone up is not shown to visitors.
 		if ( ! meil_key_can( 'manage' ) ) {
-			return $admin ? '<p>' . esc_html__( 'Forms need a "Full access" API key. Change it under meil.ro > Settings.', 'meil' ) . '</p>' : '';
+			return $admin ? '<p>' . esc_html__( 'Forms need a "Full access" API key. Change it under meil.ro > Settings.', 'meilro' ) . '</p>' : '';
 		}
 		if ( array() === $form['audiences'] ) {
-			return $admin ? '<p>' . esc_html__( 'meil_form: this form has no audiences yet. Pick them under meil.ro > Forms.', 'meil' ) . '</p>' : '';
+			return $admin ? '<p>' . esc_html__( 'meil_form: this form has no audiences yet. Pick them under meil.ro > Forms.', 'meilro' ) . '</p>' : '';
 		}
 
 		meil_enqueue_front_assets();
@@ -953,18 +953,18 @@ class Meil_Forms {
 			);
 		}
 		if ( ! is_email( $email ) ) {
-			return $error( __( 'Enter a valid email address.', 'meil' ) );
+			return $error( __( 'Enter a valid email address.', 'meilro' ) );
 		}
 		if ( array() === $chosen ) {
-			return $error( __( 'Choose at least one list.', 'meil' ) );
+			return $error( __( 'Choose at least one list.', 'meilro' ) );
 		}
 		foreach ( array_values( (array) $form['checkboxes'] ) as $i => $checkbox ) {
 			if ( ! empty( $checkbox['required'] ) && ! in_array( $i, $ticked, true ) ) {
-				return $error( __( 'Tick the required box to continue.', 'meil' ) );
+				return $error( __( 'Tick the required box to continue.', 'meilro' ) );
 			}
 		}
 		if ( ! self::within_signup_limit() ) {
-			return $error( __( 'Too many tries from your connection. Please wait a few minutes and try again.', 'meil' ) );
+			return $error( __( 'Too many tries from your connection. Please wait a few minutes and try again.', 'meilro' ) );
 		}
 
 		// With confirmation, meil.ro records when and from where the person
@@ -1032,7 +1032,7 @@ class Meil_Forms {
 			return $error(
 				current_user_can( 'manage_options' )
 					? $result->get_error_message()
-					: __( 'Sorry, we could not sign you up right now. Please try again later.', 'meil' )
+					: __( 'Sorry, we could not sign you up right now. Please try again later.', 'meilro' )
 			);
 		}
 
@@ -1081,10 +1081,10 @@ class Meil_Forms {
 		$form_id = (int) ( $problem['form'] ?? 0 );
 		$edit    = $form_id > 0 ? get_edit_post_link( $form_id ) : '';
 		echo '<div class="notice notice-warning"><p>';
-		echo esc_html__( 'A meil.ro form could not use its own confirmation page or its "after confirming" page, so its visitors confirm on meil.ro\'s page for now. Sign-ups still work. meil.ro said:', 'meil' );
+		echo esc_html__( 'A meil.ro form could not use its own confirmation page or its "after confirming" page, so its visitors confirm on meil.ro\'s page for now. Sign-ups still work. meil.ro said:', 'meilro' );
 		echo '</p><p><em>' . esc_html( (string) ( $problem['message'] ?? '' ) ) . '</em></p>';
 		if ( is_string( $edit ) && '' !== $edit ) {
-			echo '<p><a href="' . esc_url( $edit ) . '">' . esc_html__( 'Open the form', 'meil' ) . '</a></p>';
+			echo '<p><a href="' . esc_url( $edit ) . '">' . esc_html__( 'Open the form', 'meilro' ) . '</a></p>';
 		}
 		echo '</div>';
 	}

@@ -124,32 +124,32 @@ class Meil_Confirm {
 	private static function text( string $key ): string {
 		switch ( $key ) {
 			case 'confirmed':
-				$text = __( 'Thank you, your subscription is confirmed.', 'meil' );
+				$text = __( 'Thank you, your subscription is confirmed.', 'meilro' );
 				break;
 			case 'already':
-				$text = __( 'Your subscription was already confirmed. Thank you!', 'meil' );
+				$text = __( 'Your subscription was already confirmed. Thank you!', 'meilro' );
 				break;
 			case 'expired':
-				$text = __( 'This confirmation link has expired. Please sign up again to get a new one.', 'meil' );
+				$text = __( 'This confirmation link has expired. Please sign up again to get a new one.', 'meilro' );
 				break;
 			case 'invalid':
-				$text = __( 'This confirmation link is not valid. Please use the button in the email we sent you, or sign up again.', 'meil' );
+				$text = __( 'This confirmation link is not valid. Please use the button in the email we sent you, or sign up again.', 'meilro' );
 				break;
 			case 'error':
-				$text = __( 'Sorry, we could not confirm your subscription right now. Please try again in a few minutes.', 'meil' );
+				$text = __( 'Sorry, we could not confirm your subscription right now. Please try again in a few minutes.', 'meilro' );
 				break;
 			case 'ask':
 				/* translators: %s: the visitor's email address */
-				$text = __( 'Press the button to confirm that you want to receive our emails at %s.', 'meil' );
+				$text = __( 'Press the button to confirm that you want to receive our emails at %s.', 'meilro' );
 				break;
 			case 'ask_plain':
-				$text = __( 'Press the button to confirm your subscription.', 'meil' );
+				$text = __( 'Press the button to confirm your subscription.', 'meilro' );
 				break;
 			case 'lists':
-				$text = __( 'You are subscribing to:', 'meil' );
+				$text = __( 'You are subscribing to:', 'meilro' );
 				break;
 			case 'button':
-				$text = __( 'Confirm my subscription', 'meil' );
+				$text = __( 'Confirm my subscription', 'meilro' );
 				break;
 			default:
 				$text = '';
@@ -309,12 +309,12 @@ class Meil_Confirm {
 		$ask = array_merge(
 			$vars,
 			array(
-				'admin_note'  => __( 'Test mode: below is what visitors see here. First the button they press to confirm, then the message once they have confirmed, then the one for an expired link. Only you see these examples.', 'meil' ),
+				'admin_note'  => __( 'Test mode: below is what visitors see here. First the button they press to confirm, then the message once they have confirmed, then the one for an expired link. Only you see these examples.', 'meilro' ),
 				'show_button' => true,
 				'example'     => true,
 				'form_id'     => $form_id,
 				'intro'       => '' !== $email ? sprintf( self::text( 'ask' ), $email ) : self::text( 'ask_plain' ),
-				'lists'       => array() !== $lists ? $lists : array( __( 'Newsletter', 'meil' ) ),
+				'lists'       => array() !== $lists ? $lists : array( __( 'Newsletter', 'meilro' ) ),
 			)
 		);
 		$html = meil_template( 'confirm', $ask );
@@ -388,7 +388,7 @@ class Meil_Confirm {
 				return $this->examples( $vars );
 			}
 			if ( current_user_can( 'manage_options' ) ) {
-				$vars['admin_note'] = __( 'This is where visitors confirm their subscription: they arrive here from the button in the confirmation email. To see what they see, turn on test mode in meil.ro > Settings > Forms look. Only you see this note.', 'meil' );
+				$vars['admin_note'] = __( 'This is where visitors confirm their subscription: they arrive here from the button in the confirmation email. To see what they see, turn on test mode in meil.ro > Settings > Forms look. Only you see this note.', 'meilro' );
 			}
 			return '' !== $vars['admin_note'] ? meil_template( 'confirm', $vars ) : '';
 		}

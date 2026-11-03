@@ -118,7 +118,7 @@ class Meil_Integrations {
 			'source'      => $plugin,
 			'signup_text' => ! empty( $connection['everyone'] )
 				/* translators: %s: the form's title */
-				? sprintf( __( 'Sent the form "%s"', 'meil' ), (string) $connection['title'] )
+				? sprintf( __( 'Sent the form "%s"', 'meilro' ), (string) $connection['title'] )
 				: (string) $connection['consent_label'],
 		);
 		if ( ! $confirm ) {
@@ -160,7 +160,7 @@ class Meil_Integrations {
 	/* -------------------------------------------------------------- admin */
 
 	public function register_menu(): void {
-		add_submenu_page( 'meil-mailer', __( 'Form plugins', 'meil' ), __( 'Form plugins', 'meil' ), 'manage_options', self::PAGE, array( $this, 'render_page' ) );
+		add_submenu_page( 'meil-mailer', __( 'Form plugins', 'meilro' ), __( 'Form plugins', 'meilro' ), 'manage_options', self::PAGE, array( $this, 'render_page' ) );
 	}
 
 	/** The plugin's forms, or the error that kept them from being read. */
@@ -188,26 +188,26 @@ class Meil_Integrations {
 		$result = isset( $_GET['meil_saved'] ) ? sanitize_key( wp_unslash( (string) $_GET['meil_saved'] ) ) : '';
 		?>
 		<div class="wrap meil-app">
-			<?php meil_admin_head( __( 'Form plugins', 'meil' ), __( 'Sign people up from forms you already have. Pick the audiences, the field with the email address, and who joins: those who tick a checkbox of the form, or everyone who sends it.', 'meil' ) ); ?>
+			<?php meil_admin_head( __( 'Form plugins', 'meilro' ), __( 'Sign people up from forms you already have. Pick the audiences, the field with the email address, and who joins: those who tick a checkbox of the form, or everyone who sends it.', 'meilro' ) ); ?>
 			<?php
 			$notices = array(
-				'saved'        => array( 'success', __( 'Saved.', 'meil' ) ),
-				'disconnected' => array( 'success', __( 'This form no longer signs anyone up.', 'meil' ) ),
-				'incomplete'   => array( 'error', __( 'Pick at least one audience, the email field, and who joins.', 'meil' ) ),
+				'saved'        => array( 'success', __( 'Saved.', 'meilro' ) ),
+				'disconnected' => array( 'success', __( 'This form no longer signs anyone up.', 'meilro' ) ),
+				'incomplete'   => array( 'error', __( 'Pick at least one audience, the email field, and who joins.', 'meilro' ) ),
 			);
 			if ( isset( $notices[ $result ] ) ) {
 				printf( '<div class="notice notice-%1$s is-dismissible"><p>%2$s</p></div>', esc_attr( $notices[ $result ][0] ), esc_html( $notices[ $result ][1] ) );
 			}
 			?>
 			<?php if ( ! $this->client->is_configured() ) : ?>
-				<p><?php esc_html_e( 'Add an API key under meil.ro > Settings first.', 'meil' ); ?></p>
+				<p><?php esc_html_e( 'Add an API key under meil.ro > Settings first.', 'meilro' ); ?></p>
 			<?php elseif ( ! meil_key_can( 'manage' ) ) : ?>
-				<div class="notice notice-warning inline"><p><?php esc_html_e( 'Connecting forms needs a "Full access" API key. Change it under meil.ro > Settings.', 'meil' ); ?></p></div>
+				<div class="notice notice-warning inline"><p><?php esc_html_e( 'Connecting forms needs a "Full access" API key. Change it under meil.ro > Settings.', 'meilro' ); ?></p></div>
 			<?php elseif ( array() === $active ) : ?>
 				<p>
 					<?php
 					/* translators: %s: list of form plugins */
-					echo esc_html( sprintf( __( 'None of the form plugins this works with is active: %s.', 'meil' ), implode( ', ', array_map( static function ( Meil_Integration $plugin ): string {
+					echo esc_html( sprintf( __( 'None of the form plugins this works with is active: %s.', 'meilro' ), implode( ', ', array_map( static function ( Meil_Integration $plugin ): string {
 						return $plugin->name();
 					}, $this->plugins ) ) ) );
 					?>
@@ -230,20 +230,20 @@ class Meil_Integrations {
 			echo '<div class="meil-panel"><div class="meil-panel__head"><h2 class="meil-panel__title">' . esc_html( $plugin->name() ) . '</h2></div>';
 			if ( is_wp_error( $forms ) ) {
 				/* translators: %s: error message */
-				echo '<div class="meil-panel__body"><div class="notice notice-error inline"><p>' . esc_html( sprintf( __( 'Could not read its forms: %s', 'meil' ), $forms->get_error_message() ) ) . '</p></div></div></div>';
+				echo '<div class="meil-panel__body"><div class="notice notice-error inline"><p>' . esc_html( sprintf( __( 'Could not read its forms: %s', 'meilro' ), $forms->get_error_message() ) ) . '</p></div></div></div>';
 				continue;
 			}
 			if ( array() === $forms ) {
-				echo '<div class="meil-panel__body"><p class="meil-empty">' . esc_html__( 'It has no forms yet.', 'meil' ) . '</p></div></div>';
+				echo '<div class="meil-panel__body"><p class="meil-empty">' . esc_html__( 'It has no forms yet.', 'meilro' ) . '</p></div></div>';
 				continue;
 			}
 			?>
 			<div class="meil-panel__body meil-panel__body--tight">
 			<table class="meil-table meil-connections">
 				<thead><tr>
-					<th scope="col"><?php esc_html_e( 'Form', 'meil' ); ?></th>
-					<th scope="col"><?php esc_html_e( 'Signs up to', 'meil' ); ?></th>
-					<th scope="col"><span class="screen-reader-text"><?php esc_html_e( 'Actions', 'meil' ); ?></span></th>
+					<th scope="col"><?php esc_html_e( 'Form', 'meilro' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Signs up to', 'meilro' ); ?></th>
+					<th scope="col"><span class="screen-reader-text"><?php esc_html_e( 'Actions', 'meilro' ); ?></span></th>
 				</tr></thead>
 				<tbody>
 					<?php
@@ -260,13 +260,13 @@ class Meil_Integrations {
 										? implode( ', ', array_map( static function ( string $id ) use ( $names ): string {
 											return $names[ $id ] ?? $id;
 										}, (array) $connection['audiences'] ) )
-										: __( 'Not connected', 'meil' )
+										: __( 'Not connected', 'meilro' )
 								);
 								?>
 							</td>
 							<td class="meil-connections__actions">
 								<a class="button button-small" href="<?php echo esc_url( add_query_arg( array( 'page' => self::PAGE, 'edit' => $key ), admin_url( 'admin.php' ) ) ); ?>">
-									<?php echo esc_html( is_array( $connection ) ? __( 'Change', 'meil' ) : __( 'Connect', 'meil' ) ); ?>
+									<?php echo esc_html( is_array( $connection ) ? __( 'Change', 'meilro' ) : __( 'Connect', 'meilro' ) ); ?>
 								</a>
 							</td>
 						</tr>
@@ -294,7 +294,7 @@ class Meil_Integrations {
 		}
 		$back = add_query_arg( 'page', self::PAGE, admin_url( 'admin.php' ) );
 		if ( null === $form ) {
-			echo '<p>' . esc_html__( 'This form was not found. It may have been deleted.', 'meil' ) . ' <a href="' . esc_url( $back ) . '">' . esc_html__( 'Back to the list', 'meil' ) . '</a></p>';
+			echo '<p>' . esc_html__( 'This form was not found. It may have been deleted.', 'meilro' ) . ' <a href="' . esc_url( $back ) . '">' . esc_html__( 'Back to the list', 'meilro' ) . '</a></p>';
 			return;
 		}
 		$audiences  = $this->client->list_audiences();
@@ -334,7 +334,7 @@ class Meil_Integrations {
 		};
 		$checkboxes = $choices( $form['fields'], array( 'checkbox' ) );
 		?>
-		<p class="meil-back"><a href="<?php echo esc_url( $back ); ?>">&larr; <?php esc_html_e( 'Back to the list', 'meil' ); ?></a></p>
+		<p class="meil-back"><a href="<?php echo esc_url( $back ); ?>">&larr; <?php esc_html_e( 'Back to the list', 'meilro' ); ?></a></p>
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="meil-stack">
 			<input type="hidden" name="action" value="<?php echo esc_attr( self::NONCE ); ?>" />
 			<input type="hidden" name="key" value="<?php echo esc_attr( $key ); ?>" />
@@ -343,11 +343,11 @@ class Meil_Integrations {
 				<div class="meil-panel__head"><h2 class="meil-panel__title"><?php echo esc_html( $plugin->name() . ': ' . ( '' !== $form['title'] ? $form['title'] : $form['id'] ) ); ?></h2></div>
 				<div class="meil-panel__body">
 					<div class="meil-field">
-						<span class="meil-field__label"><?php esc_html_e( 'Add to', 'meil' ); ?></span>
+						<span class="meil-field__label"><?php esc_html_e( 'Add to', 'meilro' ); ?></span>
 						<div class="meil-field__control">
 							<?php if ( is_wp_error( $audiences ) ) : ?>
 								<?php /* translators: %s: error message from the meil API */ ?>
-								<p class="description"><?php echo esc_html( sprintf( __( 'Could not reach meil: %s', 'meil' ), $audiences->get_error_message() ) ); ?></p>
+								<p class="description"><?php echo esc_html( sprintf( __( 'Could not reach meil: %s', 'meilro' ), $audiences->get_error_message() ) ); ?></p>
 							<?php else : ?>
 								<ul class="meil-signup-list">
 									<?php foreach ( (array) ( $audiences['data'] ?? array() ) as $audience ) : ?>
@@ -358,47 +358,47 @@ class Meil_Integrations {
 						</div>
 					</div>
 					<div class="meil-field">
-						<label class="meil-field__label" for="meil-int-email"><?php esc_html_e( 'Email address', 'meil' ); ?></label>
-						<div class="meil-field__control"><?php $select( 'email', (string) $connection['email'], array_merge( $choices( $form['fields'], array( 'email' ) ), $choices( $form['fields'], array( 'text', 'other' ) ) ), __( 'Choose a field', 'meil' ) ); ?></div>
+						<label class="meil-field__label" for="meil-int-email"><?php esc_html_e( 'Email address', 'meilro' ); ?></label>
+						<div class="meil-field__control"><?php $select( 'email', (string) $connection['email'], array_merge( $choices( $form['fields'], array( 'email' ) ), $choices( $form['fields'], array( 'text', 'other' ) ) ), __( 'Choose a field', 'meilro' ) ); ?></div>
 					</div>
 					<div class="meil-field-row">
 						<div class="meil-field">
-							<label class="meil-field__label" for="meil-int-first"><?php esc_html_e( 'First name', 'meil' ); ?></label>
+							<label class="meil-field__label" for="meil-int-first"><?php esc_html_e( 'First name', 'meilro' ); ?></label>
 							<div class="meil-field__control">
-								<?php $select( 'first', (string) $connection['first'], $choices( $form['fields'], array( 'text', 'other' ) ), __( 'None', 'meil' ) ); ?>
-								<p class="description"><?php esc_html_e( 'A field with the whole name works here too.', 'meil' ); ?></p>
+								<?php $select( 'first', (string) $connection['first'], $choices( $form['fields'], array( 'text', 'other' ) ), __( 'None', 'meilro' ) ); ?>
+								<p class="description"><?php esc_html_e( 'A field with the whole name works here too.', 'meilro' ); ?></p>
 							</div>
 						</div>
 						<div class="meil-field">
-							<label class="meil-field__label" for="meil-int-last"><?php esc_html_e( 'Last name', 'meil' ); ?></label>
-							<div class="meil-field__control"><?php $select( 'last', (string) $connection['last'], $choices( $form['fields'], array( 'text', 'other' ) ), __( 'None', 'meil' ) ); ?></div>
+							<label class="meil-field__label" for="meil-int-last"><?php esc_html_e( 'Last name', 'meilro' ); ?></label>
+							<div class="meil-field__control"><?php $select( 'last', (string) $connection['last'], $choices( $form['fields'], array( 'text', 'other' ) ), __( 'None', 'meilro' ) ); ?></div>
 						</div>
 					</div>
 					<div class="meil-field">
-						<span class="meil-field__label"><?php esc_html_e( 'Who joins', 'meil' ); ?></span>
+						<span class="meil-field__label"><?php esc_html_e( 'Who joins', 'meilro' ); ?></span>
 						<div class="meil-field__control">
 							<fieldset class="meil-choices">
-								<label class="meil-choice"><input type="radio" name="who" value="ticked" <?php checked( empty( $connection['everyone'] ) ); ?> <?php disabled( array() === $checkboxes ); ?> /> <?php esc_html_e( 'Only those who tick this checkbox:', 'meil' ); ?></label>
+								<label class="meil-choice"><input type="radio" name="who" value="ticked" <?php checked( empty( $connection['everyone'] ) ); ?> <?php disabled( array() === $checkboxes ); ?> /> <?php esc_html_e( 'Only those who tick this checkbox:', 'meilro' ); ?></label>
 								<?php if ( array() !== $checkboxes ) : ?>
 									<div class="meil-choice__more"><?php $select( 'consent', (string) $connection['consent'], $checkboxes, '' ); ?></div>
 								<?php else : ?>
-									<p class="description"><?php esc_html_e( 'This form has no checkbox. Add one in the form (for example "Send me news by email"), then come back.', 'meil' ); ?></p>
+									<p class="description"><?php esc_html_e( 'This form has no checkbox. Add one in the form (for example "Send me news by email"), then come back.', 'meilro' ); ?></p>
 								<?php endif; ?>
-								<label class="meil-choice"><input type="radio" name="who" value="everyone" <?php checked( ! empty( $connection['everyone'] ) || array() === $checkboxes ); ?> /> <?php esc_html_e( 'Everyone who sends the form', 'meil' ); ?></label>
-								<p class="description"><?php esc_html_e( 'Only for a form made to sign up, where sending it is the request. A contact form needs the checkbox: people who only wrote to you have not asked for your emails.', 'meil' ); ?></p>
+								<label class="meil-choice"><input type="radio" name="who" value="everyone" <?php checked( ! empty( $connection['everyone'] ) || array() === $checkboxes ); ?> /> <?php esc_html_e( 'Everyone who sends the form', 'meilro' ); ?></label>
+								<p class="description"><?php esc_html_e( 'Only for a form made to sign up, where sending it is the request. A contact form needs the checkbox: people who only wrote to you have not asked for your emails.', 'meilro' ); ?></p>
 							</fieldset>
 						</div>
 					</div>
 					<div class="meil-field">
-						<span class="meil-field__label"><?php esc_html_e( 'Confirmation', 'meil' ); ?></span>
-						<div class="meil-field__control"><label><input type="checkbox" name="confirm" value="1" <?php checked( ! empty( $connection['confirm'] ) ); ?> /> <?php esc_html_e( 'Ask them to confirm by email before they are subscribed (recommended)', 'meil' ); ?></label></div>
+						<span class="meil-field__label"><?php esc_html_e( 'Confirmation', 'meilro' ); ?></span>
+						<div class="meil-field__control"><label><input type="checkbox" name="confirm" value="1" <?php checked( ! empty( $connection['confirm'] ) ); ?> /> <?php esc_html_e( 'Ask them to confirm by email before they are subscribed (recommended)', 'meilro' ); ?></label></div>
 					</div>
 				</div>
 			</div>
 			<p class="meil-actions">
-				<button type="submit" name="do" value="save" class="button button-primary"><?php esc_html_e( 'Save', 'meil' ); ?></button>
+				<button type="submit" name="do" value="save" class="button button-primary"><?php esc_html_e( 'Save', 'meilro' ); ?></button>
 				<?php if ( array() !== $saved ) : ?>
-					<button type="submit" name="do" value="disconnect" class="button-link button-link-delete"><?php esc_html_e( 'Disconnect', 'meil' ); ?></button>
+					<button type="submit" name="do" value="disconnect" class="button-link button-link-delete"><?php esc_html_e( 'Disconnect', 'meilro' ); ?></button>
 				<?php endif; ?>
 			</p>
 		</form>
@@ -407,7 +407,7 @@ class Meil_Integrations {
 
 	public function handle_save(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to do this.', 'meil' ) );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'meilro' ) );
 		}
 		check_admin_referer( self::NONCE );
 		$key         = isset( $_POST['key'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['key'] ) ) : '';

@@ -10,7 +10,7 @@
  * Author URI:        https://meil.ro
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       meil
+ * Text Domain:       meilro
  * Domain Path:       /languages
  */
 
@@ -348,7 +348,7 @@ function meil_enqueue_front_assets(): void {
  * registered elsewhere (e.g. by mu-plugins tweaking mail) are already in place.
  */
 function meil_mailer_bootstrap(): void {
-	load_plugin_textdomain( 'meil', false, dirname( plugin_basename( MEIL_MAILER_FILE ) ) . '/languages' );
+	load_plugin_textdomain( 'meilro', false, dirname( plugin_basename( MEIL_MAILER_FILE ) ) . '/languages' );
 
 	$settings = meil_mailer_settings();
 	$client   = meil_mailer_client();
@@ -397,7 +397,7 @@ function meil_test_mode_bar( $bar ): void {
 	$bar->add_node(
 		array(
 			'id'    => 'meil-test-mode',
-			'title' => esc_html__( 'meil.ro: test mode', 'meil' ),
+			'title' => esc_html__( 'meil.ro: test mode', 'meilro' ),
 			'href'  => admin_url( 'admin.php?page=meil-mailer&tab=look' ),
 		)
 	);
@@ -457,7 +457,7 @@ add_action( 'admin_enqueue_scripts', 'meil_mailer_enqueue_admin_assets' );
 
 /** Adds a "Settings" link on the Plugins screen. */
 function meil_mailer_action_links( array $links ): array {
-	$settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=meil-mailer' ) ) . '">' . esc_html__( 'Settings', 'meil' ) . '</a>';
+	$settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=meil-mailer' ) ) . '">' . esc_html__( 'Settings', 'meilro' ) . '</a>';
 	array_unshift( $links, $settings_link );
 	return $links;
 }

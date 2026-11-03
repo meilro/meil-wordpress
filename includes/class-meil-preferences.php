@@ -61,13 +61,13 @@ class Meil_Preferences {
 	private static function notice( string $result ): array {
 		switch ( $result ) {
 			case 'saved':
-				return array( 'success', __( 'Your choices are saved.', 'meil' ) );
+				return array( 'success', __( 'Your choices are saved.', 'meilro' ) );
 			case 'blocked':
-				return array( 'error', __( 'Some lists could not be turned on for this address, because earlier emails to it were not delivered or were marked as spam. Contact us if this is a mistake.', 'meil' ) );
+				return array( 'error', __( 'Some lists could not be turned on for this address, because earlier emails to it were not delivered or were marked as spam. Contact us if this is a mistake.', 'meilro' ) );
 			case 'login':
-				return array( 'error', __( 'Your email preferences are available once you are logged in.', 'meil' ) );
+				return array( 'error', __( 'Your email preferences are available once you are logged in.', 'meilro' ) );
 		}
-		return array( 'error', __( 'Sorry, your choices could not be saved right now. Please try again later.', 'meil' ) );
+		return array( 'error', __( 'Sorry, your choices could not be saved right now. Please try again later.', 'meilro' ) );
 	}
 
 	/**
@@ -271,7 +271,7 @@ class Meil_Preferences {
 	/** @param array<string,mixed>|string $atts */
 	public function render_shortcode( $atts ): string {
 		if ( ! meil_key_can( 'manage' ) ) {
-			return current_user_can( 'manage_options' ) ? '<p>' . esc_html__( 'The email preferences need a "Full access" API key. Change it under meil.ro > Settings.', 'meil' ) . '</p>' : '';
+			return current_user_can( 'manage_options' ) ? '<p>' . esc_html__( 'The email preferences need a "Full access" API key. Change it under meil.ro > Settings.', 'meilro' ) . '</p>' : '';
 		}
 		self::mark_not_cacheable();
 		meil_enqueue_front_assets();
@@ -310,7 +310,7 @@ class Meil_Preferences {
 				$problem       = is_wp_error( $audiences ) ? $audiences : $current;
 				$vars['error'] = current_user_can( 'manage_options' )
 					? $problem->get_error_message()
-					: __( 'Your email preferences cannot be shown right now. Please try again later.', 'meil' );
+					: __( 'Your email preferences cannot be shown right now. Please try again later.', 'meilro' );
 			} else {
 				$vars['choices'] = self::choices( $audiences, $current );
 			}

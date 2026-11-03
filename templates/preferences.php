@@ -44,8 +44,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="meil-prefs" data-meil-block="meil-prefs">
 	<?php if ( ! $logged_in ) : ?>
 		<p class="meil-prefs__notice">
-			<?php esc_html_e( 'Your email preferences are available once you are logged in.', 'meil' ); ?>
-			<a class="meil-prefs__login" href="<?php echo esc_url( $login_url ); ?>"><?php esc_html_e( 'Log in', 'meil' ); ?></a>
+			<?php esc_html_e( 'Your email preferences are available once you are logged in.', 'meilro' ); ?>
+			<a class="meil-prefs__login" href="<?php echo esc_url( $login_url ); ?>"><?php esc_html_e( 'Log in', 'meilro' ); ?></a>
 		</p>
 	<?php else : ?>
 		<p class="meil-prefs__message<?php echo null !== $message ? ' meil-prefs__message--' . esc_attr( $message['type'] ) : ''; ?>" role="status" aria-live="polite" data-meil-message<?php echo null === $message ? ' hidden' : ''; ?>><?php echo null !== $message ? esc_html( $message['text'] ) : ''; ?></p>
@@ -53,11 +53,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php if ( '' !== $error ) : ?>
 			<p class="meil-prefs__message meil-prefs__message--error" role="alert"><?php echo esc_html( $error ); ?></p>
 		<?php elseif ( array() === $choices ) : ?>
-			<p class="meil-prefs__notice"><?php esc_html_e( 'There are no lists to choose from yet.', 'meil' ); ?></p>
+			<p class="meil-prefs__notice"><?php esc_html_e( 'There are no lists to choose from yet.', 'meilro' ); ?></p>
 		<?php else : ?>
 			<form class="meil-prefs__form" method="post"
 				data-meil-ajax="<?php echo esc_url( $ajax_url ); ?>" data-meil-action="<?php echo esc_attr( $action ); ?>"
-				data-meil-error="<?php esc_attr_e( 'Sorry, your choices could not be saved right now. Please try again later.', 'meil' ); ?>">
+				data-meil-error="<?php esc_attr_e( 'Sorry, your choices could not be saved right now. Please try again later.', 'meilro' ); ?>">
 				<input type="hidden" name="meil_action" value="<?php echo esc_attr( $action ); ?>" />
 				<input type="hidden" name="meil_prefs_nonce" value="<?php echo esc_attr( $nonce ); ?>" />
 
@@ -66,7 +66,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<?php
 						printf(
 							/* translators: %s: the user's email address */
-							esc_html__( 'Emails we send to %s', 'meil' ),
+							esc_html__( 'Emails we send to %s', 'meilro' ),
 							'<strong class="meil-prefs__email">' . esc_html( $email ) . '</strong>'
 						);
 						?>
@@ -81,7 +81,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 									<span class="meil-prefs__choice-description"><?php echo esc_html( (string) $meil_choice['description'] ); ?></span>
 								<?php endif; ?>
 								<?php if ( 'pending' === $meil_choice['state'] ) : ?>
-									<span class="meil-prefs__choice-status"><?php esc_html_e( 'Waiting for you to confirm from the email we sent. Saving with this ticked subscribes you now.', 'meil' ); ?></span>
+									<span class="meil-prefs__choice-status"><?php esc_html_e( 'Waiting for you to confirm from the email we sent. Saving with this ticked subscribes you now.', 'meilro' ); ?></span>
 								<?php endif; ?>
 							</span>
 						</label>
@@ -89,7 +89,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</fieldset>
 
 				<p class="meil-prefs__actions">
-					<button class="meil-prefs__button<?php echo esc_attr( meil_extra_classes( 'button' ) ); ?>" type="submit"><?php esc_html_e( 'Save', 'meil' ); ?></button>
+					<button class="meil-prefs__button<?php echo esc_attr( meil_extra_classes( 'button' ) ); ?>" type="submit"><?php esc_html_e( 'Save', 'meilro' ); ?></button>
 				</p>
 			</form>
 		<?php endif; ?>

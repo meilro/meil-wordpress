@@ -60,7 +60,7 @@ class Meil_Integration_Elementor extends Meil_Integration {
 				$out[] = array(
 					'id'     => $row['ID'] . ':' . $widget['id'],
 					/* translators: 1: the form's name, 2: the page it is on */
-					'title'  => sprintf( __( '%1$s, on %2$s', 'meil' ), (string) ( $settings['form_name'] ?? __( 'Form', 'meil' ) ), (string) $row['post_title'] ),
+					'title'  => sprintf( __( '%1$s, on %2$s', 'meilro' ), (string) ( $settings['form_name'] ?? __( 'Form', 'meilro' ) ), (string) $row['post_title'] ),
 					'fields' => $fields,
 				);
 			}
