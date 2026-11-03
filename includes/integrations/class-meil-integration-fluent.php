@@ -26,9 +26,8 @@ class Meil_Integration_Fluent extends Meil_Integration {
 
 	public function forms(): array {
 		global $wpdb;
-		$table = $wpdb->prefix . 'fluentform_forms';
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Fluent Forms' own table, read only.
-		$rows = (array) $wpdb->get_results( "SELECT id, title, form_fields FROM {$table} ORDER BY id DESC", ARRAY_A );
+		$rows = (array) $wpdb->get_results( "SELECT id, title, form_fields FROM {$wpdb->prefix}fluentform_forms ORDER BY id DESC", ARRAY_A );
 		$out  = array();
 		foreach ( $rows as $row ) {
 			$data   = json_decode( (string) $row['form_fields'], true );

@@ -79,6 +79,7 @@ class Meil_Forms {
 				'audiences'     => array(),
 				'ask_name'      => false,
 				'ask_last_name' => false,
+				'all_lists'     => false,
 				'confirm'       => true,
 				'confirm_page'  => 0,
 				'thanks_page'   => 0,
@@ -198,7 +199,8 @@ class Meil_Forms {
 						<a href="<?php echo esc_url( MEIL_MAILER_APP_URL . '/audiences' ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Create one in meil.ro', 'meil' ); ?></a>
 					</p>
 				<?php else : ?>
-					<p class="meil-fa-section__lead"><?php esc_html_e( 'Tick the audiences this form offers and write the label visitors see for each. With more than one, visitors choose with checkboxes. With one, the form only asks for the email address.', 'meil' ); ?></p>
+					<p class="meil-fa-section__lead"><?php esc_html_e( 'Tick the audiences this form offers and write the label visitors see for each. With one, the form only asks for the email address. With more than one, choose below whether visitors pick from them or join all of them.', 'meil' ); ?></p>
+					<input type="hidden" name="meil_audiences_shown" value="1" />
 					<ul class="meil-fa-audiences">
 						<?php
 						foreach ( $audiences['data'] as $audience ) :
@@ -220,7 +222,7 @@ class Meil_Forms {
 								<span class="meil-fa-audience__details">
 									<label class="screen-reader-text" for="<?php echo esc_attr( $slug ); ?>"><?php esc_html_e( 'Label on the form', 'meil' ); ?></label>
 									<input type="text" id="<?php echo esc_attr( $slug ); ?>" class="meil-fa-audience__label" name="<?php echo esc_attr( $field . '[label]' ); ?>" value="<?php echo esc_attr( null !== $row ? $row['label'] : '' ); ?>" placeholder="<?php echo esc_attr( $name ); ?>" />
-									<label class="meil-fa-inline">
+									<label class="meil-fa-inline meil-fa-audience__ticked">
 										<input type="checkbox" name="<?php echo esc_attr( $field . '[checked]' ); ?>" value="1" <?php checked( null !== $row && ! empty( $row['checked'] ) ); ?> />
 										<?php esc_html_e( 'Ticked at first', 'meil' ); ?>
 									</label>
@@ -228,6 +230,12 @@ class Meil_Forms {
 							</li>
 						<?php endforeach; ?>
 					</ul>
+					<fieldset class="meil-fa-lists">
+						<legend class="meil-fa-lists__title"><?php esc_html_e( 'With more than one audience', 'meil' ); ?></legend>
+						<label class="meil-fa-inline"><input type="radio" name="meil_lists" value="choose" <?php checked( empty( $form['all_lists'] ) ); ?> /> <?php esc_html_e( 'Visitors choose, with checkboxes', 'meil' ); ?></label>
+						<label class="meil-fa-inline"><input type="radio" id="meil-lists-all" name="meil_lists" value="all" <?php checked( ! empty( $form['all_lists'] ) ); ?> /> <?php esc_html_e( 'They join all of them, without checkboxes', 'meil' ); ?></label>
+						<p class="description"><?php esc_html_e( 'Use the second one when the form says clearly what they will receive, for example "Get our news and offers by email".', 'meil' ); ?></p>
+					</fieldset>
 				<?php endif; ?>
 			</section>
 
@@ -296,7 +304,7 @@ class Meil_Forms {
 								)
 							);
 							?>
-							<p class="description"><?php esc_html_e( 'Or pick a page of this site: the button in the email opens it, and visitors confirm there. It must be on the domain you send from, or a subdomain of it. The confirmation shows at the top of the page. To place it yourself, put [meil_confirm] in the page.', 'meil' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Or pick a page of your site. The button in the email opens it, and above its content visitors see their address, the lists they chose and a button to confirm. To show this somewhere else on the page, put [meil_confirm] there. The page must be on the domain you send from, or a subdomain of it.', 'meil' ); ?></p>
 							<?php
 							$confirm_post = (int) $form['confirm_page'] > 0 ? get_post( (int) $form['confirm_page'] ) : null;
 							if ( $confirm_post && ( 'publish' !== $confirm_post->post_status || '' !== $confirm_post->post_password ) ) :
@@ -376,6 +384,10 @@ class Meil_Forms {
 			return;
 		}
 
+		// The audiences were drawn only when meil.ro answered: otherwise the
+		// form keeps the ones it had, instead of losing them on save.
+		$previous  = self::settings( $post_id );
+		$shown     = ! empty( $_POST['meil_audiences_shown'] );
 		$audiences = array();
 		$posted    = isset( $_POST['meil_audiences'] ) && is_array( $_POST['meil_audiences'] ) ? wp_unslash( $_POST['meil_audiences'] ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- each value is sanitized below.
 		foreach ( $posted as $id => $row ) {
@@ -399,12 +411,13 @@ class Meil_Forms {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- cleaned by clean_checkboxes().
 		$checkboxes = self::clean_checkboxes( isset( $_POST['meil_checkboxes'] ) ? wp_unslash( $_POST['meil_checkboxes'] ) : array() );
 
-		$old_strings = self::strings( $post_id, self::settings( $post_id ) );
+		$old_strings = self::strings( $post_id, $previous );
 		update_post_meta(
 			$post_id,
 			self::META,
 			array(
-				'audiences'     => array_slice( $audiences, 0, 20 ),
+				'audiences'     => $shown ? array_slice( $audiences, 0, 20 ) : $previous['audiences'],
+				'all_lists'     => $shown ? ( isset( $_POST['meil_lists'] ) && 'all' === sanitize_key( wp_unslash( $_POST['meil_lists'] ) ) ) : (bool) $previous['all_lists'],
 				'ask_name'      => ! empty( $_POST['meil_ask_name'] ),
 				'ask_last_name' => ! empty( $_POST['meil_ask_last_name'] ),
 				'confirm'       => ! empty( $_POST['meil_confirm'] ),
@@ -461,11 +474,12 @@ class Meil_Forms {
 	 * refused: a bot posting to it nonstop would otherwise use up the account's
 	 * requests per second, and the site's own emails (password resets,
 	 * orders) would start failing. Also used for forms of other plugins
-	 * (Meil_Integrations).
+	 * (Meil_Integrations). An address it cannot count (see meil_ip_countable())
+	 * is let through.
 	 */
 	public static function within_signup_limit(): bool {
 		$ip = meil_visitor_ip();
-		if ( '' === $ip ) {
+		if ( ! meil_ip_countable( $ip ) ) {
 			return true;
 		}
 		$key  = 'meil_signups_' . md5( $ip );
@@ -856,7 +870,7 @@ class Meil_Forms {
 				'form_id'      => $form_id,
 				'instance_id'  => 'meil-form-' . $form_id . '-' . wp_rand( 1000, 9999 ),
 				'choices'      => $choices,
-				'show_choices' => count( $choices ) > 1,
+				'show_choices' => count( $choices ) > 1 && empty( $form['all_lists'] ),
 				'ask_name'      => (bool) $form['ask_name'],
 				'ask_last_name' => (bool) $form['ask_last_name'],
 				'button_text'  => $text( 'button' ),
@@ -908,7 +922,7 @@ class Meil_Forms {
 		// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 		$offered = array_column( $form['audiences'], 'id' );
-		$chosen  = count( $offered ) > 1 ? array_values( array_intersect( $offered, $posted ) ) : $offered;
+		$chosen  = count( $offered ) > 1 && empty( $form['all_lists'] ) ? array_values( array_intersect( $offered, $posted ) ) : $offered;
 		$values  = array(
 			'email'      => $email,
 			'first_name' => $first_name,

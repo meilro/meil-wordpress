@@ -7,7 +7,8 @@
  * The browser remembers, in localStorage, when it was closed (it stays away
  * for the form's days) and that the visitor signed up through any meil.ro
  * form (forms.js notes that; it stays away for good). Escape, the close
- * button and a click beside a popup close it.
+ * button and a click beside a popup close it. In test mode (administrators
+ * only) it shows at once, every time.
  */
 (function () {
 	'use strict';
@@ -33,6 +34,12 @@
 	var days = parseInt(box.getAttribute('data-meil-days'), 10) || 14;
 	var closedKey = 'meil_popup_closed_' + id;
 	var noMouse = window.matchMedia && window.matchMedia('(hover: none)').matches;
+	// Test mode, for an administrator designing it: at once, every time, and
+	// a close or a signup is not remembered.
+	var test = box.getAttribute('data-meil-test') === '1';
+	if (test) {
+		store = null;
+	}
 
 	if (store) {
 		var closedAt = parseInt(store.getItem(closedKey), 10) || 0;
@@ -104,7 +111,9 @@
 		window.addEventListener('scroll', check, { passive: true });
 	}
 
-	if (trigger === 'scroll') {
+	if (test) {
+		show();
+	} else if (trigger === 'scroll') {
 		onScroll(Math.min(100, value));
 	} else if (trigger === 'exit' && !noMouse) {
 		document.addEventListener('mouseout', function (event) {

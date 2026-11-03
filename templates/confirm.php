@@ -28,6 +28,7 @@
  * @var string                              $action
  * @var string                              $action_url
  * @var string                              $admin_note
+ * @var bool                                $example      test mode's example, whose button does nothing
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -65,7 +66,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php endif; ?>
 
 			<p class="meil-confirm__actions">
-				<button class="meil-confirm__button<?php echo esc_attr( meil_extra_classes( 'button' ) ); ?>" type="submit"><?php echo esc_html( $button_text ); ?></button>
+				<button class="meil-confirm__button<?php echo esc_attr( meil_extra_classes( 'button' ) ); ?>" type="<?php echo empty( $example ) ? 'submit' : 'button'; ?>"><?php echo esc_html( $button_text ); ?></button>
 			</p>
 		</form>
 	<?php endif; ?>

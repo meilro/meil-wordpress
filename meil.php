@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name:       meil.ro – Email & Newsletter
+ * Plugin Name:       meil.ro – Transactional Email & Newsletters
  * Plugin URI:        https://github.com/meilro/meil-wordpress
- * Description:       Sends WordPress mail through meil.ro, with subscription forms and a preferences page for logged-in users.
+ * Description:       Sends WordPress emails through meil.ro and gathers subscribers with forms, a popup and a checkbox at checkout.
  * Version:           1.3.0
  * Requires at least: 5.9
  * Requires PHP:      7.4
@@ -58,7 +58,7 @@ require_once MEIL_MAILER_DIR . 'includes/class-meil-sent-admin.php';
  * key_domain and key_permission are what meil.ro said about the API key when
  * it was saved (GET /key), so pages never have to ask again.
  *
- * @return array{api_key:string,from_email:string,from_name:string,override_wp_mail:bool,load_css:bool,delete_with_user:bool,class_button:string,class_input:string,class_checkbox:string,signup_places:list<string>,signup_audiences:list<string>,signup_label:string,signup_confirm:bool,popup_form:int,popup_kind:string,popup_trigger:string,popup_value:int,popup_where:string,popup_days:int,popup_title:string,popup_text:string,key_domain:string,key_permission:string}
+ * @return array{api_key:string,from_email:string,from_name:string,override_wp_mail:bool,load_css:bool,delete_with_user:bool,class_button:string,class_input:string,class_checkbox:string,signup_places:list<string>,signup_audiences:list<string>,signup_label:string,signup_confirm:bool,popup_form:int,popup_kind:string,popup_trigger:string,popup_value:int,popup_where:string,popup_days:int,popup_title:string,popup_text:string,test_mode:bool,key_domain:string,key_permission:string}
  */
 function meil_mailer_settings(): array {
 	$defaults = array(
@@ -83,6 +83,7 @@ function meil_mailer_settings(): array {
 		'popup_days'       => 14,
 		'popup_title'      => '',
 		'popup_text'       => '',
+		'test_mode'        => false,
 		'key_domain'       => '',
 		'key_permission'   => '',
 	);
@@ -133,18 +134,52 @@ function meil_mailer_client(): Meil_Client {
 }
 
 /**
- * The visitor's IP address, for the consent record. Behind Cloudflare,
- * REMOTE_ADDR is Cloudflare's server and the visitor is in CF-Connecting-IP;
- * that header is only believed when the request really comes from one of
- * Cloudflare's addresses, so nobody can write their own. Sites behind another
- * proxy can supply the address with the 'meil_visitor_ip' filter.
+ * The visitor's IP address, for the consent record and the limits against bots.
+ *
+ * Behind Cloudflare, REMOTE_ADDR is Cloudflare's server and the visitor is in
+ * CF-Connecting-IP. That header is only believed when the request really comes
+ * from one of Cloudflare's addresses, so nobody can write their own.
+ *
+ * When REMOTE_ADDR is a private address (10.x, 192.168.x, 127.0.0.1 and the
+ * like), a proxy on the site's own network stands in front, such as a host's
+ * load balancer: the visitor is then the last address in X-Forwarded-For that
+ * is not a proxy, since each proxy adds the one it saw to the end and a
+ * visitor can only write the start. Where nothing in front adds the header, a
+ * visitor could write it in full, but only to change their own record.
+ *
+ * Other proxies with public addresses can supply the address with the
+ * 'meil_visitor_ip' filter.
  */
 function meil_visitor_ip(): string {
 	$remote = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( (string) $_SERVER['REMOTE_ADDR'] ) ) : '';
 	$remote = filter_var( $remote, FILTER_VALIDATE_IP ) ? $remote : '';
-	$cf     = isset( $_SERVER['HTTP_CF_CONNECTING_IP'] ) ? sanitize_text_field( wp_unslash( (string) $_SERVER['HTTP_CF_CONNECTING_IP'] ) ) : '';
-	$ip     = ( '' !== $remote && filter_var( $cf, FILTER_VALIDATE_IP ) && meil_is_cloudflare( $remote ) ) ? $cf : $remote;
+	$ip     = $remote;
+	if ( '' !== $remote && meil_is_cloudflare( $remote ) ) {
+		$cf = isset( $_SERVER['HTTP_CF_CONNECTING_IP'] ) ? sanitize_text_field( wp_unslash( (string) $_SERVER['HTTP_CF_CONNECTING_IP'] ) ) : '';
+		$ip = filter_var( $cf, FILTER_VALIDATE_IP ) ? $cf : $remote;
+	} elseif ( '' !== $remote && meil_is_private_ip( $remote ) && isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
+		$chain = explode( ',', substr( sanitize_text_field( wp_unslash( (string) $_SERVER['HTTP_X_FORWARDED_FOR'] ) ), 0, 1000 ) );
+		foreach ( array_reverse( $chain ) as $entry ) {
+			$entry = meil_bare_ip( $entry );
+			if ( '' === $entry ) {
+				break; // Not an address: nothing further left can be believed.
+			}
+			if ( ! meil_is_private_ip( $entry ) && ! meil_is_cloudflare( $entry ) ) {
+				$ip = $entry;
+				break;
+			}
+		}
+	}
 	return (string) apply_filters( 'meil_visitor_ip', $ip, $remote );
+}
+
+/** An address from X-Forwarded-For without the port some proxies add ("1.2.3.4:5678", "[2001:db8::1]:443"), or '' when it is not one. */
+function meil_bare_ip( string $entry ): string {
+	$entry = trim( $entry );
+	if ( preg_match( '/^\[([0-9a-fA-F:.]+)\](?::\d+)?$/', $entry, $m ) || preg_match( '/^(\d{1,3}(?:\.\d{1,3}){3}):\d+$/', $entry, $m ) ) {
+		$entry = $m[1];
+	}
+	return filter_var( $entry, FILTER_VALIDATE_IP ) ? $entry : '';
 }
 
 /** Is this address one of Cloudflare's (https://www.cloudflare.com/ips/)? */
@@ -155,6 +190,29 @@ function meil_is_cloudflare( string $ip ): bool {
 		'104.24.0.0/14', '172.64.0.0/13', '131.0.72.0/22',
 		'2400:cb00::/32', '2606:4700::/32', '2803:f800::/32', '2405:b500::/32', '2405:8100::/32', '2a06:98c0::/29', '2c0f:f248::/32',
 	);
+	return meil_ip_in( $ip, $ranges );
+}
+
+/**
+ * Is this an address no visitor on the internet can have: a private network,
+ * the server itself, or a provider's shared one? Then whoever sent the request
+ * is a proxy close to the site, or the site is not on the internet.
+ */
+function meil_is_private_ip( string $ip ): bool {
+	$ranges = array(
+		'10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', '127.0.0.0/8', '100.64.0.0/10', '169.254.0.0/16',
+		'::1/128', 'fc00::/7', 'fe80::/10',
+	);
+	return meil_ip_in( $ip, $ranges );
+}
+
+/**
+ * Is the address inside one of these ranges ("10.0.0.0/8", "fc00::/7")?
+ *
+ * @param string       $ip
+ * @param list<string> $ranges
+ */
+function meil_ip_in( string $ip, array $ranges ): bool {
 	$address = inet_pton( $ip );
 	if ( false === $address ) {
 		return false;
@@ -176,6 +234,15 @@ function meil_is_cloudflare( string $ip ): bool {
 		}
 	}
 	return false;
+}
+
+/**
+ * Can the per-address limits against bots count this address? Not when it is
+ * missing, nor when it is a proxy's, which would put every visitor in one
+ * count and turn real people away after a few sign-ups.
+ */
+function meil_ip_countable( string $ip ): bool {
+	return '' !== $ip && ! meil_is_private_ip( $ip );
 }
 
 /**
@@ -306,6 +373,36 @@ function meil_mailer_bootstrap(): void {
 	new Meil_Integrations( $client, $queue );
 }
 add_action( 'plugins_loaded', 'meil_mailer_bootstrap' );
+
+/**
+ * Test mode (meil.ro > Settings > Forms look), for an administrator looking
+ * at the site: the popup on every page at once, whatever was closed before,
+ * and examples of what visitors see on the confirmation pages. Visitors see
+ * the site as usual.
+ */
+function meil_test_mode(): bool {
+	return ! empty( meil_mailer_settings()['test_mode'] ) && current_user_can( 'manage_options' );
+}
+
+/**
+ * While test mode is on, a reminder in the admin bar on the site, linking to
+ * where it is turned off.
+ *
+ * @param WP_Admin_Bar $bar
+ */
+function meil_test_mode_bar( $bar ): void {
+	if ( is_admin() || ! meil_test_mode() ) {
+		return;
+	}
+	$bar->add_node(
+		array(
+			'id'    => 'meil-test-mode',
+			'title' => esc_html__( 'meil.ro: test mode', 'meil' ),
+			'href'  => admin_url( 'admin.php?page=meil-mailer&tab=look' ),
+		)
+	);
+}
+add_action( 'admin_bar_menu', 'meil_test_mode_bar', 100 );
 
 /** The table for emails and sign-ups waiting to be tried again (see Meil_Queue). */
 function meil_mailer_activate(): void {

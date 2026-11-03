@@ -155,6 +155,7 @@ class Meil_Mailer_Admin {
 			'class_button'   => __( 'Button classes', 'meil' ),
 			'class_input'    => __( 'Field classes', 'meil' ),
 			'class_checkbox' => __( 'Checkbox classes', 'meil' ),
+			'test_mode'      => __( 'Test mode', 'meil' ),
 		);
 		foreach ( $look as $field => $label ) {
 			add_settings_field(
@@ -252,6 +253,7 @@ class Meil_Mailer_Admin {
 			'class_button'   => $classes( $f['class_button'] ?? '' ),
 			'class_input'    => $classes( $f['class_input'] ?? '' ),
 			'class_checkbox' => $classes( $f['class_checkbox'] ?? '' ),
+			'test_mode'      => ! empty( $f['test_mode'] ),
 		);
 
 		$f      = $from( 'signup' );
@@ -529,11 +531,13 @@ class Meil_Mailer_Admin {
 			case 'load_css':
 			case 'delete_with_user':
 			case 'signup_confirm':
+			case 'test_mode':
 				$texts = array(
 					'override_wp_mail' => __( 'Replace wp_mail() delivery with the meil API (recommended). Leave unchecked to use meil for forms only.', 'meil' ),
 					'load_css'         => __( "Load the plugin's styles for forms and the preferences page. Turn off to style them entirely from your theme.", 'meil' ),
 					'delete_with_user' => __( 'When a WordPress user is deleted, delete their meil.ro contact too, with its data.', 'meil' ),
 					'signup_confirm'   => __( 'Ask them to confirm by email before they are subscribed (recommended)', 'meil' ),
+					'test_mode'        => __( 'Administrators see the popup on every page right away, even after closing it or signing up, and the confirmation page shows examples of what visitors see there. This lets you design both with your theme. Visitors see the site as usual.', 'meil' ),
 				);
 				printf(
 					'<label><input type="checkbox" id="%1$s" name="%2$s" value="1" %3$s /> %4$s</label>',

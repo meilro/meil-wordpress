@@ -1,12 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the meil.ro – Email & Newsletter package.
+# This file is distributed under the same license as the meil.ro – Transactional Email & Newsletters package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: meil.ro – Email & Newsletter 1.3.0\n"
+"Project-Id-Version: meil.ro – Transactional Email & Newsletters 1.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/meilro/meil-wordpress/issues\n"
 "POT-Creation-Date: 2026-11-02 13:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -148,12 +148,6 @@ msgstr ""
 msgid "Confirm my subscription"
 msgstr ""
 
-#: includes/class-meil-confirm.php:278
-msgid ""
-"This is where visitors confirm their subscription: they arrive here from the "
-"button in the confirmation email. Only you see this note."
-msgstr ""
-
 #: includes/class-meil-forms.php:93 includes/class-meil-forms.php:102
 msgid "Forms"
 msgstr ""
@@ -236,7 +230,23 @@ msgid "Create one in meil.ro"
 msgstr ""
 
 #: includes/class-meil-forms.php:195
-msgid "Tick the audiences this form offers and write the label visitors see for each. With more than one, visitors choose with checkboxes. With one, the form only asks for the email address."
+msgid "Tick the audiences this form offers and write the label visitors see for each. With one, the form only asks for the email address. With more than one, choose below whether visitors pick from them or join all of them."
+msgstr ""
+
+#: includes/class-meil-forms.php:233
+msgid "With more than one audience"
+msgstr ""
+
+#: includes/class-meil-forms.php:233
+msgid "Visitors choose, with checkboxes"
+msgstr ""
+
+#: includes/class-meil-forms.php:233
+msgid "They join all of them, without checkboxes"
+msgstr ""
+
+#: includes/class-meil-forms.php:233
+msgid "Use the second one when the form says clearly what they will receive, for example \"Get our news and offers by email\"."
 msgstr ""
 
 #: includes/class-meil-forms.php:211
@@ -312,7 +322,7 @@ msgid "On meil.ro's confirmation page, in your branding"
 msgstr ""
 
 #: includes/class-meil-forms.php:293
-msgid "Or pick a page of this site: the button in the email opens it, and visitors confirm there. It must be on the domain you send from, or a subdomain of it. The confirmation shows at the top of the page. To place it yourself, put [meil_confirm] in the page."
+msgid "Or pick a page of your site. The button in the email opens it, and above its content visitors see their address, the lists they chose and a button to confirm. To show this somewhere else on the page, put [meil_confirm] there. The page must be on the domain you send from, or a subdomain of it."
 msgstr ""
 
 #: includes/class-meil-forms.php:298
@@ -1296,4 +1306,38 @@ msgstr ""
 msgid ""
 "Waiting for you to confirm from the email we sent. Saving with this ticked "
 "subscribes you now."
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php
+msgid "Test mode"
+msgstr ""
+
+#. Plugin Name of the plugin
+#: meil.php
+msgid "meil.ro – Transactional Email & Newsletters"
+msgstr ""
+
+#. Description of the plugin
+#: meil.php
+msgid "Sends WordPress emails through meil.ro and gathers subscribers with forms, a popup and a checkbox at checkout."
+msgstr ""
+
+#: includes/class-meil-confirm.php
+msgid "This is where visitors confirm their subscription: they arrive here from the button in the confirmation email. To see what they see, turn on test mode in meil.ro > Settings > Forms look. Only you see this note."
+msgstr ""
+
+#: includes/class-meil-confirm.php
+msgid "Test mode: below is what visitors see here. First the button they press to confirm, then the message once they have confirmed, then the one for an expired link. Only you see these examples."
+msgstr ""
+
+#: includes/class-meil-confirm.php
+msgid "Newsletter"
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php
+msgid "Administrators see the popup on every page right away, even after closing it or signing up, and the confirmation page shows examples of what visitors see there. This lets you design both with your theme. Visitors see the site as usual."
+msgstr ""
+
+#: meil.php
+msgid "meil.ro: test mode"
 msgstr ""

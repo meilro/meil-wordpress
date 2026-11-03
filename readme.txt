@@ -1,6 +1,6 @@
-=== meil.ro – Email & Newsletter ===
+=== meil.ro – Transactional Email & Newsletters ===
 Contributors: meil
-Tags: email, smtp, transactional email, newsletter, subscription form
+Tags: email, romania, transactional email, newsletter, subscription form
 Requires at least: 5.9
 Tested up to: 7.1
 Requires PHP: 7.4
@@ -8,7 +8,7 @@ Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Sends WordPress mail through meil.ro, with subscription forms and an email preferences page.
+Sends WordPress emails through meil.ro and gathers subscribers with forms, a popup and a checkbox at checkout.
 
 == Description ==
 
@@ -25,7 +25,7 @@ email and newsletters.
   from (your Gmail address, or the visitor's), the email goes from your default address instead,
   with the original one as Reply-To.
 * **Subscription forms.** Build forms under **meil.ro > Forms**: pick the audiences each form offers,
-  give each one your own label, ask for a first and last name or not, and choose whether visitors
+  give each one your own label, let visitors choose among them or sign them up to all of them, ask for a first and last name or not, and choose whether visitors
   confirm by email first, on meil.ro or on a page of your own site. Place a form anywhere with its shortcode, `[meil_form id="123"]`. Forms
   are sent in the background, with the answer shown in place. Without JavaScript they still work.
   In the block editor, add the **meil.ro form** block and pick the form.
@@ -169,6 +169,10 @@ cart, the checkout or the account pages, nor on a page that already shows the sa
 for them. On phones a popup shows as a sheet at the bottom, so it never covers the page. Works
 with page caching.
 
+To design it with your theme, turn on **Test mode** under **meil.ro > Settings > Forms look**:
+administrators then see it on every page, right away, even after closing it, while visitors see it
+as usual.
+
 = Is there a block for the forms? =
 
 Yes: **meil.ro form** shows one of your forms (pick it in the block), and **meil.ro email
@@ -209,8 +213,9 @@ the thank-you on the confirmation page.
 Yes. In the form editor, under "Where visitors confirm", pick a page of your site. The button in the
 confirmation email then opens that page, which shows the visitor's address and the lists they are
 confirming, with a button. Pressing it subscribes them, records when and from where, and takes them
-to your thank-you page if the form has one. The confirmation appears at the top of the page. To place it
-yourself, put `[meil_confirm]` in the page.
+to your thank-you page if the form has one. This shows above the page's own content. To show it somewhere
+else on the page, put `[meil_confirm]` there. To see what visitors see there and design it with
+your theme, turn on **Test mode** under **meil.ro > Settings > Forms look** and open the page.
 
 Opening the page never subscribes anyone on its own, only pressing its button does: Outlook and
 company mail filters open every link in an email to check it. The page must be published, without a
@@ -230,7 +235,8 @@ email. Visitors who are not logged in see a short message. The page is never cac
   own classes (for example `btn btn-primary`, `form-control`, `form-check-input`). They are added
   to the plugin's forms, popups, preferences and confirmation pages, and to the sign-up checkbox.
 * Override the CSS variables (`--meil-accent`, `--meil-border`, `--meil-radius` and others) on
-  `.meil-form` or `.meil-prefs`.
+  `.meil-form`, `.meil-prefs` or `.meil-confirm`. The confirmation box is a card, with
+  `--meil-card` (its background), `--meil-card-border` and `--meil-card-radius`.
 * Or turn off "Form styles" on the meil.ro screen and style the classes yourself. Each checkbox has
   a real input, hidden visually, followed by `.meil-form__checkbox` / `.meil-prefs__checkbox` to
   draw your own box. Style the ticked state with `input:checked + .meil-form__checkbox`.
@@ -285,10 +291,14 @@ when the form is saved and again when it is shown.
 * Forms made with Contact Form 7, WPForms, Fluent Forms, Gravity Forms and Elementor Pro can sign people up, set under meil.ro > Form plugins.
 * meil.ro > Sent emails: what went out through meil.ro and what became of each, with the content.
 * Features that need a "Full access" key stay hidden from visitors with another key, and the key's permission is checked again every hour on the plugin's screens.
-* The settings screen has tabs: General, Forms look, Sign-up checkbox and Popup.
+* The settings screen has tabs: General, Sign-up checkbox, Popup and Forms look.
 * Your own CSS classes for the buttons, fields and checkboxes of every form the plugin draws, under Forms look.
+* Behind a host's proxy or load balancer, the visitor's address is read from the address it passes on, so the limits against bots count each visitor apart and the consent record holds the right address. When the address cannot be known, those limits no longer lump every visitor together.
+* The confirmation box on your own page is now a card in the middle of the page, with the lists in a light box and an icon next to each message.
+* Test mode, under Forms look: administrators see the popup on every page, right away, and the confirmation page shows examples of what visitors see, to design both with the theme. Visitors see the site as usual.
+* A form with several audiences can sign visitors up to all of them, without checkboxes. Saving a form while meil.ro cannot be reached keeps its audiences.
 * Sites in several languages (WPML, Polylang): a form's own texts, list labels and checkbox texts, and the popup's title and text, are translated per language, so one form serves every language, with the confirmation and thank-you pages in the visitor's language.
-* The plugin's admin screens have meil.ro's own look: panels, its buttons and fields, its font.
+* The plugin's admin screens have meil.ro's own look: panels, its buttons and fields, its font, also on the list of forms and in the form editor. A button shows it is working until the next page opens, so nothing is sent twice.
 * A page sending email waits at most 10 seconds for meil.ro, then the email is kept and sent later.
 
 = 1.2.0 =

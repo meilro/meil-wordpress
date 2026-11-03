@@ -214,9 +214,8 @@ class Meil_Queue {
 	/** Puts the cron event at the earliest waiting call, or removes it when nothing waits. */
 	public static function schedule(): void {
 		global $wpdb;
-		$table = self::table();
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- the plugin's own table.
-		$next = $wpdb->get_var( "SELECT MIN(next_try) FROM {$table} WHERE status = 'waiting'" );
+		$next = $wpdb->get_var( "SELECT MIN(next_try) FROM {$wpdb->prefix}meil_queue WHERE status = 'waiting'" );
 		$set  = wp_next_scheduled( self::HOOK );
 		if ( ! $next ) {
 			if ( $set ) {
@@ -239,9 +238,8 @@ class Meil_Queue {
 		global $wpdb;
 		self::maybe_install();
 		self::prune();
-		$table = self::table();
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- the plugin's own table.
-		$rows = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table} WHERE status = 'waiting' AND next_try <= %s ORDER BY next_try ASC LIMIT %d", gmdate( 'Y-m-d H:i:s' ), self::BATCH ), ARRAY_A );
+		$rows = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}meil_queue WHERE status = 'waiting' AND next_try <= %s ORDER BY next_try ASC LIMIT %d", gmdate( 'Y-m-d H:i:s' ), self::BATCH ), ARRAY_A );
 		foreach ( (array) $rows as $row ) {
 			$outcome = $this->attempt( $row );
 			if ( is_wp_error( $outcome ) && self::is_down() ) {
@@ -307,9 +305,8 @@ class Meil_Queue {
 	public static function rows( int $limit = 200 ): array {
 		global $wpdb;
 		self::maybe_install();
-		$table = self::table();
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- the plugin's own table.
-		$rows = $wpdb->get_results( $wpdb->prepare( "SELECT id, kind, status, recipient, subject, attempts, last_error, created_at, next_try FROM {$table} ORDER BY id DESC LIMIT %d", $limit ), ARRAY_A );
+		$rows = $wpdb->get_results( $wpdb->prepare( "SELECT id, kind, status, recipient, subject, attempts, last_error, created_at, next_try FROM {$wpdb->prefix}meil_queue ORDER BY id DESC LIMIT %d", $limit ), ARRAY_A );
 		return array_values( (array) $rows );
 	}
 
@@ -319,9 +316,8 @@ class Meil_Queue {
 		if ( self::DB_VERSION !== get_option( self::DB_OPTION ) ) {
 			return array( 0, 0 );
 		}
-		$table = self::table();
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- the plugin's own table.
-		$row = $wpdb->get_row( "SELECT COUNT(*) AS n, MAX(id) AS newest FROM {$table} WHERE status = 'failed'", ARRAY_A );
+		$row = $wpdb->get_row( "SELECT COUNT(*) AS n, MAX(id) AS newest FROM {$wpdb->prefix}meil_queue WHERE status = 'failed'", ARRAY_A );
 		return array( (int) ( $row['n'] ?? 0 ), (int) ( $row['newest'] ?? 0 ) );
 	}
 
@@ -334,9 +330,8 @@ class Meil_Queue {
 	 */
 	public function send_now( int $id ) {
 		global $wpdb;
-		$table = self::table();
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- the plugin's own table.
-		$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE id = %d", $id ), ARRAY_A );
+		$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}meil_queue WHERE id = %d", $id ), ARRAY_A );
 		if ( ! is_array( $row ) ) {
 			return null;
 		}
@@ -344,7 +339,7 @@ class Meil_Queue {
 		if ( 'email' === $row['kind'] ) {
 			$row['idem_key'] = wp_generate_uuid4();
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- the plugin's own table.
-			$wpdb->update( $table, array( 'idem_key' => $row['idem_key'] ), array( 'id' => $id ) );
+			$wpdb->update( self::table(), array( 'idem_key' => $row['idem_key'] ), array( 'id' => $id ) );
 		}
 		$outcome = $this->attempt( $row );
 		self::schedule();
@@ -368,8 +363,7 @@ class Meil_Queue {
 	/** Failed calls older than KEEP_DAYS go: they hold email contents. */
 	public static function prune(): void {
 		global $wpdb;
-		$table = self::table();
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- the plugin's own table.
-		$wpdb->query( $wpdb->prepare( "DELETE FROM {$table} WHERE status = 'failed' AND created_at < %s", gmdate( 'Y-m-d H:i:s', time() - self::KEEP_DAYS * DAY_IN_SECONDS ) ) );
+		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}meil_queue WHERE status = 'failed' AND created_at < %s", gmdate( 'Y-m-d H:i:s', time() - self::KEEP_DAYS * DAY_IN_SECONDS ) ) );
 	}
 }

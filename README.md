@@ -1,4 +1,4 @@
-# meil.ro – Email & Newsletter for WordPress
+# meil.ro – Transactional Email & Newsletters for WordPress
 
 The official WordPress plugin for [meil.ro](https://meil.ro), a Romanian service for transactional email and newsletters.
 

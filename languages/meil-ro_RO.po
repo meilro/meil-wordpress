@@ -1,11 +1,11 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the meil.ro – Email & Newsletter package.
+# This file is distributed under the same license as the meil.ro – Transactional Email & Newsletters package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: meil.ro – Email & Newsletter 1.3.0\n"
+"Project-Id-Version: meil.ro – Transactional Email & Newsletters 1.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/meilro/meil-wordpress/issues\n"
 "POT-Creation-Date: 2026-11-02 13:58+0200\n"
 "PO-Revision-Date: 2026-11-02 12:00+0200\n"
@@ -161,14 +161,6 @@ msgstr "Te abonezi la:"
 msgid "Confirm my subscription"
 msgstr "Confirm abonarea"
 
-#: includes/class-meil-confirm.php:278
-msgid ""
-"This is where visitors confirm their subscription: they arrive here from the "
-"button in the confirmation email. Only you see this note."
-msgstr ""
-"Aici își confirmă vizitatorii abonarea: ajung pe această pagină din butonul "
-"din e-mailul de confirmare. Doar tu vezi această notă."
-
 #: includes/class-meil-forms.php:93 includes/class-meil-forms.php:102
 msgid "Forms"
 msgstr "Formulare"
@@ -253,8 +245,24 @@ msgid "Create one in meil.ro"
 msgstr "Creează una în meil.ro"
 
 #: includes/class-meil-forms.php:195
-msgid "Tick the audiences this form offers and write the label visitors see for each. With more than one, visitors choose with checkboxes. With one, the form only asks for the email address."
-msgstr "Bifează audiențele pe care le oferă formularul și scrie eticheta pe care o văd vizitatorii pentru fiecare. Dacă sunt mai multe, vizitatorii aleg din căsuțe. Dacă e una singură, formularul cere doar adresa de e-mail."
+msgid "Tick the audiences this form offers and write the label visitors see for each. With one, the form only asks for the email address. With more than one, choose below whether visitors pick from them or join all of them."
+msgstr "Bifează audiențele pe care le oferă formularul și scrie eticheta pe care o văd vizitatorii pentru fiecare. Dacă e una singură, formularul cere doar adresa de e-mail. Dacă sunt mai multe, stabilești mai jos dacă vizitatorii aleg dintre ele sau se abonează la toate."
+
+#: includes/class-meil-forms.php:233
+msgid "With more than one audience"
+msgstr "Când sunt mai multe audiențe"
+
+#: includes/class-meil-forms.php:233
+msgid "Visitors choose, with checkboxes"
+msgstr "Vizitatorii aleg, din căsuțe"
+
+#: includes/class-meil-forms.php:233
+msgid "They join all of them, without checkboxes"
+msgstr "Se abonează la toate, fără căsuțe"
+
+#: includes/class-meil-forms.php:233
+msgid "Use the second one when the form says clearly what they will receive, for example \"Get our news and offers by email\"."
+msgstr "A doua variantă e potrivită când formularul spune clar ce vor primi, de exemplu „Primește noutăți și oferte pe e-mail”."
 
 #: includes/class-meil-forms.php:211
 msgid "private"
@@ -338,8 +346,8 @@ msgid "On meil.ro's confirmation page, in your branding"
 msgstr "Pe pagina de confirmare meil.ro, cu brandingul tău"
 
 #: includes/class-meil-forms.php:293
-msgid "Or pick a page of this site: the button in the email opens it, and visitors confirm there. It must be on the domain you send from, or a subdomain of it. The confirmation shows at the top of the page. To place it yourself, put [meil_confirm] in the page."
-msgstr "Sau alege o pagină de pe acest site: butonul din e-mail o deschide, iar vizitatorii confirmă acolo. Pagina trebuie să fie pe domeniul de pe care trimiți sau pe un subdomeniu al lui. Confirmarea apare în partea de sus a paginii. Ca s-o așezi tu unde vrei, pune [meil_confirm] în pagină."
+msgid "Or pick a page of your site. The button in the email opens it, and above its content visitors see their address, the lists they chose and a button to confirm. To show this somewhere else on the page, put [meil_confirm] there. The page must be on the domain you send from, or a subdomain of it."
+msgstr "Sau alege o pagină de pe site-ul tău. Butonul din e-mail o deschide, iar deasupra conținutului ei vizitatorii văd adresa lor, listele alese și butonul de confirmare. Ca să apară în alt loc din pagină, pune [meil_confirm] acolo. Pagina trebuie să fie pe domeniul de pe care trimiți sau pe un subdomeniu al lui."
 
 #: includes/class-meil-forms.php:298
 msgid ""
@@ -1408,3 +1416,37 @@ msgid ""
 msgstr ""
 "Așteaptă confirmarea ta din e-mailul trimis. Dacă salvezi cu bifa pusă, te "
 "abonezi chiar acum."
+
+#: includes/class-meil-mailer-admin.php
+msgid "Test mode"
+msgstr "Mod de test"
+
+#. Plugin Name of the plugin
+#: meil.php
+msgid "meil.ro – Transactional Email & Newsletters"
+msgstr "meil.ro – E-mailuri tranzacționale și newslettere"
+
+#. Description of the plugin
+#: meil.php
+msgid "Sends WordPress emails through meil.ro and gathers subscribers with forms, a popup and a checkbox at checkout."
+msgstr "Trimite e-mailurile WordPress prin meil.ro și adună abonați cu formulare, o fereastră pop-up și o bifă la finalizarea comenzii."
+
+#: includes/class-meil-confirm.php
+msgid "This is where visitors confirm their subscription: they arrive here from the button in the confirmation email. To see what they see, turn on test mode in meil.ro > Settings > Forms look. Only you see this note."
+msgstr "Aici își confirmă vizitatorii abonarea: ajung pe această pagină din butonul din e-mailul de confirmare. Ca să vezi ce văd ei, pornește modul de test din meil.ro > Setări > Aspectul formularelor. Doar tu vezi această notă."
+
+#: includes/class-meil-confirm.php
+msgid "Test mode: below is what visitors see here. First the button they press to confirm, then the message once they have confirmed, then the one for an expired link. Only you see these examples."
+msgstr "Mod de test: mai jos e ce văd vizitatorii aici. Întâi butonul pe care îl apasă ca să confirme, apoi mesajul de după confirmare, apoi cel pentru un link expirat. Doar tu vezi aceste exemple."
+
+#: includes/class-meil-confirm.php
+msgid "Newsletter"
+msgstr "Newsletter"
+
+#: includes/class-meil-mailer-admin.php
+msgid "Administrators see the popup on every page right away, even after closing it or signing up, and the confirmation page shows examples of what visitors see there. This lets you design both with your theme. Visitors see the site as usual."
+msgstr "Administratorii văd fereastra pop-up pe orice pagină, imediat, chiar dacă au închis-o sau s-au abonat, iar pagina de confirmare arată exemple cu ce văd vizitatorii acolo. Așa le poți aranja pe amândouă după tema ta. Vizitatorii văd site-ul ca de obicei."
+
+#: meil.php
+msgid "meil.ro: test mode"
+msgstr "meil.ro: mod de test"

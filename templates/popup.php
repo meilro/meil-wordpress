@@ -23,6 +23,7 @@
  * @var string $title
  * @var string $text
  * @var string $form_html the form, from templates/form.php
+ * @var bool   $test      test mode: shown at once, every time (administrators only)
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -32,7 +33,7 @@ $meil_title_id = 'meil-popup-' . $form_id . '-title';
 ?>
 <div class="meil-popup meil-popup--<?php echo esc_attr( $kind ); ?>" hidden
 	data-meil-popup="<?php echo esc_attr( (string) $form_id ); ?>" data-meil-kind="<?php echo esc_attr( $kind ); ?>"
-	data-meil-trigger="<?php echo esc_attr( $trigger ); ?>" data-meil-value="<?php echo esc_attr( (string) $value ); ?>" data-meil-days="<?php echo esc_attr( (string) $days ); ?>">
+	data-meil-trigger="<?php echo esc_attr( $trigger ); ?>" data-meil-value="<?php echo esc_attr( (string) $value ); ?>" data-meil-days="<?php echo esc_attr( (string) $days ); ?>"<?php echo ! empty( $test ) ? ' data-meil-test="1"' : ''; ?>>
 	<?php if ( 'modal' === $kind ) : ?>
 		<div class="meil-popup__backdrop" data-meil-popup-close></div>
 	<?php endif; ?>

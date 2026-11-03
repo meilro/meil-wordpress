@@ -7,11 +7,13 @@
  * is about to leave.
  *
  * Never on the cart, the checkout or the account pages, nor on a page that
- * already shows the same form. The browser remembers a close (for the days
+ * already shows the same form or a confirmation box (Meil_Confirm). The browser remembers a close (for the days
  * set) and a signup through any meil.ro form (for good), so it does not come
  * back.
  *
- * The same HTML goes to every visitor, so page caches are fine with it.
+ * The same HTML goes to every visitor, so page caches are fine with it. Only
+ * administrators, whose pages caches leave alone, get the test mode's mark
+ * (see meil_test_mode()).
  *
  * @package Meil_Mailer
  */
@@ -33,7 +35,7 @@ class Meil_Popups {
 
 	/** May a popup show on this page at all? */
 	private static function page_allows(): bool {
-		if ( is_admin() || wp_doing_ajax() || is_feed() || is_embed() || is_customize_preview() || Meil_Confirm::is_confirming() ) {
+		if ( is_admin() || wp_doing_ajax() || is_feed() || is_embed() || is_customize_preview() || Meil_Confirm::is_confirming() || Meil_Confirm::drawn() ) {
 			return false;
 		}
 		// Where people are paying or managing their account, nothing gets in the way.
@@ -84,6 +86,7 @@ class Meil_Popups {
 				'title'     => '' !== (string) $settings['popup_title'] ? (string) $settings['popup_title'] : Meil_Forms::default_text( 'popup_title' ),
 				'text'      => (string) $settings['popup_text'],
 				'form_html' => $html,
+				'test'      => meil_test_mode(),
 			)
 		);
 		echo $popup; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- the template escapes; the form's HTML comes from the form's own template.

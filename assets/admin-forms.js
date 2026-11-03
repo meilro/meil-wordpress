@@ -2,12 +2,22 @@
  * meil.ro > Forms: the checkboxes section of the form editor.
  *
  * Each checkbox text gets WordPress's own editor with only bold, italic and
- * links (wp.editor, loaded by wp_enqueue_editor()). "Add checkbox" adds a row
+ * links (wp.editor, loaded by wp_enqueue_editor()), kept small. "Add checkbox" adds a row
  * from the <template> and gives it an editor too; "Remove" takes one away.
  */
 (function () {
 	'use strict';
 
+	// The plugin's folder, for the admin font inside the editor's frame.
+	var script = document.currentScript;
+	var assets = script && script.src ? script.src.replace(/admin-forms\.js.*$/, '') : '';
+	var font = '"meil admin sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif';
+	var face = function (file, range) {
+		return '@font-face{font-family:"meil admin sans";font-weight:100 700;src:url("' + assets + 'fonts/' + file + '") format("woff2");unicode-range:' + range + '}';
+	};
+
+	// Two lines tall, no Visual / Code tabs and no resize bar: a checkbox text
+	// is a sentence or two, with bold, italic and links.
 	function makeEditor(textarea) {
 		if (!textarea || !window.wp || !window.wp.editor || !window.wp.editor.initialize) {
 			return; // the plain text box still works, with HTML links
@@ -17,9 +27,14 @@
 				wpautop: true,
 				toolbar1: 'bold,italic,link,unlink',
 				toolbar2: '',
-				height: 80
+				height: 52,
+				min_height: 52,
+				statusbar: false,
+				resize: false,
+				content_style: (assets ? face('plex-sans-normal-latin-ext.woff2', 'U+0100-024F,U+1E00-1EFF') + face('plex-sans-normal-latin.woff2', 'U+0000-00FF,U+2000-206F,U+20AC') : '') +
+					'body{margin:8px 10px;font-family:' + font + ';font-size:14px;line-height:1.55;color:#171717}p{margin:0}'
 			},
-			quicktags: { buttons: 'strong,em,link' },
+			quicktags: false,
 			mediaButtons: false
 		});
 	}

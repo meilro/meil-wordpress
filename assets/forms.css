@@ -23,6 +23,10 @@
 	--meil-success: #1a7f37;
 	--meil-error: #d63638;
 	--meil-muted: rgba(0, 0, 0, 0.6);
+	--meil-card: transparent;
+	--meil-card-border: rgba(128, 128, 128, 0.3);
+	--meil-card-radius: 8px;
+	--meil-tint: rgba(128, 128, 128, 0.08);
 }
 
 .meil-form__form,
@@ -257,18 +261,103 @@
 	text-decoration: underline;
 }
 
-/* Confirming a sign-up on this site: the lists, and the admins' note. */
+/* Confirming a sign-up on this site: a card in the middle of the page, like
+   meil.ro's own confirmation page. Two classes on the inner parts, so a
+   theme's list and paragraph styles do not reach them. */
+.meil-confirm {
+	box-sizing: border-box;
+	width: 100%;
+	max-width: 28em;
+	margin-right: auto;
+	margin-left: auto;
+	padding: 1.5em 1.75em;
+	padding: 1.5em clamp(1.1em, 5vw, 1.75em);
+	text-align: left;
+	background: var(--meil-card);
+	border: 1px solid var(--meil-card-border);
+	border-radius: var(--meil-card-radius);
+}
+
+/* Test mode's examples, one under the other. */
+.meil-confirm + .meil-confirm {
+	margin-top: 1em;
+}
+
+.meil-confirm .meil-confirm__form {
+	align-items: stretch;
+	gap: 1em;
+}
+
 .meil-confirm__message + .meil-confirm__form {
-	margin-top: var(--meil-gap);
+	margin-top: 1em;
 }
 
-.meil-confirm__lists {
+.meil-confirm .meil-confirm__button {
+	width: 100%;
+}
+
+.meil-confirm .meil-confirm__lists-label {
+	font-size: 0.875em;
+	color: var(--meil-muted);
+}
+
+/* The lists in a light box, each with a check mark. */
+.meil-confirm ul.meil-confirm__lists {
+	display: flex;
+	flex-direction: column;
+	gap: 0.45em;
+	margin: -0.5em 0 0;
+	padding: 0.85em 1em;
+	list-style: none;
+	background: var(--meil-tint);
+	border-radius: var(--meil-radius);
+}
+
+.meil-confirm li.meil-confirm__list {
+	position: relative;
 	margin: 0;
-	padding-left: 1.25em;
+	padding: 0 0 0 1.6em;
 }
 
-.meil-confirm__note {
-	margin-bottom: var(--meil-gap);
+.meil-confirm li.meil-confirm__list::before {
+	content: "";
+	position: absolute;
+	left: 0.25em;
+	top: 0.4em;
+	top: calc(0.5lh - 0.4em);
+	width: 0.32em;
+	height: 0.62em;
+	border: solid var(--meil-accent);
+	border-width: 0 0.14em 0.14em 0;
+	transform: rotate(45deg);
+}
+
+/* A message, with a round icon before it in its own colour. */
+.meil-confirm .meil-confirm__message {
+	display: flex;
+	gap: 0.6em;
+	align-items: flex-start;
+}
+
+.meil-confirm .meil-confirm__message::before {
+	content: "";
+	flex: none;
+	width: 1.3em;
+	height: 1.3em;
+	margin-top: 0.1em;
+	margin-top: calc(0.5lh - 0.65em);
+	background: currentColor;
+	-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 7.5v5.5M12 16.5h.01'/%3E%3C/svg%3E") center / contain no-repeat;
+	mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 7.5v5.5M12 16.5h.01'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.meil-confirm .meil-confirm__message--success::before {
+	-webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='m8 12.5 2.5 2.5 5.5-5.5'/%3E%3C/svg%3E");
+	mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='m8 12.5 2.5 2.5 5.5-5.5'/%3E%3C/svg%3E");
+}
+
+.meil-confirm .meil-confirm__note {
+	margin-bottom: 1em;
 	padding: 0.6em 0.8em;
 	font-size: 0.875em;
 	color: var(--meil-muted);

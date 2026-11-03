@@ -14,6 +14,10 @@
  * the shortcode still gets the box, above its content, whenever someone
  * arrives with a token, so a forgotten shortcode never loses a sign-up.
  *
+ * Administrators who open the page without a token see a note saying what
+ * the page is for, and with test mode on, examples of what visitors see, so
+ * the box can be designed with the theme.
+ *
  * The press posts back to the page, is handled before the page is drawn
  * (template_redirect) and ends in a redirect: to the form's "after confirming"
  * page when it has one, else back here with the result, so a refresh never
@@ -40,6 +44,9 @@ class Meil_Confirm {
 
 	/** @var Meil_Client */
 	private $client;
+
+	/** @var bool Has this page drawn the box? Then no popup goes on top of it. */
+	private static $drawn = false;
 
 	public function __construct( Meil_Client $client ) {
 		$this->client = $client;
@@ -84,6 +91,11 @@ class Meil_Confirm {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- only picks which message to show.
 		$result = isset( $_GET[ self::RESULT ] ) ? sanitize_key( wp_unslash( (string) $_GET[ self::RESULT ] ) ) : '';
 		return in_array( $result, self::RESULTS, true ) ? $result : '';
+	}
+
+	/** Has the box been drawn on this page, for anyone? Asked by the popup, in the footer. */
+	public static function drawn(): bool {
+		return self::$drawn;
 	}
 
 	/** Is this request someone confirming, or coming back from it? */
@@ -145,9 +157,16 @@ class Meil_Confirm {
 		return (string) apply_filters( 'meil_confirm_text', $text, $key );
 	}
 
-	/** Within the press limit for this visitor's IP? Counts this press. */
+	/**
+	 * Within the press limit for this visitor's IP? Counts this press. An
+	 * address it cannot count (see meil_ip_countable()) is let through.
+	 */
 	private static function within_limit(): bool {
-		$key   = 'meil_confirm_' . md5( meil_visitor_ip() );
+		$ip = meil_visitor_ip();
+		if ( ! meil_ip_countable( $ip ) ) {
+			return true;
+		}
+		$key   = 'meil_confirm_' . md5( $ip );
 		$tries = (int) get_transient( $key );
 		if ( $tries >= self::TRY_LIMIT ) {
 			return false;
@@ -224,13 +243,96 @@ class Meil_Confirm {
 
 	/**
 	 * A page with a token and no [meil_confirm] still shows the box, above
-	 * its own content: the main content of a single page only, once.
+	 * its own content: the main content of a single page only, once. So does
+	 * a form's confirmation page for administrators in test mode, with the examples.
 	 */
 	public function add_to_page( string $content ): string {
-		if ( ! self::is_confirming() || ! is_singular() || ! in_the_loop() || ! is_main_query() || has_shortcode( $content, 'meil_confirm' ) ) {
+		if ( ! is_singular() || ! in_the_loop() || ! is_main_query() || has_shortcode( $content, 'meil_confirm' ) ) {
+			return $content;
+		}
+		if ( ! self::is_confirming() && ! ( meil_test_mode() && self::page_form() > 0 ) ) {
 			return $content;
 		}
 		return $this->render() . $content;
+	}
+
+	/**
+	 * The published form whose confirmation page this is (or its translation),
+	 * or 0. Asked only for administrators, so a loop over the forms is fine.
+	 */
+	private static function page_form(): int {
+		static $found = array();
+		$page_id = (int) get_queried_object_id();
+		if ( $page_id <= 0 ) {
+			return 0;
+		}
+		if ( ! isset( $found[ $page_id ] ) ) {
+			$found[ $page_id ] = 0;
+			$forms             = get_posts(
+				array(
+					'post_type'   => Meil_Forms::POST_TYPE,
+					'post_status' => 'publish',
+					'numberposts' => 100,
+					'fields'      => 'ids',
+				)
+			);
+			foreach ( $forms as $form_id ) {
+				$confirm_page = (int) Meil_Forms::settings( (int) $form_id )['confirm_page'];
+				if ( $confirm_page > 0 && ( $confirm_page === $page_id || Meil_Forms::in_language( $confirm_page ) === $page_id ) ) {
+					$found[ $page_id ] = (int) $form_id;
+					break;
+				}
+			}
+		}
+		return $found[ $page_id ];
+	}
+
+	/**
+	 * Test mode: the box as visitors see it, with the button and the
+	 * administrator's own address, then the message after confirming and the
+	 * one for an expired link. The button does nothing here.
+	 *
+	 * @param array<string,mixed> $vars the box's values, without a token
+	 */
+	private function examples( array $vars ): string {
+		$form_id = self::page_form();
+		$lists   = array();
+		if ( $form_id > 0 ) {
+			foreach ( (array) Meil_Forms::settings( $form_id )['audiences'] as $row ) {
+				if ( is_array( $row ) && isset( $row['id'] ) ) {
+					$lists[] = Meil_Forms::list_label( $form_id, $row );
+				}
+			}
+		}
+		$email = (string) wp_get_current_user()->user_email;
+
+		$ask = array_merge(
+			$vars,
+			array(
+				'admin_note'  => __( 'Test mode: below is what visitors see here. First the button they press to confirm, then the message once they have confirmed, then the one for an expired link. Only you see these examples.', 'meil' ),
+				'show_button' => true,
+				'example'     => true,
+				'form_id'     => $form_id,
+				'intro'       => '' !== $email ? sprintf( self::text( 'ask' ), $email ) : self::text( 'ask_plain' ),
+				'lists'       => array() !== $lists ? $lists : array( __( 'Newsletter', 'meil' ) ),
+			)
+		);
+		$html = meil_template( 'confirm', $ask );
+		foreach ( array( 'confirmed', 'expired' ) as $result ) {
+			$html .= meil_template(
+				'confirm',
+				array_merge(
+					$vars,
+					array(
+						'message' => array(
+							'type' => 'confirmed' === $result ? 'success' : 'error',
+							'text' => self::text( $result ),
+						),
+					)
+				)
+			);
+		}
+		return $html;
 	}
 
 	/** @param array<string,mixed>|string $atts */
@@ -238,8 +340,14 @@ class Meil_Confirm {
 		return $this->render();
 	}
 
-	/** The box: a message, the button, or both. */
+	/** The box: a message, the button, or both. Test mode's examples count as drawn too. */
 	private function render(): string {
+		$html        = $this->box();
+		self::$drawn = self::$drawn || '' !== $html;
+		return $html;
+	}
+
+	private function box(): string {
 		$settings = meil_mailer_settings();
 		if ( ! empty( $settings['load_css'] ) ) {
 			wp_enqueue_style( 'meil-forms', MEIL_MAILER_URL . 'assets/forms.css', array(), meil_asset_version( 'assets/forms.css' ) );
@@ -259,6 +367,7 @@ class Meil_Confirm {
 			'action'      => self::ACTION,
 			'action_url'  => self::here(),
 			'admin_note'  => '',
+			'example'     => false,
 		);
 
 		if ( '' !== $result ) {
@@ -275,8 +384,11 @@ class Meil_Confirm {
 		}
 
 		if ( '' === $token ) {
+			if ( meil_test_mode() ) {
+				return $this->examples( $vars );
+			}
 			if ( current_user_can( 'manage_options' ) ) {
-				$vars['admin_note'] = __( 'This is where visitors confirm their subscription: they arrive here from the button in the confirmation email. Only you see this note.', 'meil' );
+				$vars['admin_note'] = __( 'This is where visitors confirm their subscription: they arrive here from the button in the confirmation email. To see what they see, turn on test mode in meil.ro > Settings > Forms look. Only you see this note.', 'meil' );
 			}
 			return '' !== $vars['admin_note'] ? meil_template( 'confirm', $vars ) : '';
 		}
