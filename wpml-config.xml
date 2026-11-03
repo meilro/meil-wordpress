@@ -1,0 +1,14 @@
+<wpml-config>
+	<!-- Texts of your own on the meil.ro screen (the sign-up checkbox's text, the popup's title and the line under it): translatable per language in WPML String Translation and Polylang's Strings translations. Empty ones use the plugin's default, which follows the language by itself. -->
+	<admin-texts>
+		<key name="meil_mailer_settings">
+			<key name="signup_label" />
+			<key name="popup_title" />
+			<key name="popup_text" />
+		</key>
+	</admin-texts>
+	<!-- One form serves every language: its own texts are translated as strings (the "meil.ro forms" group), not by copying the form. -->
+	<custom-types>
+		<custom-type translate="0">meil_form</custom-type>
+	</custom-types>
+</wpml-config>

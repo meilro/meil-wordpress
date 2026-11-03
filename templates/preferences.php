@@ -15,6 +15,9 @@
  *   .meil-prefs__button
  *   .meil-prefs__form--loading, .meil-prefs__button--loading   while it is being saved
  *
+ * The classes set under meil.ro > Settings > Forms look are added after these
+ * on the checkboxes and the button (meil_extra_classes()).
+ *
  * The form is sent in the background by assets/forms.js, which reads the
  * data-meil-* attributes below; keep them if you change the markup.
  *
@@ -68,16 +71,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 						);
 						?>
 					</legend>
-					<?php foreach ( $choices as $choice ) : ?>
-						<label class="meil-prefs__choice meil-prefs__choice--<?php echo esc_attr( (string) $choice['state'] ); ?><?php echo $choice['checked'] ? ' meil-prefs__choice--checked' : ''; ?>" data-meil-choice="<?php echo esc_attr( (string) $choice['id'] ); ?>">
-							<input class="meil-prefs__checkbox-input" type="checkbox" name="meil_audiences[]" value="<?php echo esc_attr( (string) $choice['id'] ); ?>" <?php checked( (bool) $choice['checked'] ); ?> />
+					<?php foreach ( $choices as $meil_choice ) : ?>
+						<label class="meil-prefs__choice meil-prefs__choice--<?php echo esc_attr( (string) $meil_choice['state'] ); ?><?php echo $meil_choice['checked'] ? ' meil-prefs__choice--checked' : ''; ?>" data-meil-choice="<?php echo esc_attr( (string) $meil_choice['id'] ); ?>">
+							<input class="meil-prefs__checkbox-input<?php echo esc_attr( meil_extra_classes( 'checkbox' ) ); ?>" type="checkbox" name="meil_audiences[]" value="<?php echo esc_attr( (string) $meil_choice['id'] ); ?>" <?php checked( (bool) $meil_choice['checked'] ); ?> />
 							<span class="meil-prefs__checkbox" aria-hidden="true"></span>
 							<span class="meil-prefs__choice-text">
-								<span class="meil-prefs__choice-label"><?php echo esc_html( (string) $choice['label'] ); ?></span>
-								<?php if ( '' !== (string) $choice['description'] ) : ?>
-									<span class="meil-prefs__choice-description"><?php echo esc_html( (string) $choice['description'] ); ?></span>
+								<span class="meil-prefs__choice-label"><?php echo esc_html( (string) $meil_choice['label'] ); ?></span>
+								<?php if ( '' !== (string) $meil_choice['description'] ) : ?>
+									<span class="meil-prefs__choice-description"><?php echo esc_html( (string) $meil_choice['description'] ); ?></span>
 								<?php endif; ?>
-								<?php if ( 'pending' === $choice['state'] ) : ?>
+								<?php if ( 'pending' === $meil_choice['state'] ) : ?>
 									<span class="meil-prefs__choice-status"><?php esc_html_e( 'Waiting for you to confirm from the email we sent. Saving with this ticked subscribes you now.', 'meil' ); ?></span>
 								<?php endif; ?>
 							</span>
@@ -86,7 +89,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</fieldset>
 
 				<p class="meil-prefs__actions">
-					<button class="meil-prefs__button" type="submit"><?php esc_html_e( 'Save', 'meil' ); ?></button>
+					<button class="meil-prefs__button<?php echo esc_attr( meil_extra_classes( 'button' ) ); ?>" type="submit"><?php esc_html_e( 'Save', 'meil' ); ?></button>
 				</p>
 			</form>
 		<?php endif; ?>

@@ -39,17 +39,18 @@ class Meil_Preferences {
 		add_action( 'wp_ajax_nopriv_' . self::ACTION, array( $this, 'handle_ajax' ) );
 	}
 
-	/** A page with the shortcode is one person's data: never cached. */
+	/** A page with the shortcode or the block is one person's data: never cached. */
 	public function no_cache(): void {
 		$post = get_post();
-		if ( is_singular() && $post && has_shortcode( $post->post_content, 'meil_preferences' ) ) {
+		if ( is_singular() && $post && ( has_shortcode( $post->post_content, 'meil_preferences' ) || has_block( 'meil/preferences', $post ) ) ) {
 			self::mark_not_cacheable();
 		}
 	}
 
 	private static function mark_not_cacheable(): void {
 		if ( ! defined( 'DONOTCACHEPAGE' ) ) {
-			define( 'DONOTCACHEPAGE', true ); // WP Super Cache, W3 Total Cache, WP Rocket, LiteSpeed and others read it.
+			// WP Super Cache, W3 Total Cache, WP Rocket, LiteSpeed and others read it.
+			define( 'DONOTCACHEPAGE', true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- the page caches' own constant.
 		}
 		if ( ! headers_sent() ) {
 			nocache_headers();
@@ -233,6 +234,7 @@ class Meil_Preferences {
 
 	/** The form sent in the background: answers with the message and the lists as they are now. */
 	public function handle_ajax(): void {
+		meil_ajax_language();
 		$saved                  = $this->save();
 		list( $type, $message ) = self::notice( $saved['result'] );
 		wp_send_json(
@@ -255,6 +257,7 @@ class Meil_Preferences {
 
 	/** Without JavaScript: saves, then sends the browser back to the page. */
 	public function handle_post(): void {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- only spots the form; save() checks its nonce.
 		if ( wp_doing_ajax() || ! isset( $_POST['meil_action'] ) || self::ACTION !== $_POST['meil_action'] ) {
 			return;
 		}
@@ -267,6 +270,9 @@ class Meil_Preferences {
 
 	/** @param array<string,mixed>|string $atts */
 	public function render_shortcode( $atts ): string {
+		if ( ! meil_key_can( 'manage' ) ) {
+			return current_user_can( 'manage_options' ) ? '<p>' . esc_html__( 'The email preferences need a "Full access" API key. Change it under meil.ro > Settings.', 'meil' ) . '</p>' : '';
+		}
 		self::mark_not_cacheable();
 		meil_enqueue_front_assets();
 
@@ -290,7 +296,7 @@ class Meil_Preferences {
 			'login_url' => wp_login_url( get_permalink() ? (string) get_permalink() : home_url( '/' ) ),
 			'action'    => self::ACTION,
 			'nonce'     => '',
-			'ajax_url'  => admin_url( 'admin-ajax.php' ),
+			'ajax_url'  => meil_ajax_url(),
 		);
 
 		if ( $vars['logged_in'] ) {

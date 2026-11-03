@@ -58,8 +58,9 @@ class Meil_Confirm {
 	 * "_" and ".", so anything else is taken out rather than passed on.
 	 */
 	private static function token(): string {
-		// phpcs:disable WordPress.Security.NonceVerification -- the token is the secret here, see the class comment.
-		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- reduced to safe characters below.
+		// The token is the secret here (see the class comment), and it is reduced to safe characters below.
+		// One disable and one enable for both: separate ones keep PHPCS from honouring the ignores further down.
+		// phpcs:disable WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$raw = '';
 		if ( isset( $_POST['meil_token'] ) ) {
 			$raw = wp_unslash( (string) $_POST['meil_token'] );
@@ -68,8 +69,7 @@ class Meil_Confirm {
 		} elseif ( isset( $_GET['token'], $_GET['meil_form'] ) ) {
 			$raw = wp_unslash( (string) $_GET['token'] );
 		}
-		// phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		// phpcs:enable WordPress.Security.NonceVerification
+		// phpcs:enable WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		return substr( (string) preg_replace( '/[^A-Za-z0-9._-]/', '', (string) $raw ), 0, 4096 );
 	}
 
@@ -87,7 +87,7 @@ class Meil_Confirm {
 	}
 
 	/** Is this request someone confirming, or coming back from it? */
-	private static function is_confirming(): bool {
+	public static function is_confirming(): bool {
 		return '' !== self::token() || '' !== self::result();
 	}
 
@@ -97,7 +97,8 @@ class Meil_Confirm {
 			return;
 		}
 		if ( ! defined( 'DONOTCACHEPAGE' ) ) {
-			define( 'DONOTCACHEPAGE', true ); // WP Super Cache, W3 Total Cache, WP Rocket, LiteSpeed and others read it.
+			// WP Super Cache, W3 Total Cache, WP Rocket, LiteSpeed and others read it.
+			define( 'DONOTCACHEPAGE', true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- the page caches' own constant.
 		}
 		if ( ! headers_sent() ) {
 			nocache_headers();
@@ -212,7 +213,7 @@ class Meil_Confirm {
 		}
 
 		// Confirmed: on to the form's own "after confirming" page, if it has one.
-		$thanks = $form_id > 0 ? (int) Meil_Forms::settings( $form_id )['thanks_page'] : 0;
+		$thanks = $form_id > 0 ? Meil_Forms::in_language( (int) Meil_Forms::settings( $form_id )['thanks_page'] ) : 0;
 		$url    = $thanks > 0 && 'publish' === get_post_status( $thanks ) ? get_permalink( $thanks ) : false;
 		if ( is_string( $url ) && '' !== $url ) {
 			wp_safe_redirect( $url );
@@ -313,7 +314,7 @@ class Meil_Confirm {
 		if ( $vars['form_id'] > 0 ) {
 			foreach ( (array) Meil_Forms::settings( $vars['form_id'] )['audiences'] as $row ) {
 				if ( is_array( $row ) && isset( $row['id'] ) ) {
-					$labels[ (string) $row['id'] ] = Meil_Forms::label( $row );
+					$labels[ (string) $row['id'] ] = Meil_Forms::list_label( $vars['form_id'], $row );
 				}
 			}
 		}

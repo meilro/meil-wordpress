@@ -58,14 +58,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php if ( array() !== $lists ) : ?>
 				<p class="meil-confirm__lists-label"><?php echo esc_html( $lists_label ); ?></p>
 				<ul class="meil-confirm__lists">
-					<?php foreach ( $lists as $list ) : ?>
-						<li class="meil-confirm__list"><?php echo esc_html( $list ); ?></li>
+					<?php foreach ( $lists as $meil_list ) : ?>
+						<li class="meil-confirm__list"><?php echo esc_html( $meil_list ); ?></li>
 					<?php endforeach; ?>
 				</ul>
 			<?php endif; ?>
 
 			<p class="meil-confirm__actions">
-				<button class="meil-confirm__button" type="submit"><?php echo esc_html( $button_text ); ?></button>
+				<button class="meil-confirm__button<?php echo esc_attr( meil_extra_classes( 'button' ) ); ?>" type="submit"><?php echo esc_html( $button_text ); ?></button>
 			</p>
 		</form>
 	<?php endif; ?>

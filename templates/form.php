@@ -16,6 +16,9 @@
  *   .meil-form__field, __label, __input, __button
  *   .meil-form__form--loading, .meil-form__button--loading   while it is being sent
  *
+ * The classes set under meil.ro > Settings > Forms look are added after these
+ * on the fields, checkboxes and the button (meil_extra_classes()).
+ *
  * The form is sent in the background by assets/forms.js, which reads the
  * data-meil-* attributes below; keep them if you change the markup.
  *
@@ -54,11 +57,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php if ( $show_choices ) : ?>
 				<fieldset class="meil-form__choices">
 					<legend class="meil-form__legend"><?php esc_html_e( 'Choose what you want to receive', 'meil' ); ?></legend>
-					<?php foreach ( $choices as $choice ) : ?>
-						<label class="meil-form__choice<?php echo $choice['checked'] ? ' meil-form__choice--checked' : ''; ?>">
-							<input class="meil-form__checkbox-input" type="checkbox" name="meil_audiences[]" value="<?php echo esc_attr( $choice['id'] ); ?>" <?php checked( $choice['checked'] ); ?> />
+					<?php foreach ( $choices as $meil_choice ) : ?>
+						<label class="meil-form__choice<?php echo $meil_choice['checked'] ? ' meil-form__choice--checked' : ''; ?>">
+							<input class="meil-form__checkbox-input<?php echo esc_attr( meil_extra_classes( 'checkbox' ) ); ?>" type="checkbox" name="meil_audiences[]" value="<?php echo esc_attr( $meil_choice['id'] ); ?>" <?php checked( $meil_choice['checked'] ); ?> />
 							<span class="meil-form__checkbox" aria-hidden="true"></span>
-							<span class="meil-form__choice-label"><?php echo esc_html( $choice['label'] ); ?></span>
+							<span class="meil-form__choice-label"><?php echo esc_html( $meil_choice['label'] ); ?></span>
 						</label>
 					<?php endforeach; ?>
 				</fieldset>
@@ -67,29 +70,29 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php if ( $ask_name ) : ?>
 				<p class="meil-form__field meil-form__field--first-name">
 					<label class="meil-form__label" for="<?php echo esc_attr( $instance_id ); ?>-first-name"><?php esc_html_e( 'First name', 'meil' ); ?></label>
-					<input class="meil-form__input" type="text" id="<?php echo esc_attr( $instance_id ); ?>-first-name" name="meil_first_name" value="<?php echo esc_attr( (string) $values['first_name'] ); ?>" autocomplete="given-name" />
+					<input class="meil-form__input<?php echo esc_attr( meil_extra_classes( 'input' ) ); ?>" type="text" id="<?php echo esc_attr( $instance_id ); ?>-first-name" name="meil_first_name" value="<?php echo esc_attr( (string) $values['first_name'] ); ?>" autocomplete="given-name" />
 				</p>
 			<?php endif; ?>
 
 			<?php if ( ! empty( $ask_last_name ) ) : ?>
 				<p class="meil-form__field meil-form__field--last-name">
 					<label class="meil-form__label" for="<?php echo esc_attr( $instance_id ); ?>-last-name"><?php esc_html_e( 'Last name', 'meil' ); ?></label>
-					<input class="meil-form__input" type="text" id="<?php echo esc_attr( $instance_id ); ?>-last-name" name="meil_last_name" value="<?php echo esc_attr( (string) ( $values['last_name'] ?? '' ) ); ?>" autocomplete="family-name" />
+					<input class="meil-form__input<?php echo esc_attr( meil_extra_classes( 'input' ) ); ?>" type="text" id="<?php echo esc_attr( $instance_id ); ?>-last-name" name="meil_last_name" value="<?php echo esc_attr( (string) ( $values['last_name'] ?? '' ) ); ?>" autocomplete="family-name" />
 				</p>
 			<?php endif; ?>
 
 			<p class="meil-form__field meil-form__field--email">
 				<label class="meil-form__label" for="<?php echo esc_attr( $instance_id ); ?>-email"><?php esc_html_e( 'Email address', 'meil' ); ?></label>
-				<input class="meil-form__input" type="email" id="<?php echo esc_attr( $instance_id ); ?>-email" name="meil_email" value="<?php echo esc_attr( (string) $values['email'] ); ?>" placeholder="<?php echo esc_attr( $placeholder ); ?>" autocomplete="email" required />
+				<input class="meil-form__input<?php echo esc_attr( meil_extra_classes( 'input' ) ); ?>" type="email" id="<?php echo esc_attr( $instance_id ); ?>-email" name="meil_email" value="<?php echo esc_attr( (string) $values['email'] ); ?>" placeholder="<?php echo esc_attr( $placeholder ); ?>" autocomplete="email" required />
 			</p>
 
 			<?php if ( array() !== $checkboxes ) : ?>
 				<div class="meil-form__consents">
-					<?php foreach ( $checkboxes as $i => $checkbox ) : ?>
-						<label class="meil-form__choice meil-form__choice--consent<?php echo $checkbox['required'] ? ' meil-form__choice--required' : ''; ?>">
-							<input class="meil-form__checkbox-input" type="checkbox" name="meil_checkbox[<?php echo esc_attr( (string) $i ); ?>]" value="1" <?php checked( $checkbox['checked'] ); ?><?php echo $checkbox['required'] ? ' required' : ''; ?> />
+					<?php foreach ( $checkboxes as $meil_i => $meil_checkbox ) : ?>
+						<label class="meil-form__choice meil-form__choice--consent<?php echo $meil_checkbox['required'] ? ' meil-form__choice--required' : ''; ?>">
+							<input class="meil-form__checkbox-input<?php echo esc_attr( meil_extra_classes( 'checkbox' ) ); ?>" type="checkbox" name="meil_checkbox[<?php echo esc_attr( (string) $meil_i ); ?>]" value="1" <?php checked( $meil_checkbox['checked'] ); ?><?php echo $meil_checkbox['required'] ? ' required' : ''; ?> />
 							<span class="meil-form__checkbox" aria-hidden="true"></span>
-							<span class="meil-form__choice-label"><?php echo wp_kses_post( $checkbox['html'] ); ?></span>
+							<span class="meil-form__choice-label"><?php echo wp_kses_post( $meil_checkbox['html'] ); ?></span>
 						</label>
 					<?php endforeach; ?>
 				</div>
@@ -100,7 +103,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</p>
 
 			<p class="meil-form__actions">
-				<button class="meil-form__button" type="submit"><?php echo esc_html( $button_text ); ?></button>
+				<button class="meil-form__button<?php echo esc_attr( meil_extra_classes( 'button' ) ); ?>" type="submit"><?php echo esc_html( $button_text ); ?></button>
 			</p>
 		</form>
 	<?php endif; ?>

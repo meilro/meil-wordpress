@@ -43,6 +43,9 @@ class Meil_Forms {
 	/** Why a form's own confirmation page was refused, shown to the admins until the form is saved again. */
 	public const PAGE_PROBLEM = 'meil_confirm_page_problem';
 
+	/** The group a form's own texts are listed under in WPML String Translation and Polylang's translations. */
+	private const STRINGS = 'meil.ro forms';
+
 	/** @var Meil_Client */
 	private $client;
 
@@ -50,6 +53,7 @@ class Meil_Forms {
 		$this->client = $client;
 
 		add_action( 'init', array( $this, 'register_post_type' ) );
+		add_action( 'before_delete_post', array( $this, 'forget_strings' ) );
 		add_shortcode( 'meil_form', array( $this, 'render_shortcode' ) );
 		add_action( 'wp_ajax_' . self::AJAX_ACTION, array( $this, 'handle_ajax' ) );
 		add_action( 'wp_ajax_nopriv_' . self::AJAX_ACTION, array( $this, 'handle_ajax' ) );
@@ -60,6 +64,8 @@ class Meil_Forms {
 			add_filter( 'manage_' . self::POST_TYPE . '_posts_columns', array( $this, 'columns' ) );
 			add_action( 'manage_' . self::POST_TYPE . '_posts_custom_column', array( $this, 'column' ), 10, 2 );
 			add_filter( 'post_updated_messages', array( $this, 'updated_messages' ) );
+			add_filter( 'disable_months_dropdown', array( $this, 'no_months_filter' ), 10, 2 );
+			add_filter( 'submenu_file', array( $this, 'menu_item' ) );
 			add_action( 'admin_notices', array( $this, 'page_problem_notice' ) );
 		}
 	}
@@ -192,7 +198,7 @@ class Meil_Forms {
 						<a href="<?php echo esc_url( MEIL_MAILER_APP_URL . '/audiences' ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Create one in meil.ro', 'meil' ); ?></a>
 					</p>
 				<?php else : ?>
-					<p class="meil-fa-section__lead"><?php esc_html_e( 'Tick the audiences this form offers and write the label visitors see for each. With more than one, visitors choose with checkboxes; with one, the form only asks for the email address.', 'meil' ); ?></p>
+					<p class="meil-fa-section__lead"><?php esc_html_e( 'Tick the audiences this form offers and write the label visitors see for each. With more than one, visitors choose with checkboxes. With one, the form only asks for the email address.', 'meil' ); ?></p>
 					<ul class="meil-fa-audiences">
 						<?php
 						foreach ( $audiences['data'] as $audience ) :
@@ -290,7 +296,7 @@ class Meil_Forms {
 								)
 							);
 							?>
-							<p class="description"><?php esc_html_e( 'Or pick a page of this site: the button in the email opens it, and visitors confirm there. It must be on the domain you send from, or a subdomain of it. The confirmation shows at the top of the page; put [meil_confirm] in the page to place it yourself.', 'meil' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Or pick a page of this site: the button in the email opens it, and visitors confirm there. It must be on the domain you send from, or a subdomain of it. The confirmation shows at the top of the page. To place it yourself, put [meil_confirm] in the page.', 'meil' ); ?></p>
 							<?php
 							$confirm_post = (int) $form['confirm_page'] > 0 ? get_post( (int) $form['confirm_page'] ) : null;
 							if ( $confirm_post && ( 'publish' !== $confirm_post->post_status || '' !== $confirm_post->post_password ) ) :
@@ -321,6 +327,9 @@ class Meil_Forms {
 			<section class="meil-fa-section">
 				<h3 class="meil-fa-section__title"><?php esc_html_e( 'Texts', 'meil' ); ?></h3>
 				<p class="meil-fa-section__lead"><?php esc_html_e( 'Leave a field empty to use the default, which follows the site language.', 'meil' ); ?></p>
+				<?php if ( defined( 'ICL_SITEPRESS_VERSION' ) || defined( 'POLYLANG_VERSION' ) ) : ?>
+					<p class="meil-fa-section__lead"><?php esc_html_e( 'With WPML or Polylang, the texts you fill in here, the list labels and the checkbox texts are translated with the site\'s other texts, in the "meil.ro forms" group, once the form is saved.', 'meil' ); ?></p>
+				<?php endif; ?>
 				<table class="form-table meil-fa-table" role="presentation">
 					<?php
 					$texts = array(
@@ -353,6 +362,8 @@ class Meil_Forms {
 				return __( 'Thank you, you are subscribed.', 'meil' );
 			case 'pending':
 				return __( 'Almost done: check your inbox and press the button in our email to confirm.', 'meil' );
+			case 'popup_title':
+				return __( 'Get our news by email', 'meil' );
 		}
 		return '';
 	}
@@ -388,6 +399,7 @@ class Meil_Forms {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- cleaned by clean_checkboxes().
 		$checkboxes = self::clean_checkboxes( isset( $_POST['meil_checkboxes'] ) ? wp_unslash( $_POST['meil_checkboxes'] ) : array() );
 
+		$old_strings = self::strings( $post_id, self::settings( $post_id ) );
 		update_post_meta(
 			$post_id,
 			self::META,
@@ -401,6 +413,7 @@ class Meil_Forms {
 				'checkboxes'    => $checkboxes,
 			) + $texts
 		);
+		self::register_strings( $post_id, $old_strings );
 
 		// Saved again: the admin has seen the warning about its confirmation page.
 		$problem = get_option( self::PAGE_PROBLEM );
@@ -447,9 +460,10 @@ class Meil_Forms {
 	 * Counts one signup for the visitor's IP. Past the limit the form is
 	 * refused: a bot posting to it nonstop would otherwise use up the account's
 	 * requests per second, and the site's own emails (password resets,
-	 * orders) would start failing.
+	 * orders) would start failing. Also used for forms of other plugins
+	 * (Meil_Integrations).
 	 */
-	private static function within_signup_limit(): bool {
+	public static function within_signup_limit(): bool {
 		$ip = meil_visitor_ip();
 		if ( '' === $ip ) {
 			return true;
@@ -609,12 +623,138 @@ class Meil_Forms {
 		}
 	}
 
+	/**
+	 * No "All dates" filter above the list of forms: a site has a few forms,
+	 * and when each was made does not help find one.
+	 *
+	 * @param bool   $disable
+	 * @param string $post_type
+	 */
+	public function no_months_filter( $disable, $post_type ): bool {
+		return (bool) $disable || self::POST_TYPE === $post_type;
+	}
+
+	/**
+	 * Forms stays lit in the menu while a form is added or edited. On "Add
+	 * form" WordPress looks for a menu item of that name, finds none, and
+	 * would light Settings instead.
+	 *
+	 * @param string|null $submenu_file
+	 * @return string|null
+	 */
+	public function menu_item( $submenu_file ) {
+		$screen = get_current_screen();
+		return $screen && self::POST_TYPE === $screen->post_type ? 'edit.php?post_type=' . self::POST_TYPE : $submenu_file;
+	}
+
 	/** "Form saved." instead of WordPress's "Post published. View post", which leads nowhere. */
 	public function updated_messages( array $messages ): array {
 		$saved                        = __( 'Form saved.', 'meil' );
 		$messages[ self::POST_TYPE ] = array_fill( 0, 11, $saved );
 		$messages[ self::POST_TYPE ][0] = '';
 		return $messages;
+	}
+
+	/* ------------------------------------------------------ other languages */
+
+	/**
+	 * A form's own texts that visitors see, by a name of their own, for WPML
+	 * String Translation and Polylang's translations: its four texts when set,
+	 * each list's label and each checkbox's text. Empty texts are left out:
+	 * the defaults follow the language by themselves. Names use the form's id,
+	 * so renaming a form keeps its translations.
+	 *
+	 * @param array<string,mixed> $form
+	 * @return array<string,string> name => text
+	 */
+	private static function strings( int $form_id, array $form ): array {
+		$out = array();
+		foreach ( array( 'button', 'placeholder', 'success', 'pending' ) as $key ) {
+			if ( '' !== (string) $form[ $key ] ) {
+				$out[ self::string_name( $form_id, $key ) ] = (string) $form[ $key ];
+			}
+		}
+		foreach ( (array) $form['audiences'] as $row ) {
+			if ( is_array( $row ) && '' !== self::label( $row ) ) {
+				$out[ self::string_name( $form_id, 'list ' . $row['id'] ) ] = self::label( $row );
+			}
+		}
+		foreach ( (array) $form['checkboxes'] as $checkbox ) {
+			if ( is_array( $checkbox ) ) {
+				$out[ self::string_name( $form_id, 'checkbox ' . $checkbox['property'] ) ] = (string) $checkbox['text'];
+			}
+		}
+		return $out;
+	}
+
+	private static function string_name( int $form_id, string $what ): string {
+		return 'Form ' . $form_id . ': ' . $what;
+	}
+
+	/**
+	 * Tells WPML and Polylang (which answers WPML's calls) about a form's
+	 * texts after it is saved, and forgets the ones it no longer has.
+	 *
+	 * @param array<string,string> $old The form's texts before the save.
+	 */
+	private static function register_strings( int $form_id, array $old ): void {
+		$new = self::strings( $form_id, self::settings( $form_id ) );
+		foreach ( $new as $name => $text ) {
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WPML's own API, which Polylang answers too.
+			do_action( 'wpml_register_single_string', self::STRINGS, $name, $text );
+		}
+		if ( function_exists( 'icl_unregister_string' ) ) {
+			foreach ( array_keys( array_diff_key( $old, $new ) ) as $name ) {
+				icl_unregister_string( self::STRINGS, $name );
+			}
+		}
+	}
+
+	/**
+	 * A form is deleted for good: its texts leave the translation screens too.
+	 *
+	 * @param int $post_id
+	 */
+	public function forget_strings( $post_id ): void {
+		if ( ! function_exists( 'icl_unregister_string' ) || self::POST_TYPE !== get_post_type( (int) $post_id ) ) {
+			return;
+		}
+		foreach ( array_keys( self::strings( (int) $post_id, self::settings( (int) $post_id ) ) ) as $name ) {
+			icl_unregister_string( self::STRINGS, $name );
+		}
+	}
+
+	/** One of a form's own texts in the visitor's language, when WPML or Polylang has a translation of it. */
+	private static function translate( int $form_id, string $what, string $text ): string {
+		if ( '' === $text ) {
+			return $text;
+		}
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WPML's own API, which Polylang answers too.
+		return (string) apply_filters( 'wpml_translate_single_string', $text, self::STRINGS, self::string_name( $form_id, $what ) );
+	}
+
+	/**
+	 * What visitors see for one of a form's lists, in their language.
+	 *
+	 * @param array<string,mixed> $row
+	 */
+	public static function list_label( int $form_id, array $row ): string {
+		return self::translate( $form_id, 'list ' . ( $row['id'] ?? '' ), self::label( $row ) );
+	}
+
+	/**
+	 * A checkbox's text in the visitor's language, still to be cleaned for showing.
+	 *
+	 * @param array<string,mixed> $checkbox
+	 */
+	private static function checkbox_text( int $form_id, array $checkbox ): string {
+		return self::translate( $form_id, 'checkbox ' . ( $checkbox['property'] ?? '' ), (string) ( $checkbox['text'] ?? '' ) );
+	}
+
+	/** A page of this site in the visitor's language, when WPML or Polylang has a translation of it. */
+	public static function in_language( int $page_id ): int {
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WPML's own API, which Polylang answers too.
+		return $page_id > 0 ? (int) apply_filters( 'wpml_object_id', $page_id, 'page', true ) : 0;
 	}
 
 	/* -------------------------------------------------------------- front end */
@@ -628,15 +768,19 @@ class Meil_Forms {
 		return self::settings( $form_id );
 	}
 
-	/** A form's text: its own, or the default in the site's language. */
-	private static function texts( array $form ): callable {
-		return static function ( string $key ) use ( $form ): string {
-			return '' !== (string) $form[ $key ] ? (string) $form[ $key ] : self::default_text( $key );
+	/**
+	 * A form's text: its own, in the visitor's language when WPML or Polylang
+	 * has a translation of it, or the default, which follows the language by itself.
+	 */
+	private static function texts( int $form_id, array $form ): callable {
+		return static function ( string $key ) use ( $form_id, $form ): string {
+			return '' !== (string) $form[ $key ] ? self::translate( $form_id, $key, (string) $form[ $key ] ) : self::default_text( $key );
 		};
 	}
 
 	/** The form sent in the background: answers with the message, and whether the form is done. */
 	public function handle_ajax(): void {
+		meil_ajax_language();
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- public form, see the class comment.
 		$form_id = isset( $_POST['meil_form_id'] ) ? absint( $_POST['meil_form_id'] ) : 0;
 		$form    = self::published( $form_id );
@@ -649,7 +793,7 @@ class Meil_Forms {
 				)
 			);
 		}
-		list( $message, $done ) = $this->handle_submission( $form_id, $form, self::texts( $form ) );
+		list( $message, $done ) = $this->handle_submission( $form_id, $form, self::texts( $form_id, $form ) );
 		wp_send_json(
 			array(
 				'type'    => $message['type'],
@@ -669,13 +813,17 @@ class Meil_Forms {
 		if ( null === $form ) {
 			return $admin ? '<p>' . esc_html__( 'meil_form: no saved form with this id.', 'meil' ) . '</p>' : '';
 		}
+		// A form that cannot sign anyone up is not shown to visitors.
+		if ( ! meil_key_can( 'manage' ) ) {
+			return $admin ? '<p>' . esc_html__( 'Forms need a "Full access" API key. Change it under meil.ro > Settings.', 'meil' ) . '</p>' : '';
+		}
 		if ( array() === $form['audiences'] ) {
 			return $admin ? '<p>' . esc_html__( 'meil_form: this form has no audiences yet. Pick them under meil.ro > Forms.', 'meil' ) . '</p>' : '';
 		}
 
 		meil_enqueue_front_assets();
 
-		$text = self::texts( $form );
+		$text = self::texts( $form_id, $form );
 
 		// phpcs:disable WordPress.Security.NonceVerification.Missing -- public form, see the class comment.
 		$submitted = isset( $_POST['meil_form_id'] ) && absint( $_POST['meil_form_id'] ) === $form_id;
@@ -697,7 +845,7 @@ class Meil_Forms {
 		foreach ( $this->with_names( $form['audiences'] ) as $row ) {
 			$choices[] = array(
 				'id'      => $row['id'],
-				'label'   => self::label( $row ),
+				'label'   => self::list_label( $form_id, $row ),
 				'checked' => null === $values['audiences'] ? ! empty( $row['checked'] ) : in_array( $row['id'], $values['audiences'], true ),
 			);
 		}
@@ -718,9 +866,9 @@ class Meil_Forms {
 				'values'       => $values,
 				'honeypot'     => self::HONEYPOT,
 				'checkboxes'   => array_map(
-					static function ( array $checkbox, int $i ) use ( $values ): array {
+					static function ( array $checkbox, int $i ) use ( $values, $form_id ): array {
 						return array(
-							'html'     => self::checkbox_html( (string) $checkbox['text'] ),
+							'html'     => self::checkbox_html( self::checkbox_text( $form_id, $checkbox ) ),
 							'required' => ! empty( $checkbox['required'] ),
 							'checked'  => in_array( $i, (array) $values['checkboxes'], true ),
 						);
@@ -728,7 +876,7 @@ class Meil_Forms {
 					array_values( (array) $form['checkboxes'] ),
 					array_keys( array_values( (array) $form['checkboxes'] ) )
 				),
-				'ajax_url'     => admin_url( 'admin-ajax.php' ),
+				'ajax_url'     => meil_ajax_url(),
 				'ajax_action'  => self::AJAX_ACTION,
 			)
 		);
@@ -818,7 +966,7 @@ class Meil_Forms {
 		// Each checkbox: whether it was ticked, and the words the visitor saw,
 		// so it can be shown later what exactly they agreed to.
 		foreach ( array_values( (array) $form['checkboxes'] ) as $i => $checkbox ) {
-			$words = trim( (string) preg_replace( '/\s+/', ' ', html_entity_decode( wp_strip_all_tags( (string) $checkbox['text'] ), ENT_QUOTES, 'UTF-8' ) ) );
+			$words = trim( (string) preg_replace( '/\s+/', ' ', html_entity_decode( wp_strip_all_tags( self::checkbox_text( $form_id, $checkbox ) ), ENT_QUOTES, 'UTF-8' ) ) );
 			$properties[ $checkbox['property'] ]           = in_array( $i, $ticked, true );
 			$properties[ $checkbox['property'] . '_text' ] = $words;
 		}
@@ -839,7 +987,7 @@ class Meil_Forms {
 			// On a page of this site (Meil_Confirm sends them on to the thanks
 			// page after the press), or on meil.ro's, which does it itself.
 			$page   = self::confirm_page_url( $form, $form_id );
-			$thanks = (int) $form['thanks_page'] > 0 ? get_permalink( (int) $form['thanks_page'] ) : false;
+			$thanks = (int) $form['thanks_page'] > 0 ? get_permalink( self::in_language( (int) $form['thanks_page'] ) ) : false;
 			if ( '' !== $page ) {
 				$payload['confirm_page'] = $page;
 			} elseif ( is_string( $thanks ) && '' !== $thanks ) {
@@ -898,7 +1046,7 @@ class Meil_Forms {
 	 * @param array<string,mixed> $form
 	 */
 	private static function confirm_page_url( array $form, int $form_id ): string {
-		$page_id = (int) ( $form['confirm_page'] ?? 0 );
+		$page_id = self::in_language( (int) ( $form['confirm_page'] ?? 0 ) );
 		$post    = $page_id > 0 ? get_post( $page_id ) : null;
 		if ( ! $post || 'publish' !== $post->post_status || '' !== $post->post_password ) {
 			return '';

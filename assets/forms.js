@@ -6,7 +6,8 @@
  * class (.meil-form__button--loading, .meil-prefs__form--loading, ...). The
  * answer is shown in the block's message line; a subscription form that
  * succeeded is hidden, the preferences tick boxes are set from what meil.ro
- * saved. Without fetch (very old browsers) the form posts to the page as usual.
+ * saved, and the browser notes the signup so popups do not ask again. Without
+ * fetch (very old browsers) the form posts to the page as usual.
  */
 (function () {
 	'use strict';
@@ -97,6 +98,10 @@
 					done = true;
 					block.classList.add(prefix + '--done');
 					form.hidden = true;
+					// Signed up: the popups (popup.js) stay away from now on.
+					try {
+						window.localStorage.setItem('meil_subscribed', '1');
+					} catch (e) {}
 				}
 			})
 			.catch(function () {

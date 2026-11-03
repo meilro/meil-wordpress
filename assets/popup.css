@@ -1,0 +1,176 @@
+/*
+ * meil.ro popups: a form on top of the page (templates/popup.php).
+ *
+ * Loaded whenever a popup is on the page, also with "Form styles" turned off,
+ * since without it the popup would not sit on top of anything. The form
+ * inside keeps its own styles (forms.css). To restyle the box, override the
+ * variables on .meil-popup in your theme.
+ */
+
+.meil-popup {
+	--meil-popup-bg: #fff;
+	--meil-popup-text: #1e1e1e;
+	--meil-popup-radius: 8px;
+	--meil-popup-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+	--meil-popup-backdrop: rgba(0, 0, 0, 0.5);
+	--meil-popup-width: 28em;
+}
+
+.meil-popup[hidden] {
+	display: none;
+}
+
+.meil-popup__box {
+	position: fixed;
+	z-index: 100000;
+	box-sizing: border-box;
+	padding: 1.5em;
+	background: var(--meil-popup-bg);
+	color: var(--meil-popup-text);
+	border-radius: var(--meil-popup-radius);
+	box-shadow: var(--meil-popup-shadow);
+	max-height: calc(100vh - 2em);
+	overflow: auto;
+	opacity: 0;
+	transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.meil-popup--open .meil-popup__box {
+	opacity: 1;
+}
+
+.meil-popup__close {
+	position: absolute;
+	top: 0.4em;
+	right: 0.4em;
+	width: 2em;
+	height: 2em;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: inherit;
+	font-size: 1.25em;
+	line-height: 1;
+	cursor: pointer;
+	opacity: 0.6;
+}
+
+.meil-popup__close:hover,
+.meil-popup__close:focus-visible {
+	opacity: 1;
+}
+
+.meil-popup__title {
+	margin: 0 1.5em 0.4em 0;
+	font-size: 1.25em;
+	font-weight: 700;
+	line-height: 1.3;
+}
+
+.meil-popup__text {
+	margin: 0 0 1em;
+}
+
+/* The form's "Choose what you want to receive" over its lists: in a popup
+   the title already says it, so it is left to screen readers. */
+.meil-popup .meil-form__legend {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+/* A popup: in the middle, the page dimmed behind it. */
+.meil-popup__backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 99999;
+	background: var(--meil-popup-backdrop);
+	opacity: 0;
+	transition: opacity 0.2s ease;
+}
+
+.meil-popup--open .meil-popup__backdrop {
+	opacity: 1;
+}
+
+.meil-popup--modal .meil-popup__box {
+	top: 50%;
+	left: 50%;
+	width: calc(100% - 2em);
+	max-width: var(--meil-popup-width);
+	transform: translate(-50%, -46%);
+}
+
+.meil-popup--open.meil-popup--modal .meil-popup__box {
+	transform: translate(-50%, -50%);
+}
+
+/* A slide-in: in the bottom corner, the page left free. */
+.meil-popup--slide .meil-popup__box {
+	right: 1em;
+	bottom: 1em;
+	width: calc(100% - 2em);
+	max-width: 22em;
+	transform: translateY(1em);
+}
+
+/* A bar: across the bottom. */
+.meil-popup--bar .meil-popup__box {
+	right: 0;
+	bottom: 0;
+	left: 0;
+	border-radius: 0;
+	padding: 1em 3em 1em 1.5em;
+	transform: translateY(1em);
+}
+
+.meil-popup--bar .meil-popup__box .meil-form__form {
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: flex-end;
+}
+
+.meil-popup--bar .meil-popup__box .meil-form__field {
+	width: auto;
+	flex: 1 1 14em;
+}
+
+.meil-popup--open.meil-popup--slide .meil-popup__box,
+.meil-popup--open.meil-popup--bar .meil-popup__box {
+	transform: none;
+}
+
+/* On phones a popup would cover the page, which search engines count
+   against it: it shows as a sheet at the bottom instead, nothing dimmed. */
+@media (max-width: 600px) {
+	.meil-popup--modal .meil-popup__backdrop {
+		display: none;
+	}
+
+	.meil-popup--modal .meil-popup__box,
+	.meil-popup--slide .meil-popup__box {
+		top: auto;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		max-width: none;
+		max-height: 70vh;
+		border-radius: var(--meil-popup-radius) var(--meil-popup-radius) 0 0;
+		transform: translateY(1em);
+	}
+
+	.meil-popup--open.meil-popup--modal .meil-popup__box {
+		transform: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.meil-popup__box,
+	.meil-popup__backdrop {
+		transition: none;
+	}
+}

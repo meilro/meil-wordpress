@@ -1,82 +1,1190 @@
-/* meil.ro > Settings. */
-.meil-mailer-wrap .form-table th {
-	width: 220px;
+/*
+ * The plugin's admin screens, in meil.ro's own light look: the settings, Form
+ * plugins, Sent emails, Unsent, and the form editor. Loaded on those screens
+ * only (meil_mailer_enqueue_admin_assets()), which also carry the body class
+ * .meil-screen; the WordPress menu and top bar keep their look.
+ *
+ * The colours, sizes and corners are meil.ro's (its style.css :root), as
+ * --ma-* here so nothing clashes with WordPress or another plugin. The font is
+ * meil.ro's, IBM Plex Sans, shipped in assets/fonts with its licence
+ * (OFL.txt), under a name of its own.
+ */
+
+@font-face {
+	font-family: "meil admin sans";
+	font-style: normal;
+	font-weight: 100 700;
+	font-display: swap;
+	src: url("fonts/plex-sans-normal-latin-ext.woff2") format("woff2");
+	unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
-.meil-mailer-links {
+@font-face {
+	font-family: "meil admin sans";
+	font-style: normal;
+	font-weight: 100 700;
+	font-display: swap;
+	src: url("fonts/plex-sans-normal-latin.woff2") format("woff2");
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+body.meil-screen {
+	--ma-primary: #f8f7f3;
+	--ma-accent: #171717;
+	--ma-panel-head: #f0eee7;
+	--ma-panel-bg: #fff;
+	--ma-text: #171717;
+	--ma-border: #e9e8e7;
+	--ma-border-head: #d8d8d8;
+	--ma-hover: #f8f6ef;
+	--ma-green: #15803d;
+	--ma-green-bg: #ecfdf3;
+	--ma-amber: #a16207;
+	--ma-amber-bg: #fffbeb;
+	--ma-red: #b42318;
+	--ma-red-bg: #fef3f2;
+	--ma-radius: 10px;
+	--ma-radius-sm: 7px;
+	--ma-fade: 0.15s ease;
+	--ma-font: "meil admin sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+	--ma-mono: "SFMono-Regular", ui-monospace, Menlo, Consolas, "Liberation Mono", monospace;
+	--ma-fs-xs: 0.75rem;
+	--ma-fs-sm: 0.8125rem;
+	--ma-fs-base: 0.875rem;
+	--ma-fs-lg: 1rem;
+	--ma-lh-tight: 1.3;
+	--ma-lh-base: 1.55;
+	background: var(--ma-primary);
+}
+
+/* ---- The page ---------------------------------------------------------- */
+
+.meil-screen #wpbody-content {
+	font-family: var(--ma-font);
+	color: var(--ma-text);
+	-webkit-font-smoothing: antialiased;
+}
+
+.meil-app {
+	max-width: 64rem;
+	font-size: var(--ma-fs-base);
+	font-weight: 500;
+	line-height: var(--ma-lh-base);
+}
+
+.meil-app p,
+.meil-app li {
+	font-size: var(--ma-fs-base);
+	line-height: var(--ma-lh-base);
+}
+
+.meil-app a:not(.button):not(.meil-tab):not(.meil-table__link),
+.meil-fa a:not(.button) {
+	color: var(--ma-text);
+	text-decoration: underline;
+	text-underline-offset: 4px;
+	transition: opacity var(--ma-fade);
+}
+
+.meil-app a:not(.button):not(.meil-tab):not(.meil-table__link):hover {
+	opacity: 0.7;
+}
+
+.meil-app code,
+.meil-fa code {
+	padding: 0.1em 0.4em;
+	border-radius: 4px;
+	background: var(--ma-primary);
+	font-family: var(--ma-mono);
+	font-size: var(--ma-fs-sm);
+}
+
+.meil-app .wp-header-end {
+	margin: 0;
+	border: 0;
+}
+
+/* The top of a screen: the title and the line under it. */
+.meil-head {
+	margin: 1.25rem 0 1.5rem;
+}
+
+.meil-app .meil-head__title {
+	margin: 0;
+	padding: 0;
+	font-size: 1.375rem;
+	font-weight: 400;
+	line-height: var(--ma-lh-tight);
+	letter-spacing: -0.025em;
+}
+
+.meil-app .meil-head__subtitle {
+	max-width: 44rem;
+	margin: 0.25rem 0 0;
+	opacity: 0.7;
+}
+
+.meil-app .meil-back {
+	margin: 0 0 1rem;
+	font-size: var(--ma-fs-sm);
+}
+
+/* Tabs: small buttons, the open one filled, as in meil.ro. */
+.meil-tabs {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 6px;
+	gap: 0.375rem;
+	margin: 0 0 1.25rem;
 }
 
-/* ------------------------------------------------------------------------
- * meil.ro > Forms: the form editor.
- * --------------------------------------------------------------------- */
-
-.meil-fa {
-	max-width: 880px;
-	margin: 0 -2px;
-}
-
-.meil-fa-section {
-	padding: 20px 2px 24px;
-	border-top: 1px solid #f0f0f1;
-}
-
-.meil-fa-section:first-child {
-	padding-top: 8px;
-	border-top: 0;
-}
-
-.meil-fa-section__title {
-	margin: 0 0 4px;
-	font-size: 14px;
-	font-weight: 600;
-}
-
-.meil-fa-section__lead {
-	margin: 0 0 14px;
-	color: #646970;
-}
-
-.meil-fa-tag {
-	padding: 1px 7px;
-	border-radius: 9px;
-	background: #f0f0f1;
-	color: #50575e;
-	font-size: 11px;
-	font-weight: 400;
-	line-height: 18px;
-}
-
-.meil-fa-inline {
+.meil-app .meil-tab {
 	display: inline-flex;
 	align-items: center;
-	gap: 6px;
+	min-height: 2rem;
+	padding: 0 0.75rem;
+	border-radius: var(--ma-radius-sm);
+	background: var(--ma-panel-bg);
+	box-shadow: inset 0 0 0 1px var(--ma-border);
+	color: var(--ma-text);
+	font-size: var(--ma-fs-sm);
+	font-weight: 500;
+	text-decoration: none;
+	transition: background var(--ma-fade), opacity var(--ma-fade);
+}
+
+.meil-app .meil-tab:hover {
+	background: var(--ma-hover);
+}
+
+.meil-app .meil-tab--active,
+.meil-app .meil-tab--active:hover {
+	background: var(--ma-accent);
+	box-shadow: none;
+	color: var(--ma-primary);
+}
+
+.meil-app .meil-tab:focus-visible {
+	outline: 2px solid var(--ma-text);
+	outline-offset: 2px;
+	box-shadow: none;
+}
+
+/* ---- Panels ------------------------------------------------------------ */
+
+.meil-panel {
+	margin: 0 0 1.375rem;
+	overflow: hidden;
+	border: 1px solid var(--ma-border);
+	border-radius: var(--ma-radius);
+	background: var(--ma-panel-bg);
+}
+
+.meil-panel__head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+	padding: 1rem 1.125rem;
+	border-bottom: 1px solid var(--ma-border);
+	background: var(--ma-panel-head);
+}
+
+.meil-app .meil-panel__title {
+	margin: 0;
+	padding: 0;
+	font-size: var(--ma-fs-base);
+	font-weight: 600;
+	line-height: var(--ma-lh-tight);
+}
+
+.meil-panel__body {
+	display: flex;
+	flex-direction: column;
+	gap: 1.125rem;
+	padding: 1.125rem;
+}
+
+.meil-panel__body--tight {
+	display: block;
+	padding: 0;
+	overflow-x: auto;
+}
+
+.meil-app .meil-panel__lead,
+.meil-app .meil-panel__lead p {
+	max-width: 46rem;
+	margin: 0;
+	opacity: 0.8;
+}
+
+.meil-app .meil-empty {
+	margin: 0;
+	padding: 1.25rem 0;
+	text-align: center;
+	opacity: 0.8;
+}
+
+.meil-app .meil-actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.75rem;
+	margin: 0 0 1.375rem;
+	padding: 0;
+}
+
+.meil-panel .meil-actions {
+	margin: 0;
+}
+
+/* ---- Fields: the label above, the hint below --------------------------- */
+
+.meil-field {
+	display: flex;
+	flex-direction: column;
+	gap: 0.375rem;
+	min-width: 0;
+}
+
+.meil-app .meil-field__label {
+	font-size: var(--ma-fs-sm);
+	font-weight: 500;
+}
+
+.meil-field__control {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.375rem;
+}
+
+.meil-field-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1.125rem;
+}
+
+.meil-field-row > .meil-field {
+	flex: 1 1 14rem;
+}
+
+.meil-inline-form {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	gap: 0.75rem;
+}
+
+.meil-field--grow {
+	flex: 1 1 18rem;
+	max-width: 32rem;
+}
+
+.meil-screen #wpbody-content .description,
+.meil-fa .description {
+	margin: 0;
+	color: var(--ma-text);
+	font-size: var(--ma-fs-sm);
+	font-style: normal;
+	opacity: 0.75;
+}
+
+.meil-app .meil-signup-list,
+.meil-app .meil-choices {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.meil-app .meil-signup-list li {
+	margin: 0;
+}
+
+.meil-choice__more {
+	padding-left: 1.75rem;
+}
+
+/* A checkbox or radio with its words: side by side, the box on the first line.
+   The form editor's rows are WordPress's form table, which sets 1.3 and 1.4. */
+.meil-field__control > label,
+.meil-signup-list label,
+.meil-app .meil-choice,
+.meil-fa-inline,
+.meil-fa .form-table td fieldset label,
+.meil-fa .form-table td > label {
+	display: inline-flex;
+	align-items: flex-start;
+	gap: 0.6rem;
+	font-size: var(--ma-fs-base);
+	line-height: var(--ma-lh-base);
+	cursor: pointer;
+}
+
+/* ---- Inputs ------------------------------------------------------------ */
+
+.meil-screen #wpbody-content input[type="text"],
+.meil-screen #wpbody-content input[type="email"],
+.meil-screen #wpbody-content input[type="password"],
+.meil-screen #wpbody-content input[type="number"],
+.meil-screen #wpbody-content input[type="url"],
+.meil-screen #wpbody-content input[type="search"],
+.meil-screen #wpbody-content select,
+.meil-screen #wpbody-content textarea {
+	box-sizing: border-box;
+	min-height: 2.6rem;
+	padding: 0.5rem 0.6875rem;
+	border: 1px solid var(--ma-border);
+	border-radius: var(--ma-radius-sm);
+	background-color: var(--ma-panel-bg);
+	box-shadow: none;
+	color: var(--ma-text);
+	font-family: inherit;
+	font-size: var(--ma-fs-base);
+	line-height: 1.4;
+	transition: border-color var(--ma-fade);
+}
+
+.meil-app input[type="text"],
+.meil-app input[type="email"],
+.meil-app input[type="password"],
+.meil-app input[type="url"] {
+	width: 100%;
+	max-width: 32rem;
+}
+
+.meil-screen #wpbody-content .large-text {
+	max-width: none;
+}
+
+.meil-screen #wpbody-content input.small-text,
+.meil-screen #wpbody-content input[type="number"] {
+	width: 5.5rem;
+}
+
+.meil-screen #wpbody-content input.code {
+	font-family: var(--ma-mono);
+	font-size: var(--ma-fs-sm);
+}
+
+.meil-screen #wpbody-content select {
+	min-width: 14rem;
+	max-width: 100%;
+	padding-right: 2.25rem;
+	background-position: right 0.6rem center;
+	cursor: pointer;
+}
+
+.meil-screen #wpbody-content input[type="text"]:hover,
+.meil-screen #wpbody-content input[type="email"]:hover,
+.meil-screen #wpbody-content input[type="password"]:hover,
+.meil-screen #wpbody-content input[type="number"]:hover,
+.meil-screen #wpbody-content select:hover,
+.meil-screen #wpbody-content textarea:hover {
+	border-color: var(--ma-border-head);
+	color: var(--ma-text);
+}
+
+.meil-screen #wpbody-content input[type="text"]:focus,
+.meil-screen #wpbody-content input[type="email"]:focus,
+.meil-screen #wpbody-content input[type="password"]:focus,
+.meil-screen #wpbody-content input[type="number"]:focus,
+.meil-screen #wpbody-content input[type="url"]:focus,
+.meil-screen #wpbody-content input[type="search"]:focus,
+.meil-screen #wpbody-content select:focus,
+.meil-screen #wpbody-content textarea:focus {
+	border-color: var(--ma-text);
+	outline: 2px solid var(--ma-text);
+	outline-offset: -1px;
+	box-shadow: none;
+}
+
+.meil-screen #wpbody-content ::placeholder {
+	color: var(--ma-text);
+	opacity: 0.4;
+}
+
+/* The browser's own checkbox and radio in black, as meil.ro has them,
+   instead of the ones WordPress draws. 16px, 3px down: the middle of a
+   first line of 14px words at line height 1.55 (21.7px), which every label
+   with a box has (see "A checkbox or radio with its words"). */
+.meil-screen #wpbody-content input[type="checkbox"],
+.meil-screen #wpbody-content input[type="radio"] {
+	-webkit-appearance: auto;
+	appearance: auto;
+	flex: none;
+	width: 16px;
+	min-width: 0;
+	height: 16px;
+	margin: 3px 0 0;
+	border: 0;
+	box-shadow: none;
+	accent-color: var(--ma-accent);
+	cursor: pointer;
+}
+
+.meil-screen #wpbody-content input[type="checkbox"]::before,
+.meil-screen #wpbody-content input[type="radio"]::before {
+	content: none;
+}
+
+.meil-screen #wpbody-content input[type="checkbox"]:focus-visible,
+.meil-screen #wpbody-content input[type="radio"]:focus-visible {
+	outline: 2px solid var(--ma-text);
+	outline-offset: 2px;
+}
+
+/* ---- Buttons ----------------------------------------------------------- */
+
+.meil-screen #wpbody-content .button,
+.meil-screen #wpbody-content .button-secondary {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	min-height: 2.5rem;
+	padding: 0 0.875rem;
+	border: 0;
+	border-radius: var(--ma-radius-sm);
+	background: var(--ma-panel-bg);
+	box-shadow: inset 0 0 0 1px var(--ma-border);
+	color: var(--ma-text);
+	font-family: inherit;
+	font-size: var(--ma-fs-base);
+	font-weight: 500;
+	line-height: 1;
+	text-decoration: none;
+	text-shadow: none;
+	vertical-align: middle;
+	transition: background var(--ma-fade), opacity var(--ma-fade);
+}
+
+.meil-screen #wpbody-content .button:hover,
+.meil-screen #wpbody-content .button-secondary:hover {
+	background: var(--ma-hover);
+	color: var(--ma-text);
+}
+
+.meil-screen #wpbody-content .button-primary {
+	background: var(--ma-accent);
+	box-shadow: none;
+	color: var(--ma-primary);
+}
+
+.meil-screen #wpbody-content .button-primary:hover,
+.meil-screen #wpbody-content .button-primary:focus {
+	background: var(--ma-accent);
+	color: var(--ma-primary);
+	opacity: 0.7;
+}
+
+.meil-screen #wpbody-content .button-small {
+	min-height: 2rem;
+	padding: 0 0.6875rem;
+	font-size: var(--ma-fs-sm);
+}
+
+.meil-screen #wpbody-content .button:focus-visible {
+	outline: 2px solid var(--ma-text);
+	outline-offset: 2px;
+	box-shadow: inset 0 0 0 1px var(--ma-border);
+}
+
+.meil-screen #wpbody-content .button:disabled,
+.meil-screen #wpbody-content .button[disabled] {
+	opacity: 0.45;
+	cursor: not-allowed;
+}
+
+.meil-screen #wpbody-content .button-link-delete,
+.meil-fa .meil-fa-card__remove {
+	padding: 0;
+	border: 0;
+	background: none;
+	box-shadow: none;
+	color: var(--ma-red);
+	font-family: inherit;
+	font-size: var(--ma-fs-sm);
+	font-weight: 500;
+	text-decoration: underline;
+	text-underline-offset: 4px;
+	cursor: pointer;
+}
+
+.meil-screen #wpbody-content .button-link-delete:hover,
+.meil-fa .meil-fa-card__remove:hover,
+.meil-fa .meil-fa-card__remove:focus {
+	color: var(--ma-red);
+	opacity: 0.7;
+}
+
+/* A button whose form is on its way (assets/admin.js): a spinner, and its
+   own colours kept while it is disabled, over WordPress's grey. */
+.meil-screen #wpbody-content .button.meil-is-loading::before {
+	content: "";
+	box-sizing: border-box;
+	flex: none;
+	width: 0.875rem;
+	height: 0.875rem;
+	border: 2px solid currentColor;
+	border-right-color: transparent;
+	border-radius: 50%;
+	animation: meil-spin 0.7s linear infinite;
+}
+
+.meil-screen #wpbody-content .button.meil-is-loading,
+.meil-screen #wpbody-content .button.meil-is-loading:disabled {
+	background: var(--ma-panel-bg) !important;
+	box-shadow: inset 0 0 0 1px var(--ma-border) !important;
+	color: var(--ma-text) !important;
+	opacity: 0.75;
+	cursor: progress;
+}
+
+.meil-screen #wpbody-content .button-primary.meil-is-loading,
+.meil-screen #wpbody-content .button-primary.meil-is-loading:disabled {
+	background: var(--ma-accent) !important;
+	box-shadow: none !important;
+	color: var(--ma-primary) !important;
+}
+
+.meil-screen #wpbody-content .button-link-delete.meil-is-loading {
+	opacity: 0.5;
+	cursor: progress;
+}
+
+@keyframes meil-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.meil-screen #wpbody-content .button.meil-is-loading::before {
+		animation-duration: 2s;
+	}
+}
+
+/* ---- Tables ------------------------------------------------------------ */
+
+.meil-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: var(--ma-fs-base);
+}
+
+.meil-table th {
+	padding: 0.6875rem 1.125rem;
+	border-bottom: 1px solid var(--ma-border);
+	font-size: var(--ma-fs-xs);
+	font-weight: 500;
+	text-align: left;
+}
+
+.meil-table td {
+	padding: 0.6rem 1.125rem;
+	border-bottom: 1px solid var(--ma-border);
+	vertical-align: middle;
+}
+
+/* Long reasons wrap anywhere; addresses and dates stay whole. */
+.meil-table td.meil-table__muted {
+	overflow-wrap: anywhere;
+}
+
+.meil-table tr:last-child td {
+	border-bottom: 0;
+}
+
+.meil-table tbody tr {
+	transition: background var(--ma-fade);
+}
+
+.meil-table tbody tr:hover {
+	background: var(--ma-hover);
+}
+
+.meil-app .meil-table__link {
+	color: var(--ma-text);
+	font-weight: 500;
+	text-decoration: none;
+	text-underline-offset: 4px;
+}
+
+.meil-app .meil-table__link:hover {
+	text-decoration: underline;
+}
+
+.meil-table__muted {
+	opacity: 0.7;
+}
+
+/* ---- Badges ------------------------------------------------------------ */
+
+.meil-badge {
+	display: inline-block;
+	padding: 0.125rem 0.5625rem;
+	border-radius: 999px;
+	background: var(--ma-primary);
+	color: var(--ma-text);
+	font-size: var(--ma-fs-xs);
+	font-weight: 500;
+	line-height: 1.6;
 	white-space: nowrap;
 }
 
-.meil-fa-inline input[type="checkbox"] {
+.meil-badge--good {
+	background: var(--ma-green-bg);
+	color: var(--ma-green);
+}
+
+.meil-badge--wait {
+	background: var(--ma-amber-bg);
+	color: var(--ma-amber);
+}
+
+.meil-badge--bad {
+	background: var(--ma-red-bg);
+	color: var(--ma-red);
+}
+
+/* ---- Notices: tinted boxes, as meil.ro's alerts ------------------------ */
+
+.meil-screen #wpbody-content .notice {
+	position: relative;
+	margin: 0 0 1rem;
+	padding: 0.6875rem 0.8125rem;
+	border: 1px solid var(--ma-border);
+	border-radius: var(--ma-radius-sm);
+	background: var(--ma-panel-bg);
+	box-shadow: none;
+	color: var(--ma-text);
+	font-size: var(--ma-fs-base);
+}
+
+.meil-screen #wpbody-content .notice p {
 	margin: 0;
+	padding: 0;
+	font-size: inherit;
+}
+
+.meil-screen #wpbody-content .notice p + p {
+	margin-top: 0.375rem;
+}
+
+.meil-screen #wpbody-content .notice.is-dismissible {
+	padding-right: 2.75rem;
+}
+
+.meil-screen #wpbody-content .notice-success {
+	border-color: color-mix(in srgb, var(--ma-green) 30%, transparent);
+	background: var(--ma-green-bg);
+}
+
+.meil-screen #wpbody-content .notice-error {
+	border-color: color-mix(in srgb, var(--ma-red) 35%, transparent);
+	background: var(--ma-red-bg);
+	color: var(--ma-red);
+}
+
+.meil-screen #wpbody-content .notice-warning {
+	border-color: color-mix(in srgb, var(--ma-amber) 30%, transparent);
+	background: var(--ma-amber-bg);
+}
+
+.meil-screen #wpbody-content .notice-dismiss {
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.meil-panel .notice {
+	margin: 0;
+}
+
+/* ---- Settings ---------------------------------------------------------- */
+
+/* A number inside a sentence: "Show it again after [14] days". */
+.meil-app .meil-inline-label {
+	display: inline-flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: var(--ma-fs-base);
+}
+
+/* The popup's preview: a stand-in page in a frame, at computer or phone width. */
+.meil-popup-preview {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	width: 100%;
+}
+
+.meil-tabs--small {
+	margin: 0;
+}
+
+.meil-app button.meil-tab {
+	border: 0;
+	font-family: inherit;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.meil-popup-preview__stage {
+	box-sizing: border-box;
+	width: 100%;
+	padding: 1rem;
+	border: 1px solid var(--ma-border);
+	border-radius: var(--ma-radius-sm);
+	background: var(--ma-primary);
+}
+
+.meil-popup-preview__frame {
+	display: block;
+	width: 100%;
+	height: 32rem;
+	margin: 0 auto;
+	border: 1px solid var(--ma-border);
+	border-radius: var(--ma-radius-sm);
+	background: #fff;
+	transition: width 0.2s ease;
+}
+
+.meil-popup-preview__stage--phone .meil-popup-preview__frame {
+	width: 375px;
+	max-width: 100%;
+	height: 42rem;
+}
+
+/* ---- Sent emails ------------------------------------------------------- */
+
+.meil-details {
+	display: flex;
+	flex-wrap: wrap;
+	margin: 0;
+}
+
+.meil-details dt,
+.meil-details dd {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0.5rem 0;
+	border-top: 1px solid var(--ma-border);
+}
+
+.meil-details dt {
+	flex: 0 0 9rem;
+	font-size: var(--ma-fs-sm);
+	opacity: 0.7;
+}
+
+.meil-details dd {
+	flex: 1 1 calc(100% - 9rem);
+	overflow-wrap: anywhere;
+}
+
+.meil-details dt:first-of-type,
+.meil-details dt:first-of-type + dd {
+	border-top: 0;
+	padding-top: 0;
+}
+
+.meil-sent__preview,
+.meil-sent__text {
+	box-sizing: border-box;
+	width: 100%;
+	border: 1px solid var(--ma-border);
+	border-radius: var(--ma-radius-sm);
+	background: #fff;
+}
+
+.meil-sent__preview {
+	height: 40rem;
+}
+
+.meil-app .meil-sent__text {
+	margin: 0;
+	padding: 0.875rem;
+	font-family: var(--ma-mono);
+	font-size: var(--ma-fs-sm);
+	white-space: pre-wrap;
+}
+
+/* ---- Unsent and Form plugins: the actions at the end of a row ---------- */
+
+.meil-unsent__actions,
+.meil-connections__actions {
+	text-align: right;
+	white-space: nowrap;
+}
+
+.meil-unsent__form {
+	display: inline-flex;
+	align-items: center;
+	margin: 0 0 0 0.75rem;
+}
+
+.meil-actions .meil-unsent__form {
+	margin: 0;
+}
+
+/* ---- The forms list (meil.ro > Forms) ---------------------------------- */
+
+/* WordPress's own list, as one of meil.ro's panels with its table inside.
+   Colours and borders at every width; the cell padding only above 782px,
+   where WordPress stops stacking each row for phones. */
+/* The list and the form editor, new or saved, as wide as the other screens. */
+.meil-screen.edit-php .wrap,
+.meil-screen.post-php .wrap,
+.meil-screen.post-new-php .wrap {
+	max-width: 64rem;
+}
+
+.meil-screen.edit-php .subsubsub {
+	margin: 0 0 0.75rem;
+	color: var(--ma-text);
+	font-size: var(--ma-fs-sm);
+}
+
+.meil-screen.edit-php .subsubsub a {
+	color: var(--ma-text);
+}
+
+.meil-screen.edit-php .subsubsub a .count {
+	color: inherit;
+	opacity: 0.6;
+}
+
+.meil-screen.edit-php p.search-box {
+	margin: 0 0 0.75rem;
+}
+
+.meil-screen.edit-php p.search-box input[type="search"] {
+	margin-right: 0.5rem;
+}
+
+.meil-screen.edit-php .tablenav {
+	height: auto;
+	min-height: 2.5rem;
+	margin: 0 0 0.75rem;
+}
+
+.meil-screen.edit-php .tablenav.bottom {
+	margin: 0.75rem 0 0;
+}
+
+/* The bulk actions and the count once, above the list; the pages below it
+   only when there is more than one. */
+.meil-screen.edit-php .tablenav.bottom .bulkactions,
+.meil-screen.edit-php .tablenav.bottom .one-page {
+	display: none;
+}
+
+.meil-screen.edit-php .tablenav .actions {
+	padding: 0 0.75rem 0 0;
+}
+
+.meil-screen #wpbody-content .tablenav select,
+.meil-screen #wpbody-content p.search-box input[type="search"] {
+	min-height: 2.5rem;
+}
+
+.meil-screen.edit-php .tablenav .actions select {
+	margin: 0 0.5rem 0 0;
+}
+
+.meil-screen.edit-php .tablenav .tablenav-pages {
+	margin: 0;
+	font-size: var(--ma-fs-sm);
+	line-height: 2.5rem;
+	opacity: 0.7;
+}
+
+.meil-screen.edit-php .tablenav .one-page .displaying-num {
+	margin: 0;
+}
+
+.meil-screen .wp-list-table {
+	border: 1px solid var(--ma-border);
+	border-radius: var(--ma-radius);
+	border-collapse: separate;
+	border-spacing: 0;
+	background: var(--ma-panel-bg);
+	box-shadow: none;
+	color: var(--ma-text);
+}
+
+/* The header is printed again under the list: once is enough. */
+.meil-screen .wp-list-table tfoot {
+	display: none;
+}
+
+.meil-screen .wp-list-table thead th,
+.meil-screen .wp-list-table thead td {
+	border-bottom: 1px solid var(--ma-border);
+	background: var(--ma-panel-head);
+	color: var(--ma-text);
+	font-size: var(--ma-fs-xs);
+	font-weight: 500;
+	line-height: var(--ma-lh-tight);
+	vertical-align: middle;
+}
+
+.meil-screen .wp-list-table thead tr > :first-child {
+	border-top-left-radius: calc(var(--ma-radius) - 1px);
+}
+
+.meil-screen .wp-list-table thead tr > :last-child {
+	border-top-right-radius: calc(var(--ma-radius) - 1px);
+}
+
+.meil-screen .wp-list-table tbody tr:last-child > :first-child {
+	border-bottom-left-radius: calc(var(--ma-radius) - 1px);
+}
+
+.meil-screen .wp-list-table tbody tr:last-child > :last-child {
+	border-bottom-right-radius: calc(var(--ma-radius) - 1px);
+}
+
+.meil-screen .wp-list-table th.sortable a,
+.meil-screen .wp-list-table th.sorted a {
+	color: var(--ma-text);
+}
+
+.meil-screen .wp-list-table tbody tr {
+	background: var(--ma-panel-bg);
+	transition: background var(--ma-fade);
+}
+
+.meil-screen .wp-list-table tbody tr:hover {
+	background: var(--ma-hover);
+}
+
+.meil-screen .wp-list-table tbody tr + tr > * {
+	border-top: 1px solid var(--ma-border);
+}
+
+.meil-screen .wp-list-table tbody th,
+.meil-screen .wp-list-table tbody td {
+	color: var(--ma-text);
+	font-size: var(--ma-fs-base);
+	line-height: var(--ma-lh-base);
+}
+
+.meil-screen .wp-list-table .row-title {
+	color: var(--ma-text);
+	font-weight: 600;
+}
+
+.meil-screen .wp-list-table .row-title:hover {
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+
+.meil-screen .wp-list-table .row-actions {
+	color: var(--ma-text);
+	font-size: var(--ma-fs-sm);
+}
+
+.meil-screen .wp-list-table .row-actions a {
+	color: var(--ma-text);
+	opacity: 0.75;
+}
+
+.meil-screen .wp-list-table .row-actions .trash a {
+	color: var(--ma-red);
+	opacity: 1;
+}
+
+.meil-screen .wp-list-table code {
+	padding: 0.1em 0.4em;
+	border-radius: 4px;
+	background: var(--ma-primary);
+	font-family: var(--ma-mono);
+	font-size: var(--ma-fs-sm);
+}
+
+.meil-screen .wp-list-table td.column-meil_audiences,
+.meil-screen .wp-list-table td.column-date {
+	font-size: var(--ma-fs-sm);
+	opacity: 0.75;
+}
+
+.meil-screen .wp-list-table .check-column label:hover,
+.meil-screen .wp-list-table .check-column input:hover + label {
+	background: transparent;
+}
+
+@media screen and (min-width: 783px) {
+	.meil-screen .wp-list-table thead th,
+	.meil-screen .wp-list-table thead td {
+		padding: 0.6875rem 1.125rem;
+	}
+
+	.meil-screen .wp-list-table th.sortable,
+	.meil-screen .wp-list-table th.sorted {
+		padding: 0;
+	}
+
+	.meil-screen .wp-list-table th.sortable a,
+	.meil-screen .wp-list-table th.sorted a {
+		padding: 0.6875rem 1.125rem;
+	}
+
+	.meil-screen .wp-list-table tbody th,
+	.meil-screen .wp-list-table tbody td {
+		padding: 0.875rem 1.125rem;
+		vertical-align: top;
+	}
+
+	.meil-screen .wp-list-table .check-column {
+		width: 16px;
+	}
+
+	/* Room for the whole shortcode, and the date on two lines. */
+	.meil-screen .wp-list-table .column-meil_shortcode {
+		width: 12rem;
+	}
+
+	.meil-screen .wp-list-table .column-date {
+		width: 10rem;
+	}
+
+	.meil-screen .wp-list-table thead .check-column,
+	.meil-screen .wp-list-table tbody .check-column {
+		padding-right: 0;
+	}
+
+	/* The box in the middle of the header, and of a row's first line of words. */
+	.meil-screen #wpbody-content .wp-list-table .check-column input[type="checkbox"] {
+		display: block;
+		margin: 0;
+	}
+
+	.meil-screen #wpbody-content .wp-list-table tbody .check-column input[type="checkbox"] {
+		margin-top: 3px;
+	}
+}
+
+/* ---- The form editor (meil.ro > Forms > a form) ------------------------ */
+
+/* WordPress's "Add form" beside the title, as a small outlined button. */
+.meil-screen .wrap .page-title-action {
+	display: inline-flex;
+	align-items: center;
+	min-height: 2rem;
+	padding: 0 0.6875rem;
+	border: 0;
+	border-radius: var(--ma-radius-sm);
+	background: var(--ma-panel-bg);
+	box-shadow: inset 0 0 0 1px var(--ma-border);
+	color: var(--ma-text);
+	font-size: var(--ma-fs-sm);
+	font-weight: 500;
+	text-decoration: none;
+}
+
+.meil-screen .wrap .page-title-action:hover {
+	background: var(--ma-hover);
+	color: var(--ma-text);
+}
+
+.meil-screen .wrap > h1.wp-heading-inline {
+	font-family: var(--ma-font);
+	font-size: 1.375rem;
+	font-weight: 400;
+}
+
+/* Its boxes as meil.ro's panels. */
+.meil-screen .postbox {
+	overflow: hidden;
+	border-color: var(--ma-border);
+	border-radius: var(--ma-radius);
+	box-shadow: none;
+}
+
+.meil-screen .postbox-header {
+	border-bottom-color: var(--ma-border);
+	background: var(--ma-panel-head);
+}
+
+.meil-screen .postbox .hndle {
+	font-family: var(--ma-font);
+	font-size: var(--ma-fs-base);
+	font-weight: 600;
+}
+
+.meil-screen #titlediv #title {
+	min-height: 2.75rem;
+	padding: 0.5rem 0.875rem;
+	border-radius: var(--ma-radius-sm);
+	font-size: 1.125rem;
+}
+
+.meil-fa {
+	max-width: 54rem;
+	font-size: var(--ma-fs-base);
+	font-weight: 500;
+	line-height: var(--ma-lh-base);
+}
+
+.meil-fa p,
+.meil-fa li,
+.meil-fa label {
+	font-size: var(--ma-fs-base);
+}
+
+.meil-fa-section {
+	padding: 1.25rem 0 1.5rem;
+	border-top: 1px solid var(--ma-border);
+}
+
+.meil-fa-section:first-child {
+	padding-top: 0.5rem;
+	border-top: 0;
+}
+
+.meil-fa .meil-fa-section__title {
+	margin: 0 0 0.25rem;
+	font-size: var(--ma-fs-base);
+	font-weight: 600;
+}
+
+.meil-fa .meil-fa-section__lead {
+	max-width: 46rem;
+	margin: 0 0 0.875rem;
+	opacity: 0.8;
+}
+
+.meil-fa-tag {
+	padding: 0.125rem 0.5rem;
+	border-radius: 999px;
+	background: var(--ma-primary);
+	font-size: var(--ma-fs-xs);
+	font-weight: 500;
 }
 
 /* Audiences: one line each. The label field shows once the audience is offered. */
 .meil-fa-audiences {
 	margin: 0;
-	border: 1px solid #dcdcde;
-	border-radius: 4px;
-	background: #fff;
+	overflow: hidden;
+	border: 1px solid var(--ma-border);
+	border-radius: var(--ma-radius-sm);
+	background: var(--ma-panel-bg);
 }
 
 .meil-fa-audience {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	gap: 8px 16px;
-	min-height: 40px;
+	gap: 0.5rem 1rem;
+	min-height: 2.75rem;
 	margin: 0;
-	padding: 8px 14px;
-	border-top: 1px solid #f0f0f1;
+	padding: 0.5rem 0.875rem;
+	border-top: 1px solid var(--ma-border);
 }
 
 .meil-fa-audience:first-child {
@@ -85,15 +1193,11 @@
 
 .meil-fa-audience__offer {
 	display: flex;
-	flex: 1 1 260px;
+	flex: 1 1 16rem;
 	align-items: center;
-	gap: 10px;
+	gap: 0.6rem;
 	min-width: 0;
 	cursor: pointer;
-}
-
-.meil-fa-audience__offer input[type="checkbox"] {
-	margin: 0;
 }
 
 .meil-fa-audience__name {
@@ -103,9 +1207,9 @@
 
 .meil-fa-audience__details {
 	display: flex;
-	flex: 1 1 360px;
+	flex: 1 1 22rem;
 	align-items: center;
-	gap: 16px;
+	gap: 1rem;
 }
 
 .meil-fa-audience__label {
@@ -118,7 +1222,19 @@
 }
 
 .meil-fa-audience:has(.meil-fa-audience__toggle:checked) {
-	background: #f6f7f7;
+	background: var(--ma-hover);
+}
+
+.meil-fa-inline {
+	align-items: center;
+	white-space: nowrap;
+}
+
+/* These labels centre the box on their words: no nudge down, as in the
+   labels whose box sits on the first line (the rule under Inputs). */
+.meil-screen #wpbody-content .meil-fa-inline input[type="checkbox"],
+.meil-screen #wpbody-content .meil-fa-audience__offer input[type="checkbox"] {
+	margin-top: 0;
 }
 
 /* Checkboxes: a numbered card each. */
@@ -128,18 +1244,20 @@
 
 .meil-fa-card {
 	counter-increment: meil-checkbox;
-	margin-bottom: 12px;
-	border: 1px solid #dcdcde;
-	border-radius: 4px;
-	background: #fff;
+	margin-bottom: 0.75rem;
+	overflow: hidden;
+	border: 1px solid var(--ma-border);
+	border-radius: var(--ma-radius-sm);
+	background: var(--ma-panel-bg);
 }
 
 .meil-fa-card__head {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 8px 12px;
-	border-bottom: 1px solid #f0f0f1;
+	padding: 0.5rem 0.875rem;
+	border-bottom: 1px solid var(--ma-border);
+	background: var(--ma-panel-head);
 }
 
 .meil-fa-card__title {
@@ -153,20 +1271,13 @@
 .meil-fa .meil-fa-card__remove {
 	display: inline-flex;
 	align-items: center;
-	gap: 2px;
-	color: #b32d2e;
-	text-decoration: none;
-}
-
-.meil-fa .meil-fa-card__remove:hover,
-.meil-fa .meil-fa-card__remove:focus {
-	color: #8a2424;
+	gap: 0.125rem;
 }
 
 /* WordPress draws dashicons at 20px whatever the box says: size the glyph too. */
 .meil-fa-card__remove .dashicons,
 .meil-fa-card__remove .dashicons::before,
-.wp-core-ui .meil-fa-add .button .dashicons,
+.meil-fa-add .button .dashicons,
 .meil-fa-add .dashicons::before {
 	width: 16px;
 	height: 16px;
@@ -175,37 +1286,37 @@
 }
 
 .meil-fa-card .wp-editor-wrap {
-	padding: 10px 12px 0;
+	padding: 0.625rem 0.875rem 0;
 }
 
 .meil-fa-card > textarea {
 	display: block;
-	width: calc(100% - 24px);
-	margin: 10px 12px 0;
+	width: calc(100% - 1.75rem);
+	margin: 0.625rem 0.875rem 0;
 }
 
 .meil-fa-card__foot {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	gap: 10px 24px;
-	padding: 10px 12px 12px;
+	gap: 0.625rem 1.5rem;
+	padding: 0.625rem 0.875rem 0.875rem;
 }
 
 .meil-fa-property {
 	display: inline-flex;
 	align-items: center;
-	gap: 8px;
+	gap: 0.5rem;
 }
 
-.meil-fa-property input {
-	width: 200px;
+.meil-screen #wpbody-content .meil-fa-property input {
+	width: 13rem;
 }
 
-.meil-fa-empty {
-	margin: 0 0 12px;
-	color: #646970;
-	font-style: italic;
+.meil-fa .meil-fa-empty {
+	margin: 0 0 0.75rem;
+	font-style: normal;
+	opacity: 0.7;
 }
 
 .meil-fa-section:has(.meil-fa-card) .meil-fa-empty {
@@ -216,22 +1327,54 @@
 	margin: 0;
 }
 
-.meil-fa-add .button {
+/* Its settings rows: the label above, as on meil.ro, not WordPress's two columns. */
+.meil-fa .form-table,
+.meil-fa .form-table tbody,
+.meil-fa .form-table tr,
+.meil-fa .form-table th,
+.meil-fa .form-table td {
+	display: block;
+	width: auto;
+	margin: 0;
+	padding: 0;
+}
+
+.meil-fa .form-table tr {
+	margin-bottom: 1.125rem;
+}
+
+.meil-fa .form-table tr:last-child {
+	margin-bottom: 0;
+}
+
+.meil-fa .form-table th {
+	margin-bottom: 0.375rem;
+	font-size: var(--ma-fs-sm);
+	font-weight: 500;
+}
+
+.meil-fa .form-table td {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.375rem;
+}
+
+.meil-fa .form-table td fieldset {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.meil-fa .form-table td fieldset label,
+.meil-fa .form-table td > label {
 	display: inline-flex;
-	align-items: center;
-	gap: 4px;
+	align-items: flex-start;
+	gap: 0.6rem;
 }
 
-
-
-/* Settings rows, as on WordPress's own settings screens. */
-.meil-fa-table {
-	margin-top: 0;
-}
-
-.meil-fa-table th {
-	width: 220px;
-	padding-left: 0;
+.meil-fa .form-table td fieldset br {
+	display: none;
 }
 
 /* Where they confirm, and the thank-you page, only matter when visitors confirm. */
@@ -240,6 +1383,7 @@
 }
 
 /* A setting that will not work as it is (an unpublished confirmation page). */
-.meil-fa-warning {
-	color: #b32d2e;
+.meil-fa .meil-fa-warning {
+	color: var(--ma-red);
+	opacity: 1;
 }

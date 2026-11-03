@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Meil_Client {
 
 	/** Seconds to wait for meil.ro while a visitor's page is loading. */
-	private const PAGE_TIMEOUT = 10;
+	public const PAGE_TIMEOUT = 10;
 
 	/** @var string */
 	private $api_key;
@@ -32,9 +32,10 @@ class Meil_Client {
 
 	/**
 	 * @param array<string,mixed>|null $body
+	 * @param array<string,string>     $headers Extra request headers.
 	 * @return array<string,mixed>|WP_Error
 	 */
-	private function request( string $method, string $path, ?array $body = null, int $timeout = 20 ) {
+	private function request( string $method, string $path, ?array $body = null, int $timeout = 20, array $headers = array() ) {
 		if ( ! $this->is_configured() ) {
 			return new WP_Error( 'meil_not_configured', __( 'meil is not configured: add the API key under meil.ro > Settings.', 'meil' ) );
 		}
@@ -47,7 +48,7 @@ class Meil_Client {
 				'Authorization' => 'Bearer ' . $this->api_key,
 				'Content-Type'  => 'application/json',
 				'Accept'        => 'application/json',
-			),
+			) + $headers,
 		);
 		if ( null !== $body ) {
 			$args['body'] = wp_json_encode( $body );
@@ -101,9 +102,35 @@ class Meil_Client {
 		return rawurlencode( $value );
 	}
 
-	/** @param array<string,mixed> $payload */
-	public function send_email( array $payload ) {
-		return $this->request( 'POST', '/emails', $payload );
+	/**
+	 * Sends one email (POST /emails). With an $idempotency_key, meil.ro answers
+	 * a repeat of the same call within 24 hours with the first result instead
+	 * of sending again, so a call that timed out can be tried again safely.
+	 *
+	 * @param array<string,mixed> $payload
+	 */
+	public function send_email( array $payload, string $idempotency_key = '', int $timeout = 20 ) {
+		return $this->request( 'POST', '/emails', $payload, $timeout, '' !== $idempotency_key ? array( 'Idempotency-Key' => $idempotency_key ) : array() );
+	}
+
+	/**
+	 * Emails sent through the API, newest first, without their contents
+	 * (GET /emails). $after is the id of the last one already shown, for the
+	 * older ones; $before the first, for the newer ones.
+	 */
+	public function list_emails( int $limit = 25, string $after = '', string $before = '' ) {
+		$query = array( 'limit' => $limit );
+		if ( '' !== $after ) {
+			$query['after'] = $after;
+		} elseif ( '' !== $before ) {
+			$query['before'] = $before;
+		}
+		return $this->request( 'GET', '/emails?' . http_build_query( $query ), null, self::PAGE_TIMEOUT );
+	}
+
+	/** One email with its contents, while meil.ro still keeps them (GET /emails/{id}). */
+	public function get_email( string $id ) {
+		return $this->request( 'GET', '/emails/' . self::segment( $id ), null, self::PAGE_TIMEOUT );
 	}
 
 	/** The key itself: its domain and permission (GET /key). */
@@ -121,8 +148,8 @@ class Meil_Client {
 	 *
 	 * @param array<string,mixed> $payload
 	 */
-	public function create_contact( array $payload ) {
-		return $this->request( 'POST', '/contacts', $payload, self::PAGE_TIMEOUT );
+	public function create_contact( array $payload, int $timeout = self::PAGE_TIMEOUT ) {
+		return $this->request( 'POST', '/contacts', $payload, $timeout );
 	}
 
 	/**
