@@ -20,7 +20,8 @@
  * on the fields, checkboxes and the button (meil_extra_classes()).
  *
  * The form is sent in the background by assets/forms.js, which reads the
- * data-meil-* attributes below; keep them if you change the markup.
+ * data-meil-* attributes below. Keep them, and the hidden fields, if you
+ * change the markup.
  *
  * @package Meil_Mailer
  *
@@ -39,6 +40,8 @@
  * @var list<array<string,mixed>>          $checkboxes   html (already safe: bold, italic, links), required, checked
  * @var string                             $ajax_url
  * @var string                             $ajax_action
+ * @var string                             $nonce        sent with the form; forms.js swaps in a fresh one when it has expired
+ * @var string                             $nonce_field  its field name
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -53,6 +56,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			data-meil-ajax="<?php echo esc_url( $ajax_url ); ?>" data-meil-action="<?php echo esc_attr( $ajax_action ); ?>"
 			data-meil-error="<?php esc_attr_e( 'Sorry, we could not sign you up right now. Please try again later.', 'meilro' ); ?>">
 			<input type="hidden" name="meil_form_id" value="<?php echo esc_attr( (string) $form_id ); ?>" />
+			<input type="hidden" name="<?php echo esc_attr( $nonce_field ); ?>" value="<?php echo esc_attr( $nonce ); ?>" data-meil-nonce />
 
 			<?php if ( $show_choices ) : ?>
 				<fieldset class="meil-form__choices">

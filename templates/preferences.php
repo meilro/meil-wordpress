@@ -59,7 +59,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				data-meil-ajax="<?php echo esc_url( $ajax_url ); ?>" data-meil-action="<?php echo esc_attr( $action ); ?>"
 				data-meil-error="<?php esc_attr_e( 'Sorry, your choices could not be saved right now. Please try again later.', 'meilro' ); ?>">
 				<input type="hidden" name="meil_action" value="<?php echo esc_attr( $action ); ?>" />
-				<input type="hidden" name="meil_prefs_nonce" value="<?php echo esc_attr( $nonce ); ?>" />
+				<input type="hidden" name="meil_prefs_nonce" value="<?php echo esc_attr( $nonce ); ?>" data-meil-nonce />
 
 				<fieldset class="meil-prefs__choices">
 					<legend class="meil-prefs__legend">

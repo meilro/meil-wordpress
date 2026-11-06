@@ -11,10 +11,12 @@
  * The form is sent in the background (admin-ajax.php, see assets/forms.js) and
  * the answer replaces it in place; without JavaScript it posts to the page.
  *
- * There is no nonce on the public form on purpose: most hosts cache pages, so
- * a nonce baked into the HTML expires and signups fail silently. A hidden
- * honeypot field turns away the simple bots instead, and the confirmation
- * email (when on) keeps the rest off the list.
+ * The public form carries a nonce. Most hosts cache pages, so the nonce in a
+ * cached page may have expired by the time someone sends it: the answer then
+ * brings a fresh one and forms.js sends again once, unseen, and without
+ * JavaScript the form comes back filled in, asking to press again. A hidden
+ * honeypot field turns away the simple bots, and the confirmation email (when
+ * on) keeps the rest off the list.
  *
  * @package Meil_Mailer
  */
@@ -39,6 +41,10 @@ class Meil_Forms {
 	private const META     = '_meil_form';
 	private const NONCE    = 'meil_form_save';
 	private const HONEYPOT = 'meil_form_website';
+
+	/** The public form's nonce: its action, and the field it is sent in. */
+	private const SUBMIT_NONCE = 'meil_form_send';
+	private const NONCE_FIELD  = 'meil_nonce';
 
 	/** Why a form's own confirmation page was refused, shown to the admins until the form is saved again. */
 	public const PAGE_PROBLEM = 'meil_confirm_page_problem';
@@ -792,10 +798,25 @@ class Meil_Forms {
 		};
 	}
 
-	/** The form sent in the background: answers with the message, and whether the form is done. */
+	/**
+	 * The form sent in the background: answers with the message, and whether
+	 * the form is done. An expired nonce (a cached page) is answered with a
+	 * fresh one, which forms.js sends again with.
+	 */
 	public function handle_ajax(): void {
 		meil_ajax_language();
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- public form, see the class comment.
+		if ( ! isset( $_POST[ self::NONCE_FIELD ] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( (string) $_POST[ self::NONCE_FIELD ] ) ), self::SUBMIT_NONCE ) ) {
+			wp_send_json(
+				array(
+					'type'        => 'error',
+					'message'     => self::press_again(),
+					'done'        => false,
+					'retry'       => true,
+					'nonce'       => wp_create_nonce( self::SUBMIT_NONCE ),
+					'nonce_field' => self::NONCE_FIELD,
+				)
+			);
+		}
 		$form_id = isset( $_POST['meil_form_id'] ) ? absint( $_POST['meil_form_id'] ) : 0;
 		$form    = self::published( $form_id );
 		if ( null === $form || array() === $form['audiences'] ) {
@@ -839,21 +860,32 @@ class Meil_Forms {
 
 		$text = self::texts( $form_id, $form );
 
-		// phpcs:disable WordPress.Security.NonceVerification.Missing -- public form, see the class comment.
-		$submitted = isset( $_POST['meil_form_id'] ) && absint( $_POST['meil_form_id'] ) === $form_id;
-		$message   = null;
-		$done      = false;
-		$values    = array(
+		$message = null;
+		$done    = false;
+		$values  = array(
 			'email'      => '',
 			'first_name' => '',
 			'last_name'  => '',
 			'audiences'  => null,
 			'checkboxes' => array(),
 		);
-		if ( $submitted ) {
-			list( $message, $done, $values ) = $this->handle_submission( $form_id, $form, $text );
+		// Sent without JavaScript: to this page, with the form's id.
+		if ( isset( $_POST['meil_form_id'] ) ) {
+			$fresh = isset( $_POST[ self::NONCE_FIELD ] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( (string) $_POST[ self::NONCE_FIELD ] ) ), self::SUBMIT_NONCE );
+			if ( absint( $_POST['meil_form_id'] ) === $form_id ) {
+				if ( $fresh ) {
+					list( $message, $done, $values ) = $this->handle_submission( $form_id, $form, $text );
+				} else {
+					// A cached page's nonce: the form again, filled in, with a fresh one.
+					$values = self::posted( $form );
+					unset( $values['bot'] );
+					$message = array(
+						'type' => 'error',
+						'text' => self::press_again(),
+					);
+				}
+			}
 		}
-		// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 		$choices = array();
 		foreach ( $this->with_names( $form['audiences'] ) as $row ) {
@@ -892,20 +924,28 @@ class Meil_Forms {
 				),
 				'ajax_url'     => meil_ajax_url(),
 				'ajax_action'  => self::AJAX_ACTION,
+				'nonce'         => wp_create_nonce( self::SUBMIT_NONCE ),
+				'nonce_field'   => self::NONCE_FIELD,
 			)
 		);
 	}
 
+	/** Shown when a form's nonce had expired: what was typed is kept. */
+	private static function press_again(): string {
+		return __( 'This page was open for a while. Please press the button again.', 'meilro' );
+	}
+
 	/**
-	 * Signs the visitor up. Only audiences the form offers are ever sent, whatever
-	 * the posted values say.
+	 * What the visitor sent: the address, the names, the lists among those the
+	 * form offers, the form's own checkboxes that were ticked, and whether the
+	 * honeypot was filled in. Read once the nonce was checked by the caller
+	 * (handle_ajax() or render_shortcode()).
 	 *
-	 * @param int                 $form_id
 	 * @param array<string,mixed> $form
-	 * @return array{0: array{type:string,text:string}|null, 1: bool, 2: array<string,mixed>}
+	 * @return array{email:string,first_name:string,last_name:string,audiences:list<string>,checkboxes:list<int>,bot:bool}
 	 */
-	private function handle_submission( int $form_id, array $form, callable $text ): array {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing -- public form, see the class comment.
+	private static function posted( array $form ): array {
+		// phpcs:disable WordPress.Security.NonceVerification.Missing -- checked by the caller, see above.
 		$email      = isset( $_POST['meil_email'] ) ? sanitize_email( wp_unslash( (string) $_POST['meil_email'] ) ) : '';
 		$first_name = isset( $_POST['meil_first_name'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['meil_first_name'] ) ) : '';
 		$last_name  = isset( $_POST['meil_last_name'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['meil_last_name'] ) ) : '';
@@ -922,15 +962,34 @@ class Meil_Forms {
 		// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 		$offered = array_column( $form['audiences'], 'id' );
-		$chosen  = count( $offered ) > 1 && empty( $form['all_lists'] ) ? array_values( array_intersect( $offered, $posted ) ) : $offered;
-		$values  = array(
+		return array(
 			'email'      => $email,
 			'first_name' => $first_name,
 			'last_name'  => $last_name,
-			'audiences'  => $chosen,
+			'audiences'  => count( $offered ) > 1 && empty( $form['all_lists'] ) ? array_values( array_intersect( $offered, $posted ) ) : $offered,
 			'checkboxes' => $ticked,
+			'bot'        => $bot,
 		);
-		$error   = static function ( string $message ) use ( $values ): array {
+	}
+
+	/**
+	 * Signs the visitor up. Only audiences the form offers are ever sent, whatever
+	 * the posted values say.
+	 *
+	 * @param int                 $form_id
+	 * @param array<string,mixed> $form
+	 * @return array{0: array{type:string,text:string}|null, 1: bool, 2: array<string,mixed>}
+	 */
+	private function handle_submission( int $form_id, array $form, callable $text ): array {
+		$values     = self::posted( $form );
+		$bot        = $values['bot'];
+		unset( $values['bot'] );
+		$email      = $values['email'];
+		$first_name = $values['first_name'];
+		$last_name  = $values['last_name'];
+		$chosen     = $values['audiences'];
+		$ticked     = $values['checkboxes'];
+		$error      = static function ( string $message ) use ( $values ): array {
 			return array(
 				array(
 					'type' => 'error',

@@ -26,6 +26,10 @@ class Meil_Signup {
 	/** The posted checkbox, on the classic checkout and the registration forms. */
 	private const FIELD = 'meil_signup';
 
+	/** The nonce shown with the checkbox on the classic checkout and the registration forms. */
+	private const NONCE       = 'meil_signup';
+	private const NONCE_FIELD = 'meil_signup_nonce';
+
 	/** The Checkout block's field. WooCommerce saves its value as _wc_other/meil/newsletter. */
 	private const BLOCK_FIELD = 'meil/newsletter';
 
@@ -95,18 +99,26 @@ class Meil_Signup {
 			),
 			0
 		);
+		wp_nonce_field( self::NONCE, self::NONCE_FIELD, false );
+	}
+
+	/** Was the checkbox ticked, on a form that carried its nonce? */
+	private static function ticked(): bool {
+		if ( ! isset( $_POST[ self::NONCE_FIELD ] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( (string) $_POST[ self::NONCE_FIELD ] ) ), self::NONCE ) ) {
+			return false;
+		}
+		return ! empty( $_POST[ self::FIELD ] );
 	}
 
 	/**
-	 * Classic checkout: WooCommerce has checked its own nonce by now.
+	 * Classic checkout, once WooCommerce has created the order.
 	 *
 	 * @param int      $order_id
 	 * @param array    $posted_data
 	 * @param WC_Order $order
 	 */
 	public function classic_order( $order_id, $posted_data, $order ): void {
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- WooCommerce verified the checkout nonce.
-		if ( empty( $_POST[ self::FIELD ] ) || ! $order instanceof WC_Order ) {
+		if ( ! $order instanceof WC_Order || ! self::ticked() ) {
 			return;
 		}
 		$order->update_meta_data( self::ORDER_META, 'yes' );
@@ -163,6 +175,7 @@ class Meil_Signup {
 			esc_html( self::label() ),
 			esc_attr( trim( meil_extra_classes( 'checkbox' ) ) )
 		);
+		wp_nonce_field( self::NONCE, self::NONCE_FIELD, false );
 	}
 
 	/** WooCommerce My Account registration. */
@@ -173,6 +186,7 @@ class Meil_Signup {
 			esc_html( self::label() ),
 			esc_attr( meil_extra_classes( 'checkbox' ) )
 		);
+		wp_nonce_field( self::NONCE, self::NONCE_FIELD, false );
 	}
 
 	/**
@@ -183,8 +197,7 @@ class Meil_Signup {
 	 * @param int $user_id
 	 */
 	public function registered( $user_id ): void {
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- the registration form's own checks ran; this only reads the opt-in.
-		if ( empty( $_POST[ self::FIELD ] ) || defined( 'WOOCOMMERCE_CHECKOUT' ) ) {
+		if ( defined( 'WOOCOMMERCE_CHECKOUT' ) || ! self::ticked() ) {
 			return;
 		}
 		$user = get_userdata( (int) $user_id );

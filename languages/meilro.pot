@@ -1341,3 +1341,7 @@ msgstr ""
 #: meil.php
 msgid "meil.ro: test mode"
 msgstr ""
+
+#: includes/class-meil-forms.php includes/class-meil-preferences.php includes/class-meil-confirm.php
+msgid "This page was open for a while. Please press the button again."
+msgstr ""

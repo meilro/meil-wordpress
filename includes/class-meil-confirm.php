@@ -18,6 +18,10 @@
  * the page is for, and with test mode on, examples of what visitors see, so
  * the box can be designed with the theme.
  *
+ * The button carries a nonce as well. The page is never cached, so it is
+ * fresh, and a press after it expired (a tab left open for a day) only shows
+ * the button again.
+ *
  * The press posts back to the page, is handled before the page is drawn
  * (template_redirect) and ends in a redirect: to the form's "after confirming"
  * page when it has one, else back here with the result, so a refresh never
@@ -32,15 +36,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Meil_Confirm {
 
-	private const ACTION = 'meil_confirm';
-	private const RESULT = 'meil_confirm_result';
+	private const ACTION      = 'meil_confirm';
+	private const RESULT      = 'meil_confirm_result';
+	private const NONCE_FIELD = 'meil_confirm_nonce';
 
 	/** Presses one visitor IP may make in TRY_WINDOW seconds, so nobody can guess tokens through this page. */
 	private const TRY_LIMIT  = 20;
 	private const TRY_WINDOW = 600;
 
 	/** The results a page can be sent back with. */
-	private const RESULTS = array( 'confirmed', 'already', 'expired', 'invalid', 'error' );
+	private const RESULTS = array( 'confirmed', 'already', 'expired', 'invalid', 'error', 'again' );
 
 	/** @var Meil_Client */
 	private $client;
@@ -138,6 +143,9 @@ class Meil_Confirm {
 			case 'error':
 				$text = __( 'Sorry, we could not confirm your subscription right now. Please try again in a few minutes.', 'meilro' );
 				break;
+			case 'again':
+				$text = __( 'This page was open for a while. Please press the button again.', 'meilro' );
+				break;
 			case 'ask':
 				/* translators: %s: the visitor's email address */
 				$text = __( 'Press the button to confirm that you want to receive our emails at %s.', 'meilro' );
@@ -189,10 +197,10 @@ class Meil_Confirm {
 
 	/** The button was pressed: confirm with meil.ro, then redirect. */
 	public function handle_post(): void {
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- the token is the secret here, see the class comment.
-		if ( wp_doing_ajax() || ! isset( $_POST['meil_action'] ) || self::ACTION !== $_POST['meil_action'] ) {
+		if ( wp_doing_ajax() || ! isset( $_POST[ self::NONCE_FIELD ] ) ) {
 			return;
 		}
+		$fresh   = wp_verify_nonce( sanitize_text_field( wp_unslash( (string) $_POST[ self::NONCE_FIELD ] ) ), self::ACTION );
 		$token   = self::token();
 		$form_id = self::form_id();
 		$back    = static function ( string $result, string $keep_token = '' ) use ( $form_id ): void {
@@ -210,6 +218,9 @@ class Meil_Confirm {
 
 		if ( '' === $token ) {
 			$back( 'invalid' );
+		}
+		if ( ! $fresh ) {
+			$back( 'again', $token );
 		}
 		if ( ! self::within_limit() ) {
 			$back( 'error', $token );
@@ -368,6 +379,8 @@ class Meil_Confirm {
 			'action_url'  => self::here(),
 			'admin_note'  => '',
 			'example'     => false,
+			'nonce'       => wp_create_nonce( self::ACTION ),
+			'nonce_field' => self::NONCE_FIELD,
 		);
 
 		if ( '' !== $result ) {
@@ -376,7 +389,7 @@ class Meil_Confirm {
 				'text' => self::text( $result ),
 			);
 			// After a failure that can be retried, the button again.
-			if ( 'error' === $result && '' !== $token ) {
+			if ( in_array( $result, array( 'error', 'again' ), true ) && '' !== $token ) {
 				$vars['show_button'] = true;
 				$vars['intro']       = self::text( 'ask_plain' );
 			}

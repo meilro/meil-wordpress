@@ -12,8 +12,8 @@
  *   .meil-confirm__form, __button
  *   .meil-confirm__note             a note only the site's admins see
  *
- * The button must post the token back: confirming happens on the press,
- * never when the page opens.
+ * The button must post the token and the nonce back: confirming happens on
+ * the press, never when the page opens.
  *
  * @package Meil_Mailer
  *
@@ -29,6 +29,8 @@
  * @var string                              $action_url
  * @var string                              $admin_note
  * @var bool                                $example      test mode's example, whose button does nothing
+ * @var string                              $nonce
+ * @var string                              $nonce_field
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -48,6 +50,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<form class="meil-confirm__form" method="post" action="<?php echo esc_url( $action_url ); ?>">
 			<input type="hidden" name="meil_action" value="<?php echo esc_attr( $action ); ?>" />
 			<input type="hidden" name="meil_token" value="<?php echo esc_attr( $token ); ?>" />
+			<input type="hidden" name="<?php echo esc_attr( $nonce_field ); ?>" value="<?php echo esc_attr( $nonce ); ?>" />
 			<?php if ( $form_id > 0 ) : ?>
 				<input type="hidden" name="meil_form" value="<?php echo esc_attr( (string) $form_id ); ?>" />
 			<?php endif; ?>

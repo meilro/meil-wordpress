@@ -49,8 +49,9 @@ email and newsletters.
   the new one. Optionally, deleting a user deletes their meil.ro contact too.
 * **Easy to restyle.** Every element has its own class, the plugin's styles can be turned off, and
   your theme can override the markup.
-* **In English and Romanian**, following the site language, and translatable with Loco Translate,
-  WPML, Polylang or any tool that reads WordPress translation files.
+* **Follows the site language.** The Romanian translation arrives with WordPress's own translation
+  updates, and any language can be added on translate.wordpress.org or with Loco Translate, WPML or
+  Polylang.
 
 Broadcasts, templates and audiences are managed in the meil.ro dashboard.
 
@@ -252,7 +253,7 @@ email. Visitors who are not logged in see a short message. The page is never cac
 = Does it work on a site in several languages? =
 
 Yes, with WPML or Polylang. Texts you leave empty use the plugin's own, which follow each visitor's
-language (English and Romanian are included). Texts you write yourself are translated with the
+language (Romanian comes with WordPress's translation updates). Texts you write yourself are translated with the
 site's other texts: a form's button, messages, list labels and checkbox texts in the "meil.ro forms"
 group, once the form is saved, and the sign-up checkbox's text and the popup's title and text with
 the plugin's settings. One form serves every language: visitors get the confirmation email in
@@ -282,6 +283,7 @@ when the form is saved and again when it is shown.
 == Changelog ==
 
 = 1.3.0 =
+* Translations now come with WordPress's own translation updates, from translate.wordpress.org.
 * Emails and sign-ups wait and are tried again when meil.ro cannot be reached, for up to 22 hours, never sent twice. The ones meil.ro refused are listed under meil.ro > Unsent, with the reason, to send again or delete, and administrators see a notice.
 * An email whose From address meil.ro cannot send from (a form plugin sending from the visitor's or the admin's Gmail address) goes from the default from address instead, with the original address as Reply-To. Before, it was refused.
 * The `wp_mail_from` filter is honoured, so WooCommerce's "From address" is used when it is on a verified domain.

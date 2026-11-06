@@ -66,6 +66,8 @@ class Meil_Preferences {
 				return array( 'error', __( 'Some lists could not be turned on for this address, because earlier emails to it were not delivered or were marked as spam. Contact us if this is a mistake.', 'meilro' ) );
 			case 'login':
 				return array( 'error', __( 'Your email preferences are available once you are logged in.', 'meilro' ) );
+			case 'expired':
+				return array( 'error', __( 'This page was open for a while. Please press the button again.', 'meilro' ) );
 		}
 		return array( 'error', __( 'Sorry, your choices could not be saved right now. Please try again later.', 'meilro' ) );
 	}
@@ -151,7 +153,8 @@ class Meil_Preferences {
 	}
 
 	/**
-	 * Saves the lists ticked in the posted form for the logged-in user.
+	 * Saves the lists ticked in the posted form for the logged-in user. Its
+	 * callers have checked the form's nonce.
 	 *
 	 * @return array{result:string,choices:list<array<string,mixed>>}
 	 */
@@ -164,9 +167,6 @@ class Meil_Preferences {
 			$fail['result'] = 'login';
 			return $fail;
 		}
-		if ( ! isset( $_POST['meil_prefs_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( (string) $_POST['meil_prefs_nonce'] ) ), self::ACTION ) ) {
-			return $fail;
-		}
 
 		$user      = wp_get_current_user();
 		$email     = (string) $user->user_email;
@@ -176,10 +176,12 @@ class Meil_Preferences {
 			return $fail;
 		}
 
-		$ids    = array_map( 'strval', array_column( $audiences, 'id' ) );
+		$ids = array_map( 'strval', array_column( $audiences, 'id' ) );
+		// phpcs:disable WordPress.Security.NonceVerification.Missing -- checked by the caller (handle_ajax(), handle_post()).
 		$posted = isset( $_POST['meil_audiences'] ) && is_array( $_POST['meil_audiences'] )
 			? array_map( 'sanitize_text_field', wp_unslash( $_POST['meil_audiences'] ) ) // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized by the map.
 			: array();
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
 		$wanted = array_values( array_intersect( $ids, $posted ) );
 
 		if ( null === $current ) {
@@ -232,9 +234,28 @@ class Meil_Preferences {
 		return $saved;
 	}
 
-	/** The form sent in the background: answers with the message and the lists as they are now. */
+	/**
+	 * The form sent in the background: answers with the message and the lists
+	 * as they are now. An expired nonce (a page left open) is answered with a
+	 * fresh one, which forms.js sends again with.
+	 */
 	public function handle_ajax(): void {
 		meil_ajax_language();
+		if ( ! isset( $_POST['meil_prefs_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( (string) $_POST['meil_prefs_nonce'] ) ), self::ACTION ) ) {
+			$logged_in              = is_user_logged_in();
+			list( $type, $message ) = self::notice( $logged_in ? 'expired' : 'login' );
+			$answer                 = array(
+				'type'    => $type,
+				'message' => $message,
+				'choices' => array(),
+			);
+			if ( $logged_in ) {
+				$answer['retry']       = true;
+				$answer['nonce']       = wp_create_nonce( self::ACTION );
+				$answer['nonce_field'] = 'meil_prefs_nonce';
+			}
+			wp_send_json( $answer );
+		}
 		$saved                  = $this->save();
 		list( $type, $message ) = self::notice( $saved['result'] );
 		wp_send_json(
@@ -257,14 +278,14 @@ class Meil_Preferences {
 
 	/** Without JavaScript: saves, then sends the browser back to the page. */
 	public function handle_post(): void {
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- only spots the form; save() checks its nonce.
-		if ( wp_doing_ajax() || ! isset( $_POST['meil_action'] ) || self::ACTION !== $_POST['meil_action'] ) {
+		if ( wp_doing_ajax() || ! isset( $_POST['meil_prefs_nonce'] ) ) {
 			return;
 		}
+		$fresh = wp_verify_nonce( sanitize_text_field( wp_unslash( (string) $_POST['meil_prefs_nonce'] ) ), self::ACTION );
 		// Back to the same address the form was sent from (an account page may
 		// carry its own query string), without the previous result.
 		$here = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( (string) $_SERVER['REQUEST_URI'] ) ) : '/';
-		wp_safe_redirect( add_query_arg( self::RESULT, $this->save()['result'], remove_query_arg( self::RESULT, $here ) ) );
+		wp_safe_redirect( add_query_arg( self::RESULT, $fresh ? $this->save()['result'] : 'expired', remove_query_arg( self::RESULT, $here ) ) );
 		exit;
 	}
 
@@ -279,7 +300,7 @@ class Meil_Preferences {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- only picks which notice to show, after a save without JavaScript.
 		$result  = isset( $_GET[ self::RESULT ] ) ? sanitize_key( wp_unslash( (string) $_GET[ self::RESULT ] ) ) : '';
 		$message = null;
-		if ( in_array( $result, array( 'saved', 'blocked', 'error' ), true ) ) {
+		if ( in_array( $result, array( 'saved', 'blocked', 'error', 'expired' ), true ) ) {
 			list( $type, $text ) = self::notice( $result );
 			$message             = array(
 				'type' => $type,

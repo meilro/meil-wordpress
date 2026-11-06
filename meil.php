@@ -348,8 +348,6 @@ function meil_enqueue_front_assets(): void {
  * registered elsewhere (e.g. by mu-plugins tweaking mail) are already in place.
  */
 function meil_mailer_bootstrap(): void {
-	load_plugin_textdomain( 'meilro', false, dirname( plugin_basename( MEIL_MAILER_FILE ) ) . '/languages' );
-
 	$settings = meil_mailer_settings();
 	$client   = meil_mailer_client();
 	$queue    = new Meil_Queue( $client );

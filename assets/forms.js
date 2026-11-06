@@ -6,8 +6,10 @@
  * class (.meil-form__button--loading, .meil-prefs__form--loading, ...). The
  * answer is shown in the block's message line; a subscription form that
  * succeeded is hidden, the preferences tick boxes are set from what meil.ro
- * saved, and the browser notes the signup so popups do not ask again. Without
- * fetch (very old browsers) the form posts to the page as usual.
+ * saved, and the browser notes the signup so popups do not ask again. When
+ * the page's nonce has expired (a cached page), the answer brings a fresh one
+ * and the form is sent again once, unseen. Without fetch (very old browsers)
+ * the form posts to the page as usual.
  */
 (function () {
 	'use strict';
@@ -73,8 +75,6 @@
 			return; // already on its way
 		}
 
-		var data = new FormData(form);
-		data.append('action', form.getAttribute('data-meil-action'));
 		setBusy(form, prefix, true);
 		var line = block.querySelector('[data-meil-message]');
 		if (line) {
@@ -82,13 +82,39 @@
 		}
 
 		var done = false;
-		fetch(form.getAttribute('data-meil-ajax'), { method: 'POST', body: data, credentials: 'same-origin' })
-			.then(function (response) {
-				if (!response.ok) {
-					throw new Error('HTTP ' + response.status);
-				}
-				return response.json();
-			})
+		var retried = false;
+		function post() {
+			var data = new FormData(form);
+			data.append('action', form.getAttribute('data-meil-action'));
+			return fetch(form.getAttribute('data-meil-ajax'), { method: 'POST', body: data, credentials: 'same-origin' })
+				.then(function (response) {
+					if (!response.ok) {
+						throw new Error('HTTP ' + response.status);
+					}
+					return response.json();
+				})
+				.then(function (answer) {
+					// The page's nonce had expired (a cached page): once, with the fresh one.
+					if (answer.retry && answer.nonce && !retried) {
+						retried = true;
+						var field = form.querySelector('[data-meil-nonce]');
+						if (!field && answer.nonce_field) {
+							field = document.createElement('input');
+							field.type = 'hidden';
+							field.name = answer.nonce_field;
+							field.setAttribute('data-meil-nonce', '');
+							form.appendChild(field);
+						}
+						if (field) {
+							field.value = answer.nonce;
+							return post();
+						}
+					}
+					return answer;
+				});
+		}
+
+		post()
 			.then(function (answer) {
 				showMessage(block, prefix, answer.type || 'error', answer.message || form.getAttribute('data-meil-error'));
 				if (answer.choices) {

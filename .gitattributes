@@ -6,3 +6,7 @@
 .phpcs.xml.dist export-ignore
 README.md export-ignore
 .wordpress-org export-ignore
+
+# Translations come from translate.wordpress.org. The .po and .mo stay here to import there.
+languages/*.po export-ignore
+languages/*.mo export-ignore
