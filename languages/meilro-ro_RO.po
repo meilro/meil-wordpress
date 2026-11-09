@@ -8,15 +8,14 @@ msgstr ""
 "Project-Id-Version: meil.ro – Transactional Email & Newsletters 1.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/meilro/meil-wordpress/issues\n"
 "POT-Creation-Date: 2026-11-02 13:58+0200\n"
-"PO-Revision-Date: 2026-11-02 12:00+0200\n"
+"PO-Revision-Date: 2026-11-09 20:59+0200\n"
 "Last-Translator: meil.ro\n"
 "Language-Team: Romanian\n"
 "Language: ro_RO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
-"20)) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2);\n"
 
 #: meil.php:328 includes/class-meil-mailer-admin.php:99
 #: includes/class-meil-mailer-admin.php:100
@@ -41,11 +40,11 @@ msgstr "Un formular de abonare, făcut la meil.ro > Formulare."
 
 #: includes/class-meil-blocks.php:107
 msgid "meil.ro email preferences"
-msgstr "Preferințe de e-mail meil.ro"
+msgstr "Preferințe de email meil.ro"
 
 #: includes/class-meil-blocks.php:108
 msgid "Logged-in users choose which of your lists they get."
-msgstr "Utilizatorii conectați aleg ce liste de-ale tale primesc."
+msgstr "Utilizatorii autentificați aleg ce liste de-ale tale primesc."
 
 #: includes/class-meil-blocks.php:109
 msgid ""
@@ -53,9 +52,9 @@ msgid ""
 "and tick the ones they want. Visitors who are not logged in see a short "
 "message."
 msgstr ""
-"Preferințe de e-mail: pe pagină, utilizatorii conectați văd aici listele "
-"tale publice și le bifează pe cele pe care le vor. Vizitatorii neconectați "
-"văd un mesaj scurt."
+"Preferințe de email: pe pagină, utilizatorii autentificați văd aici listele "
+"tale publice și le bifează pe cele pe care le vor. Vizitatorii "
+"neautentificați văd un mesaj scurt."
 
 #: includes/class-meil-blocks.php:110 includes/class-meil-forms.php:94
 #: includes/class-meil-integrations.php:244
@@ -83,8 +82,8 @@ msgstr ""
 msgid ""
 "There are no forms yet. An administrator can build one under meil.ro > Forms."
 msgstr ""
-"Nu există încă niciun formular. Un administrator poate face unul la meil.ro "
-"> Formulare."
+"Nu există încă niciun formular. Un administrator poate face unul la meil.ro >"
+" Formulare."
 
 #: includes/class-meil-blocks.php:115
 msgid "Build a form"
@@ -114,40 +113,41 @@ msgstr "API-ul meil a răspuns cu HTTP %d."
 
 #: includes/class-meil-confirm.php:114
 msgid "Thank you, your subscription is confirmed."
-msgstr "Mulțumim, abonarea ta este confirmată."
+msgstr "Îți mulțumim, abonarea ta este confirmată."
 
 #: includes/class-meil-confirm.php:117
 msgid "Your subscription was already confirmed. Thank you!"
-msgstr "Abonarea ta era deja confirmată. Mulțumim!"
+msgstr "Abonarea ta era deja confirmată. Îți mulțumim!"
 
 #: includes/class-meil-confirm.php:120
 msgid ""
 "This confirmation link has expired. Please sign up again to get a new one."
 msgstr ""
-"Linkul de confirmare a expirat. Abonează-te din nou ca să primești unul nou."
+"Legătura de confirmare a expirat. Te rog să te abonezi din nou ca să primești"
+" una nouă."
 
 #: includes/class-meil-confirm.php:123
 msgid ""
 "This confirmation link is not valid. Please use the button in the email we "
 "sent you, or sign up again."
 msgstr ""
-"Linkul de confirmare nu este valid. Folosește butonul din e-mailul primit de "
-"la noi sau abonează-te din nou."
+"Legătura de confirmare nu este validă. Te rog să folosești butonul din "
+"emailul primit de la noi sau să te abonezi din nou."
 
 #: includes/class-meil-confirm.php:126
 msgid ""
 "Sorry, we could not confirm your subscription right now. Please try again in "
 "a few minutes."
 msgstr ""
-"Ne pare rău, nu am putut confirma abonarea acum. Încearcă din nou în câteva "
-"minute."
+"Regret, nu am putut confirma abonarea acum. Te rog să încerci din nou în "
+"câteva minute."
 
 #. translators: %s: the visitor's email address
 #: includes/class-meil-confirm.php:130
 #, php-format
 msgid "Press the button to confirm that you want to receive our emails at %s."
 msgstr ""
-"Apasă butonul ca să confirmi că vrei să primești e-mailurile noastre la %s."
+"Apasă butonul ca să confirmi că vrei să primești emailurile noastre la %s."
 
 #: includes/class-meil-confirm.php:133
 msgid "Press the button to confirm your subscription."
@@ -195,15 +195,15 @@ msgstr "Setările formularului"
 
 #: includes/class-meil-forms.php:134 includes/class-meil-forms.php:595
 msgid "Shortcode"
-msgstr "Shortcode"
+msgstr "Scurtcod"
 
 #: includes/class-meil-forms.php:139
 msgid "Save the form to get its shortcode."
-msgstr "Salvează formularul ca să primești shortcode-ul lui."
+msgstr "Salvează formularul ca să primești scurtcodul lui."
 
 #: includes/class-meil-forms.php:142
 msgid "Paste it into any page, post or widget area:"
-msgstr "Pune-l în orice pagină, articol sau zonă de widgeturi:"
+msgstr "Pune-l în orice pagină, articol sau zonă asamblabilă:"
 
 #: includes/class-meil-forms.php:165 includes/class-meil-forms.php:596
 #: includes/class-meil-mailer-admin.php:784
@@ -216,8 +216,7 @@ msgid "Add an API key under meil.ro > Settings first."
 msgstr "Mai întâi adaugă o cheie API la meil.ro > Setări."
 
 #: includes/class-meil-forms.php:173 includes/class-meil-forms.php:678
-msgid ""
-"Forms need a \"Full access\" API key. Change it under meil.ro > Settings."
+msgid "Forms need a \"Full access\" API key. Change it under meil.ro > Settings."
 msgstr ""
 "Formularele au nevoie de o cheie API cu „Acces complet”. Schimb-o la meil.ro "
 "> Setări."
@@ -245,8 +244,15 @@ msgid "Create one in meil.ro"
 msgstr "Creează una în meil.ro"
 
 #: includes/class-meil-forms.php:195
-msgid "Tick the audiences this form offers and write the label visitors see for each. With one, the form only asks for the email address. With more than one, choose below whether visitors pick from them or join all of them."
-msgstr "Bifează audiențele pe care le oferă formularul și scrie eticheta pe care o văd vizitatorii pentru fiecare. Dacă e una singură, formularul cere doar adresa de e-mail. Dacă sunt mai multe, stabilești mai jos dacă vizitatorii aleg dintre ele sau se abonează la toate."
+msgid ""
+"Tick the audiences this form offers and write the label visitors see for "
+"each. With one, the form only asks for the email address. With more than one,"
+" choose below whether visitors pick from them or join all of them."
+msgstr ""
+"Bifează audiențele pe care le oferă formularul și scrie eticheta pe care o "
+"văd vizitatorii pentru fiecare. Dacă e una singură, formularul cere doar "
+"adresa de email. Dacă sunt mai multe, stabilești mai jos dacă vizitatorii "
+"aleg dintre ele sau se abonează la toate."
 
 #: includes/class-meil-forms.php:233
 msgid "With more than one audience"
@@ -254,15 +260,19 @@ msgstr "Când sunt mai multe audiențe"
 
 #: includes/class-meil-forms.php:233
 msgid "Visitors choose, with checkboxes"
-msgstr "Vizitatorii aleg, din căsuțe"
+msgstr "Vizitatorii aleg, din bife"
 
 #: includes/class-meil-forms.php:233
 msgid "They join all of them, without checkboxes"
-msgstr "Se abonează la toate, fără căsuțe"
+msgstr "Se abonează la toate, fără bife"
 
 #: includes/class-meil-forms.php:233
-msgid "Use the second one when the form says clearly what they will receive, for example \"Get our news and offers by email\"."
-msgstr "A doua variantă e potrivită când formularul spune clar ce vor primi, de exemplu „Primește noutăți și oferte pe e-mail”."
+msgid ""
+"Use the second one when the form says clearly what they will receive, for "
+"example \"Get our news and offers by email\"."
+msgstr ""
+"A doua variantă e potrivită când formularul spune clar ce vor primi, de "
+"exemplu „Primește noutăți și oferte pe email”."
 
 #: includes/class-meil-forms.php:211
 msgid "private"
@@ -278,7 +288,7 @@ msgstr "Bifată de la început"
 
 #: includes/class-meil-forms.php:229
 msgid "Checkboxes"
-msgstr "Căsuțe de bifat"
+msgstr "Bife"
 
 #: includes/class-meil-forms.php:230
 msgid ""
@@ -287,17 +297,17 @@ msgid ""
 "answer is saved on the contact, with the text the visitor saw."
 msgstr ""
 "Pentru termenii tăi, politica de confidențialitate sau orice acceptă "
-"vizitatorii. Folosește butonul de link ca să trimiți la paginile tale. "
-"Căsuțele pornesc nebifate, iar fiecare răspuns se salvează pe contact, "
-"împreună cu textul pe care l-a văzut vizitatorul."
+"vizitatorii. Folosește butonul de legătură ca să trimiți la paginile tale. "
+"Bifele pornesc nebifate, iar fiecare răspuns se salvează pe contact, împreună"
+" cu textul pe care l-a văzut vizitatorul."
 
 #: includes/class-meil-forms.php:238
 msgid "No checkboxes yet."
-msgstr "Nicio căsuță încă."
+msgstr "Nicio bifă încă."
 
 #: includes/class-meil-forms.php:255
 msgid "Add checkbox"
-msgstr "Adaugă o căsuță"
+msgstr "Adaugă o bifă"
 
 #: includes/class-meil-forms.php:261
 msgid "Signing up"
@@ -324,8 +334,7 @@ msgstr "Confirmare"
 msgid ""
 "Ask visitors to confirm by email before they are subscribed (recommended)"
 msgstr ""
-"Cere vizitatorilor să confirme prin e-mail înainte să fie abonați "
-"(recomandat)"
+"Cere vizitatorilor să confirme prin email înainte să fie abonați (recomandat)"
 
 #: includes/class-meil-forms.php:276
 msgid ""
@@ -333,8 +342,8 @@ msgid ""
 "keeps typos and bots off your list and records when and from where they "
 "confirmed."
 msgstr ""
-"Primesc un e-mail și sunt abonați doar după ce apasă pe butonul din el. Așa "
-"nu ajung pe listă adrese greșite sau boți, iar momentul și locul confirmării "
+"Primesc un email și sunt abonați doar după ce apasă pe butonul din el. Așa nu"
+" ajung pe listă adrese greșite sau boți, iar momentul și locul confirmării "
 "rămân înregistrate."
 
 #: includes/class-meil-forms.php:280
@@ -346,13 +355,22 @@ msgid "On meil.ro's confirmation page, in your branding"
 msgstr "Pe pagina de confirmare meil.ro, cu brandingul tău"
 
 #: includes/class-meil-forms.php:293
-msgid "Or pick a page of your site. The button in the email opens it, and above its content visitors see their address, the lists they chose and a button to confirm. To show this somewhere else on the page, put [meil_confirm] there. The page must be on the domain you send from, or a subdomain of it."
-msgstr "Sau alege o pagină de pe site-ul tău. Butonul din e-mail o deschide, iar deasupra conținutului ei vizitatorii văd adresa lor, listele alese și butonul de confirmare. Ca să apară în alt loc din pagină, pune [meil_confirm] acolo. Pagina trebuie să fie pe domeniul de pe care trimiți sau pe un subdomeniu al lui."
+msgid ""
+"Or pick a page of your site. The button in the email opens it, and above its "
+"content visitors see their address, the lists they chose and a button to "
+"confirm. To show this somewhere else on the page, put [meil_confirm] there. "
+"The page must be on the domain you send from, or a subdomain of it."
+msgstr ""
+"Sau alege o pagină de pe site-ul tău. Butonul din email o deschide, iar "
+"deasupra conținutului ei vizitatorii văd adresa lor, listele alese și butonul"
+" de confirmare. Ca să apară în alt loc din pagină, pune [meil_confirm] acolo."
+" Pagina trebuie să fie pe domeniul de pe care trimiți sau pe un subdomeniu al"
+" lui."
 
 #: includes/class-meil-forms.php:298
 msgid ""
-"This page is not published, or has a password, so visitors could not open "
-"it: until that changes, they confirm on meil.ro."
+"This page is not published, or has a password, so visitors could not open it:"
+" until that changes, they confirm on meil.ro."
 msgstr ""
 "Pagina nu este publicată sau are parolă, așa că vizitatorii nu o pot "
 "deschide: până se schimbă asta, confirmă pe meil.ro."
@@ -377,8 +395,14 @@ msgstr ""
 "ului."
 
 #: includes/class-meil-forms.php:331
-msgid "With WPML or Polylang, the texts you fill in here, the list labels and the checkbox texts are translated with the site's other texts, in the \"meil.ro forms\" group, once the form is saved."
-msgstr "Cu WPML sau Polylang, textele completate aici, etichetele listelor și textele căsuțelor se traduc împreună cu celelalte texte ale site-ului, în grupul „meil.ro forms”, după ce salvezi formularul."
+msgid ""
+"With WPML or Polylang, the texts you fill in here, the list labels and the "
+"checkbox texts are translated with the site's other texts, in the \"meil.ro "
+"forms\" group, once the form is saved."
+msgstr ""
+"Cu WPML sau Polylang, textele completate aici, etichetele listelor și textele"
+" bifelor se traduc împreună cu celelalte texte ale site-ului, în grupul "
+"„meil.ro forms”, după ce salvezi formularul."
 
 #: includes/class-meil-forms.php:327
 msgid "Button"
@@ -386,7 +410,7 @@ msgstr "Buton"
 
 #: includes/class-meil-forms.php:328
 msgid "Email field placeholder"
-msgstr "Text de exemplu în câmpul de e-mail"
+msgstr "Substituentul câmpului de email"
 
 #: includes/class-meil-forms.php:329
 msgid "Message after subscribing"
@@ -406,30 +430,30 @@ msgstr "tu@exemplu.ro"
 
 #: includes/class-meil-forms.php:353
 msgid "Thank you, you are subscribed."
-msgstr "Mulțumim, te-ai abonat."
+msgstr "Îți mulțumim, te-ai abonat."
 
 #: includes/class-meil-forms.php:355
 msgid ""
 "Almost done: check your inbox and press the button in our email to confirm."
 msgstr ""
-"Aproape gata: verifică-ți e-mailul și apasă pe butonul din mesajul nostru ca "
+"Aproape gata: verifică-ți emailul și apasă pe butonul din mesajul nostru ca "
 "să confirmi."
 
 #: includes/class-meil-forms.php:357
 msgid "Get our news by email"
-msgstr "Primește noutățile noastre pe e-mail"
+msgstr "Primește noutățile noastre pe email"
 
 #: includes/class-meil-forms.php:427
 msgid "Checkbox"
-msgstr "Căsuța"
+msgstr "Bifa"
 
 #: includes/class-meil-forms.php:430
 msgid "Remove"
-msgstr "Elimină"
+msgstr "Înlătură"
 
 #: includes/class-meil-forms.php:433
 msgid "Checkbox text"
-msgstr "Textul căsuței"
+msgstr "Textul bifei"
 
 #: includes/class-meil-forms.php:438
 msgid "Required"
@@ -445,12 +469,13 @@ msgstr "Niciuna încă"
 
 #: includes/class-meil-forms.php:618
 msgid "Form saved."
-msgstr "Formular salvat."
+msgstr "Am salvat formularul."
 
 #: includes/class-meil-forms.php:651 includes/class-meil-forms.php:881
 #: templates/form.php:54
 msgid "Sorry, we could not sign you up right now. Please try again later."
-msgstr "Ne pare rău, nu te-am putut abona acum. Încearcă din nou mai târziu."
+msgstr ""
+"Regret, nu te-am putut abona acum. Te rog să încerci din nou mai târziu."
 
 #: includes/class-meil-forms.php:674
 msgid "meil_form: no saved form with this id."
@@ -464,7 +489,7 @@ msgstr ""
 
 #: includes/class-meil-forms.php:802 includes/class-meil-mailer-admin.php:899
 msgid "Enter a valid email address."
-msgstr "Scrie o adresă de e-mail validă."
+msgstr "Scrie o adresă de email validă."
 
 #: includes/class-meil-forms.php:805
 msgid "Choose at least one list."
@@ -472,14 +497,14 @@ msgstr "Alege cel puțin o listă."
 
 #: includes/class-meil-forms.php:809
 msgid "Tick the required box to continue."
-msgstr "Bifează căsuța obligatorie ca să continui."
+msgstr "Bifează opțiunea obligatorie ca să continui."
 
 #: includes/class-meil-forms.php:813
 msgid ""
 "Too many tries from your connection. Please wait a few minutes and try again."
 msgstr ""
-"Prea multe încercări de la conexiunea ta. Așteaptă câteva minute și încearcă "
-"din nou."
+"Prea multe încercări de la conexiunea ta. Te rog să aștepți câteva minute și "
+"să încerci din nou."
 
 #: includes/class-meil-forms.php:930
 msgid ""
@@ -504,21 +529,21 @@ msgstr "A trimis formularul „%s”"
 #: includes/class-meil-integrations.php:163
 #: includes/class-meil-integrations.php:191
 msgid "Form plugins"
-msgstr "Pluginuri de formulare"
+msgstr "Module de formulare"
 
 #: includes/class-meil-integrations.php:191
 msgid ""
 "Sign people up from forms you already have. Pick the audiences, the field "
-"with the email address, and who joins: those who tick a checkbox of the "
-"form, or everyone who sends it."
+"with the email address, and who joins: those who tick a checkbox of the form,"
+" or everyone who sends it."
 msgstr ""
 "Abonează oameni din formularele pe care le ai deja. Alege audiențele, câmpul "
-"cu adresa de e-mail și cine se abonează: cei care bifează o căsuță din "
+"cu adresa de email și cine se abonează: cei care bifează o opțiune din "
 "formular sau toți cei care îl trimit."
 
 #: includes/class-meil-integrations.php:194
 msgid "Saved."
-msgstr "Salvat."
+msgstr "Am salvat."
 
 #: includes/class-meil-integrations.php:195
 msgid "This form no longer signs anyone up."
@@ -527,22 +552,21 @@ msgstr "Formularul acesta nu mai abonează pe nimeni."
 #: includes/class-meil-integrations.php:196
 msgid "Pick at least one audience, the email field, and who joins."
 msgstr ""
-"Alege cel puțin o audiență, câmpul cu adresa de e-mail și cine se abonează."
+"Alege cel puțin o audiență, câmpul cu adresa de email și cine se abonează."
 
 #: includes/class-meil-integrations.php:205
 msgid ""
 "Connecting forms needs a \"Full access\" API key. Change it under meil.ro > "
 "Settings."
 msgstr ""
-"Conectarea formularelor are nevoie de o cheie API cu „Acces complet”. Schimb-"
-"o la meil.ro > Setări."
+"Conectarea formularelor are nevoie de o cheie API cu „Acces complet”. "
+"Schimb-o la meil.ro > Setări."
 
 #. translators: %s: list of form plugins
 #: includes/class-meil-integrations.php:210
 #, php-format
 msgid "None of the form plugins this works with is active: %s."
-msgstr ""
-"Niciunul dintre pluginurile de formulare compatibile nu este activ: %s."
+msgstr "Niciunul dintre modulele de formulare compatibile nu este activ: %s."
 
 #. translators: %s: error message
 #: includes/class-meil-integrations.php:233
@@ -591,7 +615,7 @@ msgstr "Adaugă în"
 
 #: includes/class-meil-integrations.php:361 templates/form.php:85
 msgid "Email address"
-msgstr "Adresa de e-mail"
+msgstr "Adresa de email"
 
 #: includes/class-meil-integrations.php:362
 msgid "Choose a field"
@@ -620,15 +644,15 @@ msgstr "Cine se abonează"
 
 #: includes/class-meil-integrations.php:381
 msgid "Only those who tick this checkbox:"
-msgstr "Doar cei care bifează căsuța:"
+msgstr "Doar cei care bifează opțiunea:"
 
 #: includes/class-meil-integrations.php:385
 msgid ""
-"This form has no checkbox. Add one in the form (for example \"Send me news "
-"by email\"), then come back."
+"This form has no checkbox. Add one in the form (for example \"Send me news by"
+" email\"), then come back."
 msgstr ""
-"Formularul nu are nicio căsuță de bifat. Adaugă una în formular (de exemplu "
-"„Vreau noutăți pe e-mail”), apoi revino aici."
+"Formularul nu are nicio bifă. Adaugă una în formular (de exemplu „Vreau "
+"noutăți pe email”), apoi revino aici."
 
 #: includes/class-meil-integrations.php:387
 msgid "Everyone who sends the form"
@@ -637,17 +661,17 @@ msgstr "Toți cei care trimit formularul"
 #: includes/class-meil-integrations.php:388
 msgid ""
 "Only for a form made to sign up, where sending it is the request. A contact "
-"form needs the checkbox: people who only wrote to you have not asked for "
-"your emails."
+"form needs the checkbox: people who only wrote to you have not asked for your"
+" emails."
 msgstr ""
 "Doar pentru un formular făcut pentru abonare, unde trimiterea lui e chiar "
-"cererea. Un formular de contact are nevoie de căsuță: cine doar ți-a scris "
-"nu ți-a cerut și e-mailurile."
+"cererea. Un formular de contact are nevoie de bifă: cine doar ți-a scris nu "
+"ți-a cerut și emailurile."
 
 #: includes/class-meil-integrations.php:394
 #: includes/class-meil-mailer-admin.php:537
 msgid "Ask them to confirm by email before they are subscribed (recommended)"
-msgstr "Cere-le să confirme prin e-mail înainte să fie abonați (recomandat)"
+msgstr "Cere-le să confirme prin email înainte să fie abonați (recomandat)"
 
 #: includes/class-meil-integrations.php:399 templates/preferences.php:92
 msgid "Save"
@@ -673,8 +697,14 @@ msgid "Connection"
 msgstr "Conexiune"
 
 #: includes/class-meil-mailer-admin.php:122
-msgid "Enter an API key created under API Keys in meil.ro for this site's domain. A \"Transactional only\" key is enough for WordPress mail. Forms and the preferences page need \"Full access\"."
-msgstr "Scrie o cheie API creată la Chei API în meil.ro pentru domeniul acestui site. Pentru e-mailurile WordPress ajunge o cheie „Doar tranzacționale”, iar formularele și pagina de preferințe au nevoie de „Acces complet”."
+msgid ""
+"Enter an API key created under API Keys in meil.ro for this site's domain. A "
+"\"Transactional only\" key is enough for WordPress mail. Forms and the "
+"preferences page need \"Full access\"."
+msgstr ""
+"Scrie o cheie API creată la Chei API în meil.ro pentru domeniul acestui site."
+" Pentru emailurile WordPress ajunge o cheie „Doar tranzacționale”, iar "
+"formularele și pagina de preferințe au nevoie de „Acces complet”."
 
 #: includes/class-meil-mailer-admin.php:128
 msgid "API key"
@@ -690,7 +720,7 @@ msgstr "Numele de expeditor implicit"
 
 #: includes/class-meil-mailer-admin.php:131
 msgid "Send WordPress mail through meil"
-msgstr "Trimite e-mailurile WordPress prin meil"
+msgstr "Trimite emailurile WordPress prin meil"
 
 #: includes/class-meil-mailer-admin.php:132
 msgid "Deleted users"
@@ -698,13 +728,13 @@ msgstr "Utilizatori șterși"
 
 #: includes/class-meil-mailer-admin.php:150
 msgid ""
-"Your own CSS classes are added after the plugin's own, on the buttons, "
-"fields and checkboxes of its forms and popups, the preferences page, the "
+"Your own CSS classes are added after the plugin's own, on the buttons, fields"
+" and checkboxes of its forms and popups, the preferences page, the "
 "confirmation page and the sign-up checkbox, so they take your theme's look. "
 "Separate several with spaces."
 msgstr ""
-"Clasele CSS proprii se adaugă după cele ale pluginului, pe butoanele, "
-"câmpurile și căsuțele formularelor și ferestrelor pop-up, ale paginii de "
+"Clasele CSS proprii se adaugă după cele ale modulului, pe butoanele, "
+"câmpurile și bifele formularelor și ferestrelor pop-up, ale paginii de "
 "preferințe, ale paginii de confirmare și pe bifa de abonare, ca să preia "
 "aspectul temei. Desparte-le cu spații."
 
@@ -722,15 +752,15 @@ msgstr "Clase pentru câmpuri"
 
 #: includes/class-meil-mailer-admin.php:158
 msgid "Checkbox classes"
-msgstr "Clase pentru căsuțe"
+msgstr "Clase pentru bife"
 
 #: includes/class-meil-mailer-admin.php:176
 msgid ""
-"Adds a \"send me news by email\" checkbox at checkout and on the "
-"registration forms. It starts unticked, and whoever ticks it is added to the "
-"audiences below."
+"Adds a \"send me news by email\" checkbox at checkout and on the registration"
+" forms. It starts unticked, and whoever ticks it is added to the audiences "
+"below."
 msgstr ""
-"Adaugă o bifă „vreau noutăți pe e-mail” la finalizarea comenzii și în "
+"Adaugă o bifă „vreau noutăți pe email” la finalizarea comenzii și în "
 "formularele de înregistrare. Pornește nebifată, iar cine o bifează e adăugat "
 "în audiențele de mai jos."
 
@@ -746,9 +776,13 @@ msgstr "Text"
 msgid ""
 "Shows one of your forms on top of your pages, when the visitor has had time "
 "to read. It is not shown again to someone who closed it, for the days you "
-"choose, nor to someone who already signed up. On phones a popup in the "
-"middle shows at the bottom instead, so it never covers the page."
-msgstr "Arată unul dintre formularele tale deasupra paginilor, după ce vizitatorul a avut timp să citească. Nu mai apare cuiva care l-a închis, câte zile alegi tu, și nici cuiva care s-a abonat deja. Pe telefon, fereastra din mijloc apare jos, ca să nu acopere pagina."
+"choose, nor to someone who already signed up. On phones a popup in the middle"
+" shows at the bottom instead, so it never covers the page."
+msgstr ""
+"Arată unul dintre formularele tale deasupra paginilor, după ce vizitatorul a "
+"avut timp să citească. Nu mai apare cuiva care l-a închis, câte zile alegi "
+"tu, și nici cuiva care s-a abonat deja. Pe telefon, fereastra din mijloc "
+"apare jos, ca să nu acopere pagina."
 
 #: includes/class-meil-mailer-admin.php:207
 msgid "Show it as"
@@ -795,7 +829,7 @@ msgstr "Acces complet"
 
 #: includes/class-meil-mailer-admin.php:350
 msgid "Emails and broadcasts"
-msgstr "E-mailuri și campanii"
+msgstr "Emailuri și campanii"
 
 #: includes/class-meil-mailer-admin.php:351
 msgid "Transactional only"
@@ -832,8 +866,8 @@ msgstr ""
 
 #: includes/class-meil-mailer-admin.php:435
 msgid ""
-"Leave it empty to use the default, which follows the site language. The "
-"exact text is saved with each contact."
+"Leave it empty to use the default, which follows the site language. The exact"
+" text is saved with each contact."
 msgstr ""
 "Lasă gol ca să folosești textul implicit, care urmează limba site-ului. "
 "Textul exact se salvează la fiecare contact."
@@ -846,12 +880,11 @@ msgstr "De exemplu %s"
 
 #: includes/class-meil-mailer-admin.php:454
 msgid ""
-"With the form styles on, the box people see on the plugin's forms is drawn "
-"by the plugin. Turn them off to let your theme style the real checkbox."
+"With the form styles on, the box people see on the plugin's forms is drawn by"
+" the plugin. Turn them off to let your theme style the real checkbox."
 msgstr ""
-"Cu stilurile formularelor pornite, căsuța pe care o văd oamenii în "
-"formularele pluginului e desenată de plugin. Oprește-le ca tema să stilizeze "
-"căsuța reală."
+"Cu stilurile formularelor pornite, bifa pe care o văd oamenii în formularele "
+"modulului e desenată de modul. Oprește-le ca tema să stilizeze bifa reală."
 
 #: includes/class-meil-mailer-admin.php:464
 msgid "A popup in the middle of the screen"
@@ -929,7 +962,7 @@ msgid ""
 "Load the plugin's styles for forms and the preferences page. Turn off to "
 "style them entirely from your theme."
 msgstr ""
-"Încarcă stilurile pluginului pentru formulare și pagina de preferințe. "
+"Încarcă stilurile modulului pentru formulare și pagina de preferințe. "
 "Oprește-le ca să le stilizezi complet din temă."
 
 #: includes/class-meil-mailer-admin.php:536
@@ -937,8 +970,8 @@ msgid ""
 "When a WordPress user is deleted, delete their meil.ro contact too, with its "
 "data."
 msgstr ""
-"Când un utilizator WordPress este șters, șterge și contactul lui din "
-"meil.ro, cu tot cu date."
+"Când un utilizator WordPress este șters, șterge și contactul lui din meil.ro,"
+" cu tot cu date."
 
 #: includes/class-meil-mailer-admin.php:559
 msgid "Save an API key first."
@@ -955,7 +988,9 @@ msgstr "Fără fereastră pop-up"
 #: includes/class-meil-mailer-admin.php:634
 msgid ""
 "This form cannot be shown yet: pick its audiences under meil.ro > Forms."
-msgstr "Formularul nu poate fi arătat încă: alege-i audiențele la meil.ro > Formulare."
+msgstr ""
+"Formularul nu poate fi arătat încă: alege-i audiențele la meil.ro > "
+"Formulare."
 
 #: includes/class-meil-mailer-admin.php:649
 msgid "Pick a form above to see the popup."
@@ -977,7 +1012,9 @@ msgstr "Previzualizarea ferestrei pop-up"
 msgid ""
 "As it opens on your site, where it also takes your theme's look. The form "
 "cannot be sent from here."
-msgstr "Așa se deschide pe site, unde preia și aspectul temei. Formularul nu poate fi trimis de aici."
+msgstr ""
+"Așa se deschide pe site, unde preia și aspectul temei. Formularul nu poate fi"
+" trimis de aici."
 
 #: includes/class-meil-mailer-admin.php:674
 msgid "General"
@@ -1005,22 +1042,22 @@ msgstr "Salvează setările"
 
 #: includes/class-meil-mailer-admin.php:716
 msgid "Send a test email"
-msgstr "Trimite un e-mail de test"
+msgstr "Trimite un email de test"
 
 #: includes/class-meil-mailer-admin.php:719
 msgid ""
 "Add an API key and turn on \"Send WordPress mail through meil\" to send a "
 "test."
 msgstr ""
-"Adaugă o cheie API și pornește „Trimite e-mailurile WordPress prin meil” ca "
-"să trimiți un test."
+"Adaugă o cheie API și pornește „Trimite emailurile WordPress prin meil” ca să"
+" trimiți un test."
 
 #: includes/class-meil-mailer-admin.php:721
 msgid ""
 "Sends through wp_mail(), the same way your site sends password resets and "
 "order emails."
 msgstr ""
-"Se trimite prin wp_mail(), la fel ca resetările de parolă și e-mailurile "
+"Se trimite prin wp_mail(), la fel ca resetările de parolă și emailurile "
 "despre comenzi."
 
 #: includes/class-meil-mailer-admin.php:726
@@ -1029,23 +1066,20 @@ msgstr "Trimite la"
 
 #: includes/class-meil-mailer-admin.php:729
 msgid "Send Test Email"
-msgstr "Trimite e-mailul de test"
+msgstr "Trimite emailul de test"
 
 #: includes/class-meil-mailer-admin.php:782
 #: includes/class-meil-sent-admin.php:34 includes/class-meil-sent-admin.php:80
 msgid "Sent emails"
-msgstr "E-mailuri trimise"
+msgstr "Emailuri trimise"
 
 #: includes/class-meil-mailer-admin.php:808
 msgid "Email preferences"
-msgstr "Preferințe de e-mail"
+msgstr "Preferințe de email"
 
 #: includes/class-meil-mailer-admin.php:811
 msgid "The preferences page needs a \"Full access\" API key."
-msgstr ""
-"Pagina de preferințe are nevoie de o cheie API cu „Acces "
-"complet”.Formularele și pagina de preferințe au nevoie de o cheie API cu "
-"„Acces complet”."
+msgstr "Pagina de preferințe are nevoie de o cheie API cu „Acces complet”."
 
 #. translators: 1: the shortcode, 2: the API key's domain
 #: includes/class-meil-mailer-admin.php:818
@@ -1055,9 +1089,9 @@ msgid ""
 "logged-in users see the public audiences of %2$s and choose which ones they "
 "get. Visitors who are not logged in see a message instead."
 msgstr ""
-"Pune blocul „Preferințe de e-mail meil.ro” sau %1$s pe o pagină de cont: "
-"utilizatorii conectați văd audiențele publice ale %2$s și aleg ce primesc. "
-"Vizitatorii neconectați văd în loc un mesaj."
+"Pune blocul „Preferințe de email meil.ro” sau %1$s pe o pagină de cont: "
+"utilizatorii autentificați văd audiențele publice ale %2$s și aleg ce "
+"primesc. Vizitatorii neautentificați văd în loc un mesaj."
 
 #. translators: %s: the shortcode
 #: includes/class-meil-mailer-admin.php:825
@@ -1067,23 +1101,23 @@ msgid ""
 "in users see the public audiences of all your domains and choose which ones "
 "they get. Visitors who are not logged in see a message instead."
 msgstr ""
-"Pune blocul „Preferințe de e-mail meil.ro” sau %s pe o pagină de cont: "
-"utilizatorii conectați văd audiențele publice ale tuturor domeniilor tale și "
-"aleg ce primesc. Vizitatorii neconectați văd în loc un mesaj."
+"Pune blocul „Preferințe de email meil.ro” sau %s pe o pagină de cont: "
+"utilizatorii autentificați văd audiențele publice ale tuturor domeniilor tale"
+" și aleg ce primesc. Vizitatorii neautentificați văd în loc un mesaj."
 
 #. translators: %s: site name
 #: includes/class-meil-mailer-admin.php:865
 #, php-format
 msgid "Test email from %s"
-msgstr "E-mail de test de la %s"
+msgstr "Email de test de la %s"
 
 #: includes/class-meil-mailer-admin.php:868
 msgid ""
 "This is a test email sent by the meil.ro plugin. If you received this, "
 "WordPress mail is going through meil."
 msgstr ""
-"Acesta este un e-mail de test trimis de pluginul meil.ro. Dacă l-ai primit, "
-"e-mailurile WordPress trec prin meil."
+"Acesta este un email de test trimis de modulul meil.ro. Dacă l-ai primit, "
+"emailurile WordPress trec prin meil."
 
 #: includes/class-meil-mailer-admin.php:876
 msgid "wp_mail() returned false."
@@ -1091,21 +1125,21 @@ msgstr "wp_mail() a răspuns cu false."
 
 #: includes/class-meil-mailer-admin.php:895
 msgid "Test email sent."
-msgstr "E-mailul de test a fost trimis."
+msgstr "Am trimis emailul de test."
 
 #: includes/class-meil-mailer-admin.php:897
 msgid ""
 "meil.ro could not be reached, so the test email is waiting under meil.ro > "
 "Unsent and will be tried again on its own."
 msgstr ""
-"meil.ro nu a putut fi contactat, așa că e-mailul de test așteaptă la meil.ro "
-"> Netrimise și va fi trimis din nou automat."
+"meil.ro nu a putut fi contactat, așa că emailul de test așteaptă la meil.ro >"
+" Netrimise și va fi trimis din nou automat."
 
 #. translators: %s: error message from the meil API
 #: includes/class-meil-mailer-admin.php:905
 #, php-format
 msgid "Test email failed: %s"
-msgstr "E-mailul de test nu a putut fi trimis: %s"
+msgstr "Emailul de test nu a putut fi trimis: %s"
 
 #: includes/class-meil-mailer.php:65
 msgid "meil: no recipient address."
@@ -1113,43 +1147,43 @@ msgstr "meil: nu există adresă de destinatar."
 
 #: includes/class-meil-preferences.php:63
 msgid "Your choices are saved."
-msgstr "Alegerile tale au fost salvate."
+msgstr "Am salvat alegerile tale."
 
 #: includes/class-meil-preferences.php:65
 msgid ""
-"Some lists could not be turned on for this address, because earlier emails "
-"to it were not delivered or were marked as spam. Contact us if this is a "
+"Some lists could not be turned on for this address, because earlier emails to"
+" it were not delivered or were marked as spam. Contact us if this is a "
 "mistake."
 msgstr ""
-"Unele liste nu au putut fi pornite pentru această adresă, pentru că e-"
-"mailurile anterioare nu au ajuns sau au fost marcate ca spam. Scrie-ne dacă "
+"Unele liste nu au putut fi pornite pentru această adresă, pentru că "
+"emailurile anterioare nu au ajuns sau au fost marcate ca spam. Scrie-ne dacă "
 "e o greșeală."
 
 #: includes/class-meil-preferences.php:67 templates/preferences.php:47
 msgid "Your email preferences are available once you are logged in."
-msgstr "Preferințele tale de e-mail sunt disponibile după ce te autentifici."
+msgstr "Preferințele tale de email sunt disponibile după ce te autentifici."
 
 #: includes/class-meil-preferences.php:69 templates/preferences.php:60
 msgid ""
 "Sorry, your choices could not be saved right now. Please try again later."
 msgstr ""
-"Ne pare rău, alegerile tale nu au putut fi salvate acum. Încearcă din nou "
-"mai târziu."
+"Regret, nu am putut salva alegerile tale acum. Te rog să încerci din nou mai "
+"târziu."
 
 #: includes/class-meil-preferences.php:271
 msgid ""
-"The email preferences need a \"Full access\" API key. Change it under "
-"meil.ro > Settings."
+"The email preferences need a \"Full access\" API key. Change it under meil.ro"
+" > Settings."
 msgstr ""
-"Preferințele de e-mail au nevoie de o cheie API cu „Acces complet”. Schimb-o "
+"Preferințele de email au nevoie de o cheie API cu „Acces complet”. Schimb-o "
 "la meil.ro > Setări."
 
 #: includes/class-meil-preferences.php:310
 msgid ""
 "Your email preferences cannot be shown right now. Please try again later."
 msgstr ""
-"Preferințele tale de e-mail nu pot fi afișate acum. Încearcă din nou mai "
-"târziu."
+"Preferințele tale de email nu pot fi afișate acum. Te rog să încerci din nou "
+"mai târziu."
 
 #: includes/class-meil-queue-admin.php:38
 #: includes/class-meil-queue-admin.php:86
@@ -1161,9 +1195,9 @@ msgstr "Netrimise"
 #, php-format
 msgid "meil.ro: %s email or sign-up could not be sent."
 msgid_plural "meil.ro: %s emails or sign-ups could not be sent."
-msgstr[0] "meil.ro: %s e-mail sau abonare nu a putut fi trimis."
-msgstr[1] "meil.ro: %s e-mailuri sau abonări nu au putut fi trimise."
-msgstr[2] "meil.ro: %s de e-mailuri sau abonări nu au putut fi trimise."
+msgstr[0] "meil.ro: %s email sau abonare nu a putut fi trimis."
+msgstr[1] "meil.ro: %s emailuri sau abonări nu au putut fi trimise."
+msgstr[2] "meil.ro: %s de emailuri sau abonări nu au putut fi trimise."
 
 #: includes/class-meil-queue-admin.php:70
 msgid "See why"
@@ -1172,13 +1206,13 @@ msgstr "Vezi de ce"
 #: includes/class-meil-queue-admin.php:86
 msgid ""
 "When meil.ro cannot be reached, emails and sign-ups wait here and are tried "
-"again on their own for up to 22 hours. The ones meil.ro refused stay here "
-"for 30 days, with the reason, so you can fix the cause and send them again."
+"again on their own for up to 22 hours. The ones meil.ro refused stay here for"
+" 30 days, with the reason, so you can fix the cause and send them again."
 msgstr ""
-"Când meil.ro nu poate fi contactat, e-mailurile și abonările așteaptă aici "
-"și sunt încercate din nou automat, timp de până la 22 de ore. Cele refuzate "
-"de meil.ro rămân aici 30 de zile, cu motivul, ca să poți rezolva problema și "
-"să le trimiți din nou."
+"Când meil.ro nu poate fi contactat, emailurile și abonările așteaptă aici și "
+"sunt încercate din nou automat, timp de până la 22 de ore. Cele refuzate de "
+"meil.ro rămân aici 30 de zile, cu motivul, ca să poți rezolva problema și să "
+"le trimiți din nou."
 
 #: includes/class-meil-queue-admin.php:90
 msgid "Nothing is waiting, and nothing failed."
@@ -1240,7 +1274,7 @@ msgstr "Șterge toate cele eșuate"
 
 #: includes/class-meil-queue-admin.php:183
 msgid "Sent."
-msgstr "Trimis."
+msgstr "Am trimis."
 
 #: includes/class-meil-queue-admin.php:184
 msgid "meil.ro still cannot be reached. It will be tried again on its own."
@@ -1252,7 +1286,7 @@ msgstr "meil.ro l-a refuzat din nou. Motivul e în listă."
 
 #: includes/class-meil-queue-admin.php:186
 msgid "Deleted."
-msgstr "Șters."
+msgstr "Am șters."
 
 #: includes/class-meil-sent-admin.php:40
 msgid "Delivered"
@@ -1291,17 +1325,17 @@ msgid ""
 "The emails your site and your other apps sent through meil.ro, newest first, "
 "and what became of each. Campaigns are in the meil.ro dashboard."
 msgstr ""
-"E-mailurile trimise prin meil.ro de site și de celelalte aplicații ale tale, "
+"Emailurile trimise prin meil.ro de site și de celelalte aplicații ale tale, "
 "cele mai noi primele, și ce s-a întâmplat cu fiecare. Campaniile sunt în "
 "panoul meil.ro."
 
 #: includes/class-meil-sent-admin.php:84
 msgid "This API key cannot read sent emails."
-msgstr "Cheia API nu poate citi e-mailurile trimise."
+msgstr "Cheia API nu poate citi emailurile trimise."
 
 #: includes/class-meil-sent-admin.php:106
 msgid "No emails yet."
-msgstr "Încă niciun e-mail."
+msgstr "Încă niciun email."
 
 #: includes/class-meil-sent-admin.php:124
 msgid "(no subject)"
@@ -1317,11 +1351,11 @@ msgstr "Mai vechi"
 
 #: includes/class-meil-sent-admin.php:150
 msgid "All sent emails"
-msgstr "Toate e-mailurile trimise"
+msgstr "Toate emailurile trimise"
 
 #: includes/class-meil-sent-admin.php:154
 msgid "This email was not found."
-msgstr "E-mailul nu a fost găsit."
+msgstr "Emailul nu a fost găsit."
 
 #: includes/class-meil-sent-admin.php:162
 msgid "From"
@@ -1356,16 +1390,16 @@ msgid ""
 "meil.ro keeps the content of an email for 30 days. This one is older, or was "
 "sent without it being kept."
 msgstr ""
-"meil.ro păstrează conținutul unui e-mail 30 de zile. Acesta e mai vechi sau "
-"a fost trimis fără să i se păstreze conținutul."
+"meil.ro păstrează conținutul unui email 30 de zile. Acesta e mai vechi sau a "
+"fost trimis fără să i se păstreze conținutul."
 
 #: includes/class-meil-sent-admin.php:208
 msgid "Email preview"
-msgstr "Previzualizare e-mail"
+msgstr "Previzualizare email"
 
 #: includes/class-meil-signup.php:78
 msgid "Send me news and offers by email"
-msgstr "Vreau să primesc pe e-mail noutăți și oferte"
+msgstr "Vreau să primesc pe email noutăți și oferte"
 
 #. translators: 1: the form's name, 2: the page it is on
 #: includes/integrations/class-meil-integration-elementor.php:63
@@ -1397,7 +1431,7 @@ msgstr "Închide"
 
 #: templates/preferences.php:48
 msgid "Log in"
-msgstr "Autentifică-te"
+msgstr "Autentificare"
 
 #: templates/preferences.php:56
 msgid "There are no lists to choose from yet."
@@ -1407,14 +1441,14 @@ msgstr "Nu există încă liste din care să alegi."
 #: templates/preferences.php:69
 #, php-format
 msgid "Emails we send to %s"
-msgstr "E-mailurile pe care le trimitem la %s"
+msgstr "Emailurile pe care le trimitem la %s"
 
 #: templates/preferences.php:84
 msgid ""
 "Waiting for you to confirm from the email we sent. Saving with this ticked "
 "subscribes you now."
 msgstr ""
-"Așteaptă confirmarea ta din e-mailul trimis. Dacă salvezi cu bifa pusă, te "
+"Așteaptă confirmarea ta din emailul trimis. Dacă salvezi cu bifa pusă, te "
 "abonezi chiar acum."
 
 #: includes/class-meil-mailer-admin.php
@@ -1424,33 +1458,58 @@ msgstr "Mod de test"
 #. Plugin Name of the plugin
 #: meil.php
 msgid "meil.ro – Transactional Email & Newsletters"
-msgstr "meil.ro – E-mailuri tranzacționale și newslettere"
+msgstr "meil.ro – Transactional Email & Newsletters"
 
 #. Description of the plugin
 #: meil.php
-msgid "Sends WordPress emails through meil.ro and gathers subscribers with forms, a popup and a checkbox at checkout."
-msgstr "Trimite e-mailurile WordPress prin meil.ro și adună abonați cu formulare, o fereastră pop-up și o bifă la finalizarea comenzii."
+msgid ""
+"Sends WordPress emails through meil.ro and gathers subscribers with forms, a "
+"popup and a checkbox at checkout."
+msgstr ""
+"Trimite emailurile WordPress prin meil.ro și adună abonați cu formulare, o "
+"fereastră pop-up și o bifă la finalizarea comenzii."
 
 #: includes/class-meil-confirm.php
-msgid "This is where visitors confirm their subscription: they arrive here from the button in the confirmation email. To see what they see, turn on test mode in meil.ro > Settings > Forms look. Only you see this note."
-msgstr "Aici își confirmă vizitatorii abonarea: ajung pe această pagină din butonul din e-mailul de confirmare. Ca să vezi ce văd ei, pornește modul de test din meil.ro > Setări > Aspectul formularelor. Doar tu vezi această notă."
+msgid ""
+"This is where visitors confirm their subscription: they arrive here from the "
+"button in the confirmation email. To see what they see, turn on test mode in "
+"meil.ro > Settings > Forms look. Only you see this note."
+msgstr ""
+"Aici își confirmă vizitatorii abonarea: ajung pe această pagină din butonul "
+"din emailul de confirmare. Ca să vezi ce văd ei, pornește modul de test din "
+"meil.ro > Setări > Aspectul formularelor. Doar tu vezi această notă."
 
 #: includes/class-meil-confirm.php
-msgid "Test mode: below is what visitors see here. First the button they press to confirm, then the message once they have confirmed, then the one for an expired link. Only you see these examples."
-msgstr "Mod de test: mai jos e ce văd vizitatorii aici. Întâi butonul pe care îl apasă ca să confirme, apoi mesajul de după confirmare, apoi cel pentru un link expirat. Doar tu vezi aceste exemple."
+msgid ""
+"Test mode: below is what visitors see here. First the button they press to "
+"confirm, then the message once they have confirmed, then the one for an "
+"expired link. Only you see these examples."
+msgstr ""
+"Mod de test: mai jos e ce văd vizitatorii aici. Întâi butonul pe care îl "
+"apasă ca să confirme, apoi mesajul de după confirmare, apoi cel pentru o "
+"legătură expirată. Doar tu vezi aceste exemple."
 
 #: includes/class-meil-confirm.php
 msgid "Newsletter"
 msgstr "Newsletter"
 
 #: includes/class-meil-mailer-admin.php
-msgid "Administrators see the popup on every page right away, even after closing it or signing up, and the confirmation page shows examples of what visitors see there. This lets you design both with your theme. Visitors see the site as usual."
-msgstr "Administratorii văd fereastra pop-up pe orice pagină, imediat, chiar dacă au închis-o sau s-au abonat, iar pagina de confirmare arată exemple cu ce văd vizitatorii acolo. Așa le poți aranja pe amândouă după tema ta. Vizitatorii văd site-ul ca de obicei."
+msgid ""
+"Administrators see the popup on every page right away, even after closing it "
+"or signing up, and the confirmation page shows examples of what visitors see "
+"there. This lets you design both with your theme. Visitors see the site as "
+"usual."
+msgstr ""
+"Administratorii văd fereastra pop-up pe orice pagină, imediat, chiar dacă au "
+"închis-o sau s-au abonat, iar pagina de confirmare arată exemple cu ce văd "
+"vizitatorii acolo. Așa le poți aranja pe amândouă după tema ta. Vizitatorii "
+"văd site-ul ca de obicei."
 
 #: meil.php
 msgid "meil.ro: test mode"
 msgstr "meil.ro: mod de test"
 
-#: includes/class-meil-forms.php includes/class-meil-preferences.php includes/class-meil-confirm.php
+#: includes/class-meil-forms.php includes/class-meil-preferences.php
+#: includes/class-meil-confirm.php
 msgid "This page was open for a while. Please press the button again."
-msgstr "Pagina a fost deschisă de ceva vreme. Apasă din nou butonul."
+msgstr "Pagina a fost deschisă de ceva vreme. Te rog să apeși din nou butonul."
