@@ -19,7 +19,7 @@ Requires WordPress 5.9+ and PHP 7.4+.
 
 ## Install
 
-In WordPress, go to **Plugins → Add New**, search for **meil.ro** and install it. Then open **meil.ro** in the admin menu and paste an API key from [meil.ro/api-keys](https://meil.ro/api-keys).
+In WordPress, go to **Plugins → Add New**, search for **meil.ro** and install it, or get it from [wordpress.org/plugins/meilro](https://wordpress.org/plugins/meilro/). Then open **meil.ro** in the admin menu and paste an API key from [meil.ro/api-keys](https://meil.ro/api-keys).
 
 Setup steps, FAQ and changelog are in [readme.txt](readme.txt), which is also the WordPress.org listing.
 
