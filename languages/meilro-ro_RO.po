@@ -1513,3 +1513,15 @@ msgstr "meil.ro: mod de test"
 #: includes/class-meil-confirm.php
 msgid "This page was open for a while. Please press the button again."
 msgstr "Pagina a fost deschisă de ceva vreme. Te rog să apeși din nou butonul."
+
+#: includes/class-meil-mailer-admin.php
+msgid "Visitor IP"
+msgstr "IP-ul vizitatorului"
+
+#: includes/class-meil-mailer-admin.php
+msgid "Automatic (Cloudflare, or my host)"
+msgstr "Automat (Cloudflare sau gazda mea)"
+
+#: includes/class-meil-mailer-admin.php
+msgid "Where the visitor's IP address comes from, saved as proof of each sign-up. Leave it on automatic unless a service other than Cloudflare stands in front of your site, such as Sucuri or a CDN. Then pick the header that service sends."
+msgstr "De unde vine adresa IP a vizitatorului, salvată ca dovadă la fiecare înscriere. Las-o pe automat, în afară de cazul în care în fața site-ului stă alt serviciu decât Cloudflare, cum ar fi Sucuri sau un CDN. Atunci alege antetul pe care îl trimite acel serviciu."

@@ -37,7 +37,7 @@ The plugin talks to the meil.ro API (`https://api.meil.ro`), and only after you 
 What it sends:
 
 * **Emails**, when "Send WordPress mail through meil" is on: every email sent with `wp_mail()`, with its addresses, subject, content, headers and attachments.
-* **Sign-ups**, from the plugin's forms and popup, the sign-up checkbox and connected form plugins: the email address, the name if the form asks for it, the chosen lists, the checkbox answers with their text, where they signed up and the site language. With email confirmation, also the confirmation and thank-you page addresses. Without it, the time and the visitor's IP address, as proof of consent.
+* **Sign-ups**, from the plugin's forms and popup, the sign-up checkbox and connected form plugins: the email address, the name if the form asks for it, the chosen lists, the checkbox answers with their text and the site language. With email confirmation, also the confirmation and thank-you page addresses. The visitor's IP address goes along as proof of consent.
 * **Confirming on your site**: the token from the confirmation email, plus the visitor's IP address when they press the button.
 * **Email preferences**: the logged-in user's email address. When they join a list for the first time, also their name, the time and their IP address.
 * **User changes**: the old and new address when a user changes their email, and a deleted user's address if "Deleted users" is on.

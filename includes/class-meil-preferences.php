@@ -195,11 +195,7 @@ class Meil_Preferences {
 			$payload = array(
 				'audience_ids' => $wanted,
 				'email'        => $email,
-				'properties'   => array(
-					'consent_timestamp' => gmdate( 'c' ),
-					'consent_ip'        => meil_visitor_ip(),
-					'source'            => 'wordpress_account',
-				),
+				'ip'           => meil_visitor_ip(), // Kept on each list, next to the date, as proof.
 			);
 			if ( '' !== (string) $user->first_name ) {
 				$payload['first_name'] = (string) $user->first_name;

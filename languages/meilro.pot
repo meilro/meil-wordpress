@@ -1345,3 +1345,15 @@ msgstr ""
 #: includes/class-meil-forms.php includes/class-meil-preferences.php includes/class-meil-confirm.php
 msgid "This page was open for a while. Please press the button again."
 msgstr ""
+
+#: includes/class-meil-mailer-admin.php
+msgid "Visitor IP"
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php
+msgid "Automatic (Cloudflare, or my host)"
+msgstr ""
+
+#: includes/class-meil-mailer-admin.php
+msgid "Where the visitor's IP address comes from, saved as proof of each sign-up. Leave it on automatic unless a service other than Cloudflare stands in front of your site, such as Sucuri or a CDN. Then pick the header that service sends."
+msgstr ""

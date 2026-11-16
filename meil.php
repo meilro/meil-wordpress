@@ -86,6 +86,7 @@ function meil_mailer_settings(): array {
 		'test_mode'        => false,
 		'key_domain'       => '',
 		'key_permission'   => '',
+		'ip_header'        => '',
 	);
 	$saved    = get_option( MEIL_MAILER_OPTION, array() );
 	return wp_parse_args( is_array( $saved ) ? $saved : array(), $defaults );
@@ -134,6 +135,32 @@ function meil_mailer_client(): Meil_Client {
 }
 
 /**
+ * The name this site saves a property under on a contact: the site's own name
+ * first, as in alta_consent_ip for alta.ro. A contact is shared by every site
+ * of the meil.ro account and keeps one value per property, so each site's
+ * answers need names of their own, or only the first site's would be kept.
+ *
+ * @param string $name The property's own name, like consent_ip.
+ */
+function meil_property( string $name ): string {
+	return meil_site_label() . '_' . $name;
+}
+
+/**
+ * This site's name for its properties: alta for alta.ro, www.alta.ro or
+ * alta.co.uk, "site" when the address has none. At most 30 characters, so a
+ * property built on it stays within meil.ro's 64.
+ */
+function meil_site_label(): string {
+	$host  = (string) preg_replace( '/^www\./', '', strtolower( (string) wp_parse_url( home_url(), PHP_URL_HOST ) ) );
+	$parts = explode( '.', $host );
+	$count = count( $parts );
+	$index = $count >= 3 && in_array( $parts[ $count - 2 ], array( 'co', 'com', 'org', 'net', 'gov', 'edu', 'ac' ), true ) ? $count - 3 : max( 0, $count - 2 );
+	$label = trim( (string) preg_replace( '/[^a-z0-9]+/', '_', (string) ( $parts[ $index ] ?? '' ) ), '_' );
+	return '' !== $label ? substr( $label, 0, 30 ) : 'site';
+}
+
+/**
  * The visitor's IP address, for the consent record and the limits against bots.
  *
  * Behind Cloudflare, REMOTE_ADDR is Cloudflare's server and the visitor is in
@@ -147,13 +174,26 @@ function meil_mailer_client(): Meil_Client {
  * visitor can only write the start. Where nothing in front adds the header, a
  * visitor could write it in full, but only to change their own record.
  *
- * Other proxies with public addresses can supply the address with the
- * 'meil_visitor_ip' filter.
+ * Behind another service (Sucuri, a CDN), the site names the header it sends
+ * in the settings (Visitor IP, see meil_ip_headers()). From a list such as
+ * X-Forwarded-For, the last public address is the visitor: each proxy adds the
+ * one it saw to the end, and a visitor can only write the start. Code can also
+ * supply the address with the 'meil_visitor_ip' filter.
  */
 function meil_visitor_ip(): string {
 	$remote = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( (string) $_SERVER['REMOTE_ADDR'] ) ) : '';
 	$remote = filter_var( $remote, FILTER_VALIDATE_IP ) ? $remote : '';
-	$ip     = $remote;
+	$header = (string) meil_mailer_settings()['ip_header'];
+	if ( isset( meil_ip_headers()[ $header ], $_SERVER[ $header ] ) ) {
+		$chain = explode( ',', substr( sanitize_text_field( wp_unslash( (string) $_SERVER[ $header ] ) ), 0, 1000 ) );
+		foreach ( array_reverse( $chain ) as $entry ) {
+			$entry = meil_bare_ip( $entry );
+			if ( '' !== $entry && ! meil_is_private_ip( $entry ) ) {
+				return (string) apply_filters( 'meil_visitor_ip', $entry, $remote );
+			}
+		}
+	}
+	$ip = $remote;
 	if ( '' !== $remote && meil_is_cloudflare( $remote ) ) {
 		$cf = isset( $_SERVER['HTTP_CF_CONNECTING_IP'] ) ? sanitize_text_field( wp_unslash( (string) $_SERVER['HTTP_CF_CONNECTING_IP'] ) ) : '';
 		$ip = filter_var( $cf, FILTER_VALIDATE_IP ) ? $cf : $remote;
@@ -180,6 +220,22 @@ function meil_bare_ip( string $entry ): string {
 		$entry = $m[1];
 	}
 	return filter_var( $entry, FILTER_VALIDATE_IP ) ? $entry : '';
+}
+
+/**
+ * The headers a site can name in the settings as holding the visitor's IP
+ * address, for a service other than Cloudflare in front of it.
+ *
+ * @return array<string,string> The $_SERVER key => what the settings show.
+ */
+function meil_ip_headers(): array {
+	return array(
+		'HTTP_X_FORWARDED_FOR'   => 'X-Forwarded-For',
+		'HTTP_X_REAL_IP'         => 'X-Real-IP',
+		'HTTP_X_SUCURI_CLIENTIP' => 'X-Sucuri-ClientIP (Sucuri)',
+		'HTTP_FASTLY_CLIENT_IP'  => 'Fastly-Client-IP (Fastly)',
+		'HTTP_TRUE_CLIENT_IP'    => 'True-Client-IP (Akamai)',
+	);
 }
 
 /** Is this address one of Cloudflare's (https://www.cloudflare.com/ips/)? */

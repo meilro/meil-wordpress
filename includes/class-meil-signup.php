@@ -123,7 +123,7 @@ class Meil_Signup {
 		}
 		$order->update_meta_data( self::ORDER_META, 'yes' );
 		$order->save_meta_data();
-		$this->subscribe( $order->get_billing_email(), $order->get_billing_first_name(), $order->get_billing_last_name(), 'woocommerce_checkout' );
+		$this->subscribe( $order->get_billing_email(), $order->get_billing_first_name(), $order->get_billing_last_name() );
 	}
 
 	/** Checkout block: the same checkbox as an additional field, under the order notes. */
@@ -162,7 +162,7 @@ class Meil_Signup {
 		if ( 'yes' !== $order->get_meta( self::ORDER_META ) && '1' !== (string) $order->get_meta( '_wc_other/' . self::BLOCK_FIELD ) ) {
 			return;
 		}
-		$this->subscribe( $order->get_billing_email(), $order->get_billing_first_name(), $order->get_billing_last_name(), 'woocommerce_checkout' );
+		$this->subscribe( $order->get_billing_email(), $order->get_billing_first_name(), $order->get_billing_last_name() );
 	}
 
 	/* --------------------------------------------------------- registration */
@@ -202,35 +202,29 @@ class Meil_Signup {
 		}
 		$user = get_userdata( (int) $user_id );
 		if ( $user ) {
-			$this->subscribe( (string) $user->user_email, (string) $user->first_name, (string) $user->last_name, 'wordpress_register' );
+			$this->subscribe( (string) $user->user_email, (string) $user->first_name, (string) $user->last_name );
 		}
 	}
 
 	/* ---------------------------------------------------------------- shared */
 
-	private function subscribe( string $email, string $first_name, string $last_name, string $source ): void {
+	private function subscribe( string $email, string $first_name, string $last_name ): void {
 		$email = strtolower( trim( $email ) );
 		if ( ! is_email( $email ) || isset( self::$done[ $email ] ) ) {
 			return;
 		}
 		self::$done[ $email ] = true;
 
-		$confirm    = ! empty( $this->settings['signup_confirm'] );
-		$properties = array(
-			'source'      => $source,
-			'signup_text' => self::label(),
-		);
-		// With confirmation, meil.ro records when and from where they confirmed.
-		if ( ! $confirm ) {
-			$properties = array(
-				'consent_timestamp' => gmdate( 'c' ),
-				'consent_ip'        => meil_visitor_ip(),
-			) + $properties;
-		}
+		// The words of the checkbox they ticked, under this site's own name
+		// (meil_property()). The visitor's IP goes with the sign-up (ip): meil.ro keeps it on
+		// each list, next to the date, as proof. With confirmation it also
+		// records when and from where they confirmed.
+		$confirm = ! empty( $this->settings['signup_confirm'] );
 		$payload = array(
 			'audience_ids' => array_values( array_map( 'strval', (array) $this->settings['signup_audiences'] ) ),
 			'email'        => $email,
-			'properties'   => $properties,
+			'ip'           => meil_visitor_ip(),
+			'properties'   => array( meil_property( 'signup_text' ) => self::label() ),
 		);
 		if ( '' !== trim( $first_name ) ) {
 			$payload['first_name'] = trim( $first_name );

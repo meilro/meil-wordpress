@@ -129,6 +129,7 @@ class Meil_Mailer_Admin {
 			'from_name'        => __( 'Default from name', 'meilro' ),
 			'override_wp_mail' => __( 'Send WordPress mail through meil', 'meilro' ),
 			'delete_with_user' => __( 'Deleted users', 'meilro' ),
+			'ip_header'        => __( 'Visitor IP', 'meilro' ),
 		);
 		foreach ( $fields as $field => $label ) {
 			add_settings_field(
@@ -288,6 +289,7 @@ class Meil_Mailer_Admin {
 			'from_name'        => sanitize_text_field( (string) ( $input['from_name'] ?? '' ) ),
 			'override_wp_mail' => ! empty( $input['override_wp_mail'] ),
 			'delete_with_user' => ! empty( $input['delete_with_user'] ),
+			'ip_header'        => isset( meil_ip_headers()[ (string) ( $input['ip_header'] ?? '' ) ] ) ? (string) $input['ip_header'] : '',
 			'key_domain'       => '',
 			'key_permission'   => '',
 		) + $look + $signup + $popup;
@@ -526,6 +528,14 @@ class Meil_Mailer_Admin {
 				break;
 			case 'popup_preview':
 				$this->render_popup_preview( $settings );
+				break;
+			case 'ip_header':
+				printf( '<select id="%1$s" name="%2$s">', esc_attr( $id ), esc_attr( $name ) );
+				foreach ( array( '' => __( 'Automatic (Cloudflare, or my host)', 'meilro' ) ) + meil_ip_headers() as $option => $text ) {
+					printf( '<option value="%1$s" %2$s>%3$s</option>', esc_attr( $option ), selected( (string) $value, $option, false ), esc_html( $text ) );
+				}
+				echo '</select>';
+				echo '<p class="description">' . esc_html__( 'Where the visitor\'s IP address comes from, saved as proof of each sign-up. Leave it on automatic unless a service other than Cloudflare stands in front of your site, such as Sucuri or a CDN. Then pick the header that service sends.', 'meilro' ) . '</p>';
 				break;
 			case 'override_wp_mail':
 			case 'load_css':

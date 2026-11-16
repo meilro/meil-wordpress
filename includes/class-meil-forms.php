@@ -449,7 +449,7 @@ class Meil_Forms {
 	 */
 	private static function render_checkbox_row( string $key, int $number, array $checkbox ): void {
 		$name        = 'meil_checkboxes[' . $key . ']';
-		$placeholder = 'checkbox_' . ( $number > 0 ? $number : '__n__' );
+		$placeholder = meil_property( 'checkbox_' . ( $number > 0 ? $number : '__n__' ) );
 		?>
 		<div class="meil-fa-card" data-meil-checkbox>
 			<div class="meil-fa-card__head">
@@ -537,7 +537,8 @@ class Meil_Forms {
 
 	/**
 	 * The posted checkboxes, cleaned: empty ones dropped, each with a property
-	 * name that is safe and unique ("checkbox_1" when none was given).
+	 * name that is safe and unique ("alta_checkbox_1" when none was given, see
+	 * meil_property()).
 	 *
 	 * @param mixed $posted
 	 * @return list<array{text:string,required:bool,property:string}>
@@ -554,7 +555,7 @@ class Meil_Forms {
 				continue;
 			}
 			$property = trim( (string) preg_replace( '/[^a-z0-9_]+/', '_', strtolower( (string) ( $row['property'] ?? '' ) ) ), '_' );
-			$property = substr( '' !== $property ? $property : 'checkbox_' . ( count( $out ) + 1 ), 0, 58 );
+			$property = substr( '' !== $property ? $property : meil_property( 'checkbox_' . ( count( $out ) + 1 ) ), 0, 58 );
 			while ( isset( $used[ $property ] ) ) {
 				$property = substr( $property, 0, 54 ) . '_' . ( count( $out ) + 1 );
 			}
@@ -1026,16 +1027,10 @@ class Meil_Forms {
 			return $error( __( 'Too many tries from your connection. Please wait a few minutes and try again.', 'meilro' ) );
 		}
 
-		// With confirmation, meil.ro records when and from where the person
-		// confirmed (confirmed_at, confirmed_ip): that is the proof, so the form
-		// keeps no IP of its own. Without it, the form's record is the only one.
-		$properties = array( 'source' => 'wordpress' );
-		if ( empty( $form['confirm'] ) ) {
-			$properties = array(
-				'consent_timestamp' => gmdate( 'c' ),
-				'consent_ip'        => meil_visitor_ip(),
-			) + $properties;
-		}
+		// The visitor's IP goes with the sign-up (ip): meil.ro keeps it on
+		// each list, next to the date, as proof. With confirmation it also
+		// records when and from where they confirmed.
+		$properties = array();
 		// Each checkbox: whether it was ticked, and the words the visitor saw,
 		// so it can be shown later what exactly they agreed to.
 		foreach ( array_values( (array) $form['checkboxes'] ) as $i => $checkbox ) {
@@ -1046,6 +1041,7 @@ class Meil_Forms {
 		$payload = array(
 			'audience_ids' => $chosen,
 			'email'        => $email,
+			'ip'           => meil_visitor_ip(),
 			'properties'   => $properties,
 		);
 		if ( '' !== $first_name ) {

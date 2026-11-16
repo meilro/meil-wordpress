@@ -113,23 +113,21 @@ class Meil_Integrations {
 			return;
 		}
 
+		// What they agreed to, under this site's own name (meil_property()).
+		// The visitor's IP goes with the sign-up (ip): meil.ro keeps it on
+		// each list, next to the date, as proof. With confirmation it also
+		// records when and from where they confirmed.
 		$confirm    = ! empty( $connection['confirm'] );
 		$properties = array(
-			'source'      => $plugin,
-			'signup_text' => ! empty( $connection['everyone'] )
+			meil_property( 'signup_text' ) => ! empty( $connection['everyone'] )
 				/* translators: %s: the form's title */
 				? sprintf( __( 'Sent the form "%s"', 'meilro' ), (string) $connection['title'] )
 				: (string) $connection['consent_label'],
 		);
-		if ( ! $confirm ) {
-			$properties = array(
-				'consent_timestamp' => gmdate( 'c' ),
-				'consent_ip'        => meil_visitor_ip(),
-			) + $properties;
-		}
-		$payload = array(
+		$payload    = array(
 			'audience_ids' => array_values( array_map( 'strval', (array) $connection['audiences'] ) ),
 			'email'        => $email,
+			'ip'           => meil_visitor_ip(),
 			'properties'   => $properties,
 		);
 		foreach ( array( 'first' => 'first_name', 'last' => 'last_name' ) as $field => $name ) {
