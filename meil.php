@@ -3,7 +3,7 @@
  * Plugin Name:       meil.ro – Transactional Email & Newsletters
  * Plugin URI:        https://github.com/meilro/meil-wordpress
  * Description:       Sends WordPress emails through meil.ro and gathers subscribers with forms, a popup and a checkbox at checkout.
- * Version:           1.3.0
+ * Version:           1.4.0
  * Requires at least: 5.9
  * Requires PHP:      7.4
  * Author:            meil.ro
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'MEIL_MAILER_VERSION', '1.3.0' );
+define( 'MEIL_MAILER_VERSION', '1.4.0' );
 define( 'MEIL_MAILER_FILE', __FILE__ );
 define( 'MEIL_MAILER_DIR', plugin_dir_path( __FILE__ ) );
 define( 'MEIL_MAILER_URL', plugin_dir_url( __FILE__ ) );

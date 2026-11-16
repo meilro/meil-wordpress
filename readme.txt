@@ -4,7 +4,7 @@ Tags: email, romania, transactional email, newsletter, subscription form
 Requires at least: 5.9
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -128,6 +128,11 @@ Yes, forms and popups both do.
 Yes. Forms have a hidden field that catches bots and a limit on sign-ups per visitor. With email confirmation on, nobody is subscribed without pressing the button.
 
 == Changelog ==
+
+= 1.4.0 =
+* What the plugin saves on a contact starts with the site's name, like alta_checkbox_1, so several sites on one meil.ro account no longer overwrite each other.
+* The visitor's IP goes with each sign-up, and meil.ro keeps it on each list. The consent_ip, consent_timestamp and source properties are no longer saved.
+* New Visitor IP setting, for sites behind a service other than Cloudflare, such as Sucuri or a CDN.
 
 = 1.3.0 =
 * First release on WordPress.org.
